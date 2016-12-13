@@ -4,12 +4,14 @@ This repository contains the source code that will be used to run UCSD's IEEE Te
 
 ## Current Implementation Objectives:
 * Determine C vs C++ pros/cons and choose a language
+
 * Determine language limitations
     + dynamic memory
 	+ usable libraries
 	    1. MBed's libraries *(.h & .dll's)*
 		2. Project Futura ST Libraries *(.h & stm32f4xx_foo.c)*
 	+ etc
+	
 * Develop __Classes__ for:
 	1. Main
 	2. Maze
@@ -17,6 +19,7 @@ This repository contains the source code that will be used to run UCSD's IEEE Te
 	4. Encoder _(maybe merge with motor?)_
 	5. IR Sensor
 	6. Gyro
+	
 * Develop __Headers__ *(Sets of Functions)* for:
 	1. Pin Assignments Header _(determine if this legacy feature is useful)_
 	2. Drive Controls
