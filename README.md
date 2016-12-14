@@ -8,15 +8,15 @@ This repository contains the source code that will be used to run UCSD's IEEE Te
 * Determine language limitations
     + dynamic memory
 	+ usable libraries
-	    1. MBed's libraries *(.h & .dll's)*
-		2. Project Futura ST Libraries *(.h & stm32f4xx_foo.c)*
+	    1. MBed's libraries *(.dll's)*
+		2. Project Futura ST Libraries *(stm32f4xx_foo.c's)*
 	+ etc
 	
 * Develop __Classes__ for:
 	1. Main
-	2. Maze
+	2. Maze __(possibly nested cell class)__
     3. Motor
-	4. Encoder _(maybe merge with motor?)_
+	4. Encoder _(maybe nest in motor)_
 	5. IR Sensor
 	6. Gyro
 	
