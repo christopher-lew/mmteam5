@@ -4,56 +4,32 @@ This repository contains the source code that will be used to run UCSD's IEEE Te
 
 This repo is meant to be compatible with mbed's library using the [NUCLEO-F401RE platform](https://developer.mbed.org/platforms/ST-Nucleo-F411RE/) and designed to be run on the "Falcon v2" Micromouse.
 
-[How to export mbed c/C++ SDK to use with offline toolchains](https://developer.mbed.org/handbook/Exporting-to-offline-toolchains)
+* [How to export mbed C/C++ SDK to use with offline toolchains](https://developer.mbed.org/handbook/Exporting-to-offline-toolchains)
 
+* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+
+* * *
 ## Current Implementation Objectives:
 * ~~Determine C vs C++ pros/cons and choose a language~~ (Develop classes in C++)
 
-* Determine language limitations
-    + dynamic memory
-	+ usable libraries
-	    1. MBed's libraries *(.dll's)*
-		2. Project Futura ST Libraries *(stm32f4xx_foo.c's)*
-	+ etc
+* ~~Determine language limitations~~
+    + no dynamic memory
+	+ will use mbed's libraries
+	
+* Learn to use FPU on STM32F446RE
 	
 * Develop __Classes__ for:
 	1. Main
-	2. Maze __(later implement nested cell class with inline function calls)__
+	2. Maze *(later implement nested cell class with inline function calls)*
     3. Motor
-	4. Encoder _(maybe nest in motor)_
-	5. IR Controller __(with nested IRPair class with inline function calls)__
+	4. Encoder
+	5. ~~IR Sensor Pair~~
 	6. Gyro
 	
 * Develop __Headers__ *(Sets of Functions)* for:
-	1. Pin Assignments Header _(determine if this legacy feature is useful)_
-	2. Drive Controls
-	2. Set of I/O Print _Debug_ functions through Bluetooth USART
+	1. ~~Initialize Sensors~~
+		+ Instatiates objects from sensor classes and objects from mbed libraries *(battery, ledRed, etc.)*
+	2. ~~Debugging IO Print Functions~~
+		+ Can be printed through Bluetooth USART or SWD cable?
+	3. Drive Control Logic
 	
-	
-* * *
-*Default information below*
-### What is this repository for?
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up?
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to?
-
-* Repo owner or admin
-* Other community or team contact

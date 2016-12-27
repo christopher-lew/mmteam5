@@ -9,8 +9,8 @@
 #include "mbed.h"
 #include "initSensors.hpp"
 
-Serial pc(PA_9, PA_10);  // Check if it MUST go in main
 
+Serial pc(PA_9, PA_10);  // Check if it MUST go in main
 
 // Debugging Print Statements
 
