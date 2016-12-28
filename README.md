@@ -32,4 +32,5 @@ This repo is meant to be compatible with mbed's library using the [NUCLEO-F401RE
 	2. ~~Debugging IO Print Functions~~
 		+ Can be printed through Bluetooth USART or SWD cable?
 	3. Drive Control Logic
+	4. Buzzer & Music headers
 	
