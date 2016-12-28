@@ -18,9 +18,9 @@ IRPair rightIR(PH_0, PA_4);
 // Other IO Devices
 AnalogIn battery(PA_3);
 
-
 DigitalIn userButton(PC_10);
 
+Serial pc(PA_9, PA_10);
 
 PwmOut buzzer(PA_2);
 //PwmOut ledMf(PC_6);

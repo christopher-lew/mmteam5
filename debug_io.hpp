@@ -10,7 +10,7 @@
 #include "initSensors.hpp"
 
 
-Serial pc(PA_9, PA_10);  // Check if it MUST go in main
+extern Serial pc;
 
 // Debugging Print Statements
 
