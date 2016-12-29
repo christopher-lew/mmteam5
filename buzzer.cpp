@@ -1,15 +1,17 @@
-#include "mbed.h"
 #include "buzzer.hpp"
 
-extern PwmOut buzzer;
 
+Buzzer::Buzzer(PinName pwmPin)
+	: PwmCtrl(pwmPin) { }
+
+	
 /* 
  * This sets turns off the buzzer to simulate a musician 
  * taking a breath between notes or to just stop playing 
  */
-void pause(float duration) {
-    buzzer.period(0);   // Turn off buzzer
-    buzzer.write(0.5);
+void Buzzer::pause(float duration) {
+    this->PwmCtrl.period(0);   // Turn off buzzer
+    this->PwmCtrl.write(0.5);
     wait(duration/1000);    
 }
 
@@ -18,9 +20,9 @@ void pause(float duration) {
  * This function takes in the note the user wants to play 
  * along with the duration of the note 
  */
-void play(float note, float duration) {
-    buzzer.period(note);
-    buzzer.write(0.5);
+void Buzzer::play(float note, float duration) {
+    this->PwmCtrl.period(note);
+    this->PwmCtrl.write(0.5);
     wait(duration/1000);
     pause(P);
 }
@@ -28,7 +30,7 @@ void play(float note, float duration) {
 // Music
 
 /* Enter Lord Vader  */
-void imperialMarch() {   
+void Buzzer::imperialMarch() {   
     play(LA3,Q);
     play(LA3,Q);
     play(LA3,Q);
@@ -124,7 +126,7 @@ void imperialMarch() {
 
 
 /* Super Mario Level Complete */
-void levelComplete() {
+void Buzzer::levelComplete() {
     play(G5,E);
     play(C6,E);
     play(E6,E);

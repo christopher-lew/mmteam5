@@ -9,6 +9,8 @@
 
 
 // Sensor Classes
+Buzzer buzzer(PA_2);
+
 IRPair leftIR(PC_3, PC_5);
 IRPair leftFrontIR(PC_1, PA_7);
 IRPair rightFrontIR(PC_0, PA_6);
@@ -22,10 +24,8 @@ DigitalIn userButton(PC_10);
 
 Serial pc(PA_9, PA_10);
 
-PwmOut buzzer(PA_2);
+
 //PwmOut ledMf(PC_6);
-
-
 DigitalOut ledMf(PC_6);
 DigitalOut ledRed(PB_15);
 DigitalOut ledYellow(PB_14);

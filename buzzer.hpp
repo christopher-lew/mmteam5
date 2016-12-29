@@ -1,6 +1,8 @@
 #ifndef BUZZER_H
 #define BUZZER_H
 
+#include "mbed.h"
+
 /* 
  * NB: ALL NOTES DEFINED WITH STANDARD ENGLISH NAMES, EXCEPT FROM "A" 
  * THAT IS CALLED WITH THE ITALIAN NAME "LA" BECAUSE A0,A1...ARE THE ANALOG PINS ON ARDUINO.
@@ -125,12 +127,17 @@
 #define P 20 // This variable is used in pause()
              // Use P=10 for 120BPM, P=20 for 90BPM, P=30 for 60BPM
 
+class Buzzer
+{
+public:
+	Buzzer(PinName pwmPin);
+	void imperialMarch();
+	void levelComplete();
 
-// Functions
-void pause(float duration);
-void play(float note, float duration);
-
-void imperialMarch();
-void levelComplete();
+private:
+	PwmOut PwmCtrl;
+	void pause(float duration);
+	void play(float note, float duration);
+}
 
 #endif
