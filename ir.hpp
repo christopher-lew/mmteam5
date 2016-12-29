@@ -12,14 +12,11 @@
 class IRPair
 {	
 public:
-	// Constants	
 	static const float COEFF[]; // Coefficients found using linear regression (volts->cm)
 	float readLog[IR_SAMPLES]; // used for logging IR read values
 	
-	// Constructors
 	IRPair(PinName rxPin, PinName txPin);
 	
-	// Methods
 	float dist_to_wall(); // Returns dist in cm
 	
 private:

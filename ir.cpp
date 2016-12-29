@@ -8,7 +8,7 @@ const float IRPair::COEFF[] = {0.218, -5.510, 55.011, -229.934, 506.986, -502.86
  * Constructor for IRPair. Initializes physical sensor pair.
  */
 IRPair::IRPair(PinName rxPin, PinName txPin)
-	: IR_Receiver(rxPin) , IR_Emitter(txPin) { }
+	: IR_Receiver(rxPin), IR_Emitter(txPin) { }
 
 /*
  * Gets the distance to the wall.
