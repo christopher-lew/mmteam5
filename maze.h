@@ -6,47 +6,81 @@
 #define __MAZE_H__
 
 /**
- * @author Christopher Lew
+ * @author MMTeam1
  * @version 0.1
  */
+
+#include <cmath>
+#include <ctime>
+#include <climits>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+#define TOP 0
+#define RIGHT 1
+#define DOWN 2
+#define LEFT 3
 
 using namespace std;
 
 const int MAZE_SIZE = 8;
 
+extern int next_cell_direction;
+extern int direction;
+extern bool has_right_wall;
+extern bool has_left_wall;
+extern int current_direction;
+extern int next_direction;
+extern int drive_distance;
+
 /**
- * Psuedocode: A matrix of cells
- * CLASS MAZE:
- * In : maze(int[][]), x(int x), y(int y), direction(int dir)
+ * Cell inner class for the maze
  */
-class Maze {
-
+class Cell {
+    
 public:
-  Cell *maze[][]
+    int y;
+    int x;
+    int dist;
+    bool top_wall;
+    bool right_wall;
+    bool visited;
+    
+    Cell(int y, int x) : y(y), x(x), dist(0), top_wall(false), right_wall(false) {}
+    Cell(int y, int x, int dist) : y(y), x(x), dist(dist), top_wall(false), right_wall(false) {}
+    Cell(int y, int x, bool top_wall, bool right_wall) : y(y), x(x), top_wall(top_wall), right_wall(right_wall) {}
+};
 
-private:
 
-// FUNCTION to check whether the cell is the center cell
-bool is_center(Cell *cell) {
-  int x = cell->x;
-  int y = cell->y;
-  int goal1 = MAZE_SIZE / 2;
-  int goal2 = (MAZE_SIZE - 1) / 2;
+extern Cell *maze[MAZE_SIZE][MAZE_SIZE];
+extern Cell *mazeIn[MAZE_SIZE][MAZE_SIZE];
 
-  // Checks if the manhattan_dist of the current cell to the 4 goal states is 0
-  if (cell.manhattan_dist(y, goal1, x, goal1) == 0 ||
-      cell.manhattan_dist(y, goal1, x, goal2) == 0 ||
-      cell.manhattan_dist(y, goal2, x, goal1) == 0 ||
-      cell.manhattan_dist(y, goal2, x, goal2) == 0)
-      // If so, return TRUE
-      { return true; }
-  // Else, not the center, return false
-  return false;
+int manhattan_dist(int x1, int x2, int y1, int y2);
 
-}
+int min4(int a, int b, int c, int d);
+
+void update_distances(vector<Cell*> &stack);
+
+bool fully_explored();
+
+void explore(vector<Cell*> &stack, int y, int x);
+
+bool is_solved();
+
+void generate_random_walls();
+
+void init_maze();
 
 void print_maze();
 
-}
+bool is_center(Cell* cell);
+
+void set_wall(int y,int x);
+
+Cell* next_move(Cell* cell);
+
+void print_maze();
+
 
 #endif

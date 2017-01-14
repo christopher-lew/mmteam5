@@ -1,12 +1,15 @@
-#include "mbed.h"
-#include "initSensors.hpp"
-#include "buzzer.hpp"
+//#include "mbed.h"
+//#include "initSensors.hpp"
+//#include "buzzer.hpp"
+#include "maze.h"
 
 //#include <iostream> // Use pc instead of std?
 //#include "debug_io.hpp" // Uncomment if debugging
 
 int main()
 {
-	//std::cout << "testing" << std::endl;
-	return 0;
+    //std::cout << "testing" << std::endl;
+    init_maze();
+    print_maze();
+        
 }
