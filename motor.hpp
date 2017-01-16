@@ -1,3 +1,9 @@
+/**
+ * Creates Motor class that allows the utilization of a single motor.
+ * Functions include a go() and stop() function.
+ * Possibly might include PID/speed profile functions/constants later on.
+ */
+
 #ifndef MOTOR_H
 #define MOTOR_H
 
@@ -11,8 +17,8 @@ public:
 	void stop();
 
 private:
-	DigitalOut DirCtrl;
-	PwmOut PwmCtrl;
+	DigitalOut ctrlDir;
+	PwmOut ctrlPwm;
 	float speed;
 };
 

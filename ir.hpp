@@ -1,3 +1,8 @@
+/**
+ * Creates an IR Sensor class that includes private Emitter and Receiver objects. 
+ * This class allows for a simple function call to utilize both physical sensors for each IR Pair.
+ */
+
 #ifndef IR_H
 #define IR_H
 
@@ -16,7 +21,6 @@ public:
 	float readLog[IR_SAMPLES]; // used for logging IR read values
 	
 	IRPair(PinName rxPin, PinName txPin);
-	
 	float dist_to_wall(); // Returns dist in cm
 	
 private:

@@ -1,33 +1,38 @@
+/**
+ * Buzzer class implementation. Includes constructor, pause, play, and song functions.
+ */
+
 #include "buzzer.hpp"
 
 
+/* Constructor */
 Buzzer::Buzzer(PinName pwmPin)
-	: PwmCtrl(pwmPin) { }
+	: ctrlPwm(pwmPin) { }
 
 	
 /* 
- * This sets turns off the buzzer to simulate a musician 
- * taking a breath between notes or to just stop playing 
+ * Turns off the buzzer to simulate a musician taking
+ * a breath between notes or to just stop playing.
  */
 void Buzzer::pause(float duration) {
-    this->PwmCtrl.period(0);   // Turn off buzzer
-    this->PwmCtrl.write(0.5);
+    this->ctrlPwm.period(0);   // Turn off buzzer
+    this->ctrlPwm.write(0.5);
     wait(duration/1000);    
 }
 
 
 /* 
  * This function takes in the note the user wants to play 
- * along with the duration of the note 
+ * along with the duration of the note.
  */
 void Buzzer::play(float note, float duration) {
-    this->PwmCtrl.period(note);
-    this->PwmCtrl.write(0.5);
+    this->ctrlPwm.period(note);
+    this->ctrlPwm.write(0.5);
     wait(duration/1000);
     pause(P);
 }
 
-// Music
+// Sheet Music Functions
 
 /* Enter Lord Vader  */
 void Buzzer::imperialMarch() {   

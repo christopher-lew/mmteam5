@@ -25,6 +25,7 @@ This repo is meant to be compatible with mbed's library using the [NUCLEO-F401RE
 	4. Encoder
 	5. ~~IR Sensor Pair~~
 	6. Gyro
+	7. ~~Buzzer~~
 	
 * Develop __Headers__ *(Sets of Functions)* for:
 	1. ~~Initialize Sensors~~
@@ -32,5 +33,4 @@ This repo is meant to be compatible with mbed's library using the [NUCLEO-F401RE
 	2. ~~Debugging IO Print Functions~~
 		+ Can be printed through Bluetooth USART or SWD cable?
 	3. Drive Control Logic
-	4. Buzzer & Music headers
 	

@@ -1,6 +1,7 @@
-/*
- * This header instatiates a pc serial object, and several functions
- * that use pc to print the status of different sensors & devices on the mouse.
+/**
+ * This header utilizes the pc serial object instantiated in initSensors,
+ * and several functions that use pc to print the status of different 
+ * sensors & devices on the mouse.
  */
 
 #ifndef DEBUG_IO_H
