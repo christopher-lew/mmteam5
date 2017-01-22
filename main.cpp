@@ -1,6 +1,5 @@
 //#include "mbed.h"
 //#include "initSensors.hpp"
-//#include "buzzer.hpp"
 #include "maze.h"
 
 #include <iostream> // Use pc instead of std?

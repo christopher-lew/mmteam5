@@ -1,17 +1,23 @@
-#ifndef BUZZER_H
-#define BUZZER_H
+/**
+ * Creates a buzzer class using a PwmOut object.
+ * Includes private pause() and play() functions that can be used
+ * together to create songs in the form of public functions.
+ */
 
-#include "mbed.h"
-
-/* 
+/*
  * NB: ALL NOTES DEFINED WITH STANDARD ENGLISH NAMES, EXCEPT FROM "A" 
  * THAT IS CALLED WITH THE ITALIAN NAME "LA" BECAUSE A0,A1...ARE THE ANALOG PINS ON ARDUINO.
  * (Ab IS CALLED Ab AND NOT LAb)
  *
- * JAVIER: Notes were defined in frequencies so I added a 1/freq to pass them in as period values
+ * JAVIER: Notes were defined in frequencies so I added a 1/freq to pass them in as period values.
  * Since the scale of harmonies starts at C,Db,D, I kept this first series as 0, and scaled
  * everything else up by 1. (i.e. Ab0,LA0,Bb0,B0 --> Ab1, LA1, Bb1, B1)
  */
+
+#ifndef BUZZER_H
+#define BUZZER_H
+
+#include "mbed.h"
  
  
 // Notes
@@ -124,8 +130,8 @@
 #define S Q/4 // sixteenth 1/16
 #define H 2*Q // half 2/4
 #define W 4*Q // whole 4/4
-#define P 20 // This variable is used in pause()
-             // Use P=10 for 120BPM, P=20 for 90BPM, P=30 for 60BPM
+#define P 20  // This variable is used in pause()
+              // Use P=10 for 120BPM, P=20 for 90BPM, P=30 for 60BPM
 
 class Buzzer
 {
@@ -135,9 +141,10 @@ public:
 	void levelComplete();
 
 private:
-	PwmOut PwmCtrl;
+	PwmOut ctrlPwm;
+	
 	void pause(float duration);
 	void play(float note, float duration);
-}
+};
 
 #endif
