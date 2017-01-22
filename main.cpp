@@ -3,7 +3,7 @@
 //#include "buzzer.hpp"
 #include "maze.h"
 
-//#include <iostream> // Use pc instead of std?
+#include <iostream> // Use pc instead of std?
 //#include "debug_io.hpp" // Uncomment if debugging
 
 int main()
