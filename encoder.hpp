@@ -23,6 +23,6 @@ private:
 	InterruptIn channelB;
 	
 	void countChange();
-}
+};
 
 #endif
