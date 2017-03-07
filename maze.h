@@ -24,7 +24,7 @@
 
 using namespace std;
 
-const int MAZE_SIZE = 8;
+const int MAZE_SIZE = 4;
 
 extern int next_cell_direction;
 extern int direction;
@@ -46,6 +46,7 @@ public:
     bool top_wall;
     bool right_wall;
     bool visited;
+    bool mouse;
     
     Cell(int y, int x) : y(y), x(x), dist(0), top_wall(false), right_wall(false) {}
     Cell(int y, int x, int dist) : y(y), x(x), dist(dist), top_wall(false), right_wall(false) {}
@@ -55,6 +56,8 @@ public:
 
 extern Cell *maze[MAZE_SIZE][MAZE_SIZE];
 extern Cell *mazeIn[MAZE_SIZE][MAZE_SIZE];
+
+vector<Cell*> get_open_neighbors(int y, int x, Cell* current);
 
 int manhattan_dist(int x1, int x2, int y1, int y2);
 
