@@ -7,10 +7,10 @@
 #define INIT_SENSORS_H
 
 #include "mbed.h"
-#include "buzzer.hpp"
-#include "ir.hpp"
-#include "motor.hpp"
-#include "encoder.hpp"
+#include "../devices/buzzer.hpp"
+#include "../devices/ir.hpp"
+#include "../devices/motor.hpp"
+#include "../devices/encoder.hpp"
 
 #define VOLT_CONV 9.8 // DigOut Read -> Volts
 #define MIN_VOLTAGE 7.3 // Min Battery Voltage 
@@ -18,7 +18,7 @@
 
 // Sensor Classes
 Buzzer buzzer(PA_2);
-
+/*
 IRPair leftIR(PC_3, PC_5);
 IRPair leftFrontIR(PC_1, PA_7);
 IRPair rightFrontIR(PC_0, PA_6);
@@ -29,7 +29,7 @@ Motor rightMotor(PB_9, PB_8);
 
 Encoder leftEncoder(PB_3, PB_4);
 Encoder rightEncoder(PB_7, PB_6); 
-
+*/
 
 // LEDs
 //PwmOut ledMf(PC_6);

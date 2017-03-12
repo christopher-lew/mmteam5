@@ -1,5 +1,5 @@
 #include "mbed.h"
-#include "./config/initDevices.h"
+#include "./config/initDevices.hpp"
 //#include "maze.h"
 
 //#include <iostream> // Use pc instead of std?
@@ -14,6 +14,7 @@ int main()
 	ledRed = 1;
 	wait(0.5);
 	
+	buzzer.levelComplete();
 	/*
 	leftMotor.go(1);
 	rightMotor.go(1);
