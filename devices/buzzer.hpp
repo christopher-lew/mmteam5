@@ -139,6 +139,8 @@ public:
 	Buzzer(PinName pwmPin);
 	void imperialMarch();
 	void levelComplete();
+	void startUp();
+	void testSound();
 
 private:
 	PwmOut ctrlPwm;

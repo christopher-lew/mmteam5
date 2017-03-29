@@ -172,3 +172,18 @@ void Buzzer::levelComplete() {
     play(C8,H);
     pause(H); // END  
 }
+
+
+/* Legend of Zelda Treasure Chest */
+void Buzzer::startUp() {
+}
+
+
+/* Test the buzzer */
+void Buzzer::testSound() {
+    float testNote = 0.00083;
+
+    play(testNote, E);
+    pause(E);
+    play(testNote, E);
+}
