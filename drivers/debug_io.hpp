@@ -8,7 +8,7 @@
 #define DEBUG_IO_H
 
 #include "mbed.h"
-#include "initSensors.hpp"
+#include "../config/initSensors.hpp"
 
 
 extern Serial pc;

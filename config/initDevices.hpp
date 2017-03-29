@@ -7,6 +7,7 @@
 #define INIT_SENSORS_H
 
 #include "mbed.h"
+#include "constants.hpp"
 #include "../devices/buzzer.hpp"
 #include "../devices/ir.hpp"
 #include "../devices/motor.hpp"
