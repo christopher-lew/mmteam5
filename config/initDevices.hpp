@@ -3,8 +3,8 @@
  * operate the MF, and also defines a few constants.
  */
 
-#ifndef INIT_SENSORS_H
-#define INIT_SENSORS_H
+#ifndef INIT_DEVICES_H
+#define INIT_DEVICES_H
 
 #include "mbed.h"
 #include "constants.hpp"
@@ -32,8 +32,7 @@
 	*/
 
 	// LEDs
-	//PwmOut ledMf(PA_2);
-	DigitalOut ledMf(PA_2);
+	PwmOut ledMf(PA_2);
 	DigitalOut ledRed(PB_14);
 	DigitalOut ledYellow(PB_13);
 	DigitalOut ledGreen(PB_12);

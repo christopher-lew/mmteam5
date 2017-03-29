@@ -1,3 +1,15 @@
+#define FALCON_TESTING
+//#define MAZE_TESTING
+
+#define F21
+//#define F20
+
+
+
+
+
+#ifdef MAZE_TESTING
+
 #include "src/maze.h"
 #include <stdio.h>
 #include <iostream>
@@ -44,3 +56,23 @@ int main() {
     explore(stack, mouse_x, mouse_y);
 }
 
+#endif
+
+
+
+
+
+#ifdef FALCON_TESTING
+
+#include "mbed.h"
+#include "./config/initDevices.hpp"
+#include "./drivers/testFunctions.hpp"
+
+int main()
+{
+	cycleLEDs(0.5);
+	cycleMFs(1.0);
+	testBuzzer();
+}
+
+#endif

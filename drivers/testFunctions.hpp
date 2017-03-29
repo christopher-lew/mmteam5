@@ -7,11 +7,11 @@
 #define TEST_FUNCTIONS_H
 
 #include "mbed.h"
-#include "../config/initSensors.hpp"
+#include "../config/initDevices.hpp"
 
-void cycleLEDs();
+void cycleLEDs(float flashPeriod);
 
-void cycleMFs();
+void cycleMFs(float flashPeriod);
 
 void testBuzzer();
 

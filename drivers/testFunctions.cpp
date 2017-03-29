@@ -2,9 +2,15 @@
  * Implementation of test functions.
  */
 
- #include "testFunctions.hpp"
+#include "testFunctions.hpp"
 
-void cycleLEDs()
+extern Buzzer buzzer;
+extern PwmOut ledMf;
+extern DigitalOut ledRed;
+extern DigitalOut ledYellow;
+extern DigitalOut ledGreen;
+
+void cycleLEDs(float flashPeriod)
 {
 	ledRed = 0;
 	ledYellow = 0;
@@ -12,21 +18,21 @@ void cycleLEDs()
 
 	for(int i = 0; i < 3; i += 1 ) {
 		ledRed = !ledRed;
-		wait(0.5);
+		wait(flashPeriod);
 
 		ledRed = !ledRed;
 		ledYellow = !ledYellow;
-		wait(0.5);
+		wait(flashPeriod);
 
 		ledYellow = !ledYellow;
 		ledGreen = !ledGreen;
-		wait(0.5);
+		wait(flashPeriod);
 
 		ledGreen = !ledGreen;
 	}
 }
 
-void cycleMFs()
+void cycleMFs(float flashPeriod)
 {
 	float a = 0.0;
 	ledMf.period_ms(5);
@@ -35,7 +41,7 @@ void cycleMFs()
 	for(int i = 1; i <= 5; i += 1) {
 		a += 0.2;
 		ledMf.write(a);
-		wait(1.0);
+		wait(flashPeriod);
 	}
 
 	ledMf.write(0);
@@ -43,14 +49,5 @@ void cycleMFs()
 
 void testBuzzer()
 {
-	float freq = 1.0/400.0;
-
-	buzzer.period(freq);
-	buzzer.write(0.5);
-	
-	wait(1.0);
-	buzzer.write(0.25);
-
-	wait(1.0);
-	buzzer.write(0);
+	buzzer.testSound();
 }

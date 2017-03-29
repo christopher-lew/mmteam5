@@ -8,10 +8,8 @@
 #define DEBUG_IO_H
 
 #include "mbed.h"
-#include "../config/initSensors.hpp"
+#include "../config/initDevices.hpp"
 
-
-extern Serial pc;
 
 // Debugging Print Statements
 
