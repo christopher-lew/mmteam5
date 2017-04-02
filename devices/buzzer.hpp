@@ -123,15 +123,6 @@
 #define Eb8 1/4978.03
 
 
-// Duration of Notes
-#define BPM 90 // change this to change the pace of the song
-#define Q 60000/BPM // quarter 1/4 
-#define E Q/2 // eighth 1/8
-#define S Q/4 // sixteenth 1/16
-#define H 2*Q // half 2/4
-#define W 4*Q // whole 4/4
-#define P 20  // This variable is used in pause()
-              // Use P=10 for 120BPM, P=20 for 90BPM, P=30 for 60BPM
 
 class Buzzer
 {
@@ -144,7 +135,17 @@ public:
 
 private:
 	PwmOut ctrlPwm;
+
+	// Duration of Notes
+	float BPM; // change this to change the pace of the song
+	float W; // whole 4/4
+	float H; // half 2/4
+	float Q; // quarter 1/4
+	float E; // eighth 1/8
+	float S; // sixteenth 1/16	
+	float P; // This variable is used in pause()
 	
+	void setBPM(int newBPM);
 	void pause(float duration);
 	void play(float note, float duration);
 };

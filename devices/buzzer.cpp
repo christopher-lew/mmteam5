@@ -9,6 +9,20 @@
 Buzzer::Buzzer(PinName pwmPin)
 	: ctrlPwm(pwmPin) { }
 
+
+/*
+ * Sets the appropriate note durations based on the new BPM.
+ */
+void Buzzer::setBPM(int newBPM) {
+    this->BPM = newBPM;
+    this->Q = 60000 / this->BPM;    // 60,000 ms in 1 min
+    this->W = this->Q * 4;
+    this->H = this->Q * 2;
+    this->E = this->Q / 2;
+    this->S = this->Q / 4;    
+    this->P = this->Q / 40;
+}
+
 	
 /* 
  * Turns off the buzzer to simulate a musician taking
@@ -32,10 +46,14 @@ void Buzzer::play(float note, float duration) {
     pause(P);
 }
 
+
+
 // Sheet Music Functions
 
 /* Enter Lord Vader  */
-void Buzzer::imperialMarch() {   
+void Buzzer::imperialMarch() {
+    setBPM(90);
+
     play(LA3,Q);
     play(LA3,Q);
     play(LA3,Q);
@@ -132,6 +150,8 @@ void Buzzer::imperialMarch() {
 
 /* Super Mario Level Complete */
 void Buzzer::levelComplete() {
+    setBPM(180);
+
     play(G5,E);
     play(C6,E);
     play(E6,E);
@@ -181,9 +201,10 @@ void Buzzer::startUp() {
 
 /* Test the buzzer */
 void Buzzer::testSound() {
-    float testNote = 0.00083;
+    setBPM(210);
 
+    float testNote = 0.00083;
     play(testNote, E);
-    pause(E);
+    pause(S);
     play(testNote, E);
 }
