@@ -7,6 +7,7 @@
 #define TEST_FUNCTIONS_H
 
 #include "mbed.h"
+#include "../config/initModes.hpp"
 #include "../config/initDevices.hpp"
 
 void cycleLEDs(float flashPeriod);
