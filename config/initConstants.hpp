@@ -31,4 +31,16 @@
 
 #endif
 
+// Declare IR Coefficients
+// COEFF = [x^-3, x^-2, x^-1, x^0, x^1, x^2, x^3]
+#if _IR_COEFF == 1
+	#define IR_C13    0.218
+	#define IR_C12   -5.510
+	#define IR_C11   55.011
+	#define IR_C00 -229.934
+	#define IR_C01  506.986
+	#define IR_C02 -502.862
+	#define IR_C03  177.713
+#endif
+
 #endif

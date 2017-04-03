@@ -50,7 +50,7 @@ void cycleMFs(float flashPeriod)
 void testBuzzer()
 {
 	buzzer.testSound();
-	wait(0.1);
-	buzzer.levelComplete();
+	//wait(0.1);
+	//buzzer.levelComplete();
 	//buzzer.imperialMarch();
 }

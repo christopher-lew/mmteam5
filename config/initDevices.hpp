@@ -17,19 +17,19 @@
 
 // Sensor Classes
 extern Buzzer buzzer;
-/*
-IRPair leftIR(PB_0, PC_9;
-IRPair leftFrontIR(PC_5, PA_4);
-IRPair rightFrontIR(PC_4, PC_1);
-IRPair rightIR(PA_6, PC_14);
-IRPair testIR(PA_7, PH_0);
 
-Motor leftMotor(PB_5, PB_4);
-Motor rightMotor(PB_9, PB_8);
+extern IRPair leftIR;
+extern IRPair leftFrontIR;
+extern IRPair rightFrontIR;
+extern IRPair rightIR;
+extern IRPair testIR;
 
-Encoder leftEncoder(PB_10, PA_5);
-Encoder rightEncoder(PA_0, PA_1); 
-*/
+extern Motor leftMotor;
+extern Motor rightMotor;
+
+extern Encoder leftEncoder;
+extern Encoder rightEncoder; 
+
 
 // LEDs
 extern PwmOut ledMf;
@@ -43,7 +43,7 @@ extern AnalogIn battery;
 
 extern Serial pc;
 
-//extern DigitalIn userButton;
+extern DigitalIn userButton; // Falcon v2.0
 
 
 #endif

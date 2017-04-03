@@ -59,12 +59,15 @@
 	#include "mbed.h"
 	#include "config/initDevices.hpp"
 	#include "drivers/testFunctions.hpp"
+	#include "drivers/debug_io.hpp"
 
 	int main()
 	{
-		cycleLEDs(0.5);
+		cycleLEDs(0.25);
 		testBuzzer();
-		cycleMFs(1.0);
+
+		print_battery();
+		cycleLEDs(0.1);
 	}
 
 #endif

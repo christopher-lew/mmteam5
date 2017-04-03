@@ -5,11 +5,6 @@
 #include "ir.hpp"
 
 
-// Initialize constant array COEFF, in the IRPair class (and all IRPair objects)
-// COEFF = [x^-3, x^-2, x^-1, x^0, x^1, x^2, x^3]
-const float IRPair::COEFF[] = {0.218, -5.510, 55.011, -229.934, 506.986, -502.862, 177.713};
-
-
 /* Constructor */
 IRPair::IRPair(PinName rxPin, PinName txPin)
 	: IR_Receiver(rxPin), IR_Emitter(txPin) { }
@@ -48,13 +43,13 @@ float IRPair::distToWall()
 	float square = avgRead * avgRead;
 	float cube = square * avgRead;
 	
-	dist += this->COEFF[0] / cube;
-	dist += this->COEFF[1] / square;
-	dist += this->COEFF[2] / avgRead;
-	dist += this->COEFF[3];
-	dist += this->COEFF[4] * avgRead;
-	dist += this->COEFF[5] * square;
-	dist += this->COEFF[6] * cube;
+	dist += IR_C13 / cube;
+	dist += IR_C12 / square;
+	dist += IR_C11 / avgRead;
+	dist += IR_C00;
+	dist += IR_C01 * avgRead;
+	dist += IR_C02 * square;
+	dist += IR_C03 * cube;
 		
 	return dist;
 }

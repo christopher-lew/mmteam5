@@ -3,13 +3,13 @@
 #if _FALCON_CONFIG == 21
 	// Sensor Classes
 	Buzzer buzzer(PB_15);
-	/*
-	IRPair leftIR(PB_0, PC_9;
+	
+	IRPair leftIR(PB_0, PC_9);
 	IRPair leftFrontIR(PC_5, PA_4);
 	IRPair rightFrontIR(PC_4, PC_1);
 	IRPair rightIR(PA_6, PC_14);
 	IRPair testIR(PA_7, PH_0);
-
+	/*
 	Motor leftMotor(PB_5, PB_4);
 	Motor rightMotor(PB_9, PB_8);
 
@@ -34,12 +34,12 @@
 #elif _FALCON_CONFIG == 20
 	// Sensor Classes
 	Buzzer buzzer(PA_2);
-	/*
+	
 	IRPair leftIR(PC_3, PC_5);
 	IRPair leftFrontIR(PC_1, PA_7);
 	IRPair rightFrontIR(PC_0, PA_6);
 	IRPair rightIR(PH_0, PA_4);
-
+	/*
 	Motor leftMotor(PC_8, PC_7);
 	Motor rightMotor(PB_9, PB_8);
 
