@@ -10,7 +10,7 @@ extern AnalogIn battery;
 void print_battery() 
 {
 	float Vbat = battery.read();
-	pc.printf("Battery: %1.2f (%1.2f V)\r\n", Vbat, Vbat*VOLT_CONV);
+	pc.printf("Battery: %1.4f (%1.4f V)\r\n", Vbat, Vbat*VOLT_CONV);
 }
 
 void print_ir(IRPair ir) 

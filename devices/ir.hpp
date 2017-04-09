@@ -9,7 +9,7 @@
 #include "mbed.h"
 #include "../config/initConstants.hpp"
 
-#define IR_SAMPLES 5
+#define IR_SAMPLES 3
 #define IR_SIGDELAY 6 // Wait for firing capacitor signal (usec)
 #define IR_SIGREST 75 // Allows firing cap to recharge
 

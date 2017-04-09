@@ -15,7 +15,7 @@
  */
 
 #if _FALCON_CONFIG == 21
-	#define VOLT_CONV 18
+	#define VOLT_CONV 16.7
 
  	#if _BATTERIES == 2
 		#define MIN_VOLTAGE 7.2

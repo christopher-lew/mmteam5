@@ -63,7 +63,7 @@
 
 	int main()
 	{
-		cycleLEDs(0.25);
+		cycleLEDs(0.1);
 		testBuzzer();
 
 		print_battery();

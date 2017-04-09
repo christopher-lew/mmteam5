@@ -18,6 +18,7 @@ IRPair::IRPair(PinName rxPin, PinName txPin)
 float IRPair::distToWall()
 {
 	float avgRead = 0;
+	IR_Receiver.read();
 	
 	for (int i = 0; i < IR_SAMPLES; i++) {
 		// Turn on IR
