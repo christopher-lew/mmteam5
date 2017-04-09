@@ -15,7 +15,9 @@ void print_battery()
 
 void print_ir(IRPair ir) 
 {
+	float dist = ir.distToWall();
 	for (int i = 0; i < IR_SAMPLES; i++) {
 		pc.printf("%3.9f\r\n", ir.readLog[i]);
 	}
+	pc.printf("Avg Dist To Wall = %3.9f\r\n\n", dist);
 }

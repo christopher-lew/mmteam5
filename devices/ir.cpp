@@ -21,17 +21,17 @@ float IRPair::distToWall()
 	
 	for (int i = 0; i < IR_SAMPLES; i++) {
 		// Turn on IR
-		this->IR_Emitter.write(1);
+		IR_Emitter.write(1);
 		
 		// Wait for firing capacitor
 		wait_us(IR_SIGDELAY);
 		
 		// Read IR 
-		this->readLog[i] = this->IR_Receiver.read();
-		avgRead += this->readLog[i];
+		readLog[i] = IR_Receiver.read();
+		avgRead += readLog[i];
 		
 		// Turn off IR
-		this->IR_Emitter.write(0);
+		IR_Emitter.write(0);
 		
 		// Recharge
 		wait_us(IR_SIGREST);

@@ -4,11 +4,6 @@
 
 #include "testFunctions.hpp"
 
-extern Buzzer buzzer;
-extern PwmOut ledMf;
-extern DigitalOut ledRed;
-extern DigitalOut ledYellow;
-extern DigitalOut ledGreen;
 
 void cycleLEDs(float flashPeriod)
 {
