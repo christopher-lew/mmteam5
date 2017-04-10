@@ -65,9 +65,18 @@
 	{
 		cycleLEDs(0.1);
 		testBuzzer();
-
 		print_battery();
-		cycleLEDs(0.1);
+		
+		leftMotor.go(0.25);
+		rightMotor.go(0.25);
+		
+		wait(0.1);
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		cycleMFs(0.1);
+		testBuzzer();
 	}
 
 #endif

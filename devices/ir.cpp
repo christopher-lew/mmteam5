@@ -7,7 +7,10 @@
 
 /* Constructor */
 IRPair::IRPair(PinName rxPin, PinName txPin)
-	: IR_Receiver(rxPin), IR_Emitter(txPin) { }
+	: IR_Receiver(rxPin), IR_Emitter(txPin) 
+{
+	this->IR_Emitter.write(0);
+}
 
 	
 /*
@@ -18,7 +21,12 @@ IRPair::IRPair(PinName rxPin, PinName txPin)
 float IRPair::distToWall()
 {
 	float avgRead = 0;
+	
+	IR_Emitter.write(1);
+	wait_us(IR_SIGDELAY);
 	IR_Receiver.read();
+	IR_Emitter.write(0);
+	wait_us(IR_SIGREST);
 	
 	for (int i = 0; i < IR_SAMPLES; i++) {
 		// Turn on IR

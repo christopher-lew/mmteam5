@@ -10,7 +10,7 @@
 	IRPair rightIR(PA_6, PC_14);
 	IRPair testIR(PA_7, PH_0);
 	
-	Motor leftMotor(PB_5, PB_4);
+	Motor leftMotor(PB_5, PC_6);
 	Motor rightMotor(PB_9, PB_8);
 	/*
 	Encoder leftEncoder(PB_10, PA_5);
