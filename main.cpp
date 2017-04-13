@@ -67,16 +67,15 @@
 		testBuzzer();
 		print_battery();
 		
-		leftMotor.go(0.25);
-		rightMotor.go(0.25);
+		testMotors_straight(0.2, 200);
+		wait_ms(250);
+		testMotors_straight(-0.2, 200);
+
+		wait_ms(500);
 		
-		wait(0.1);
-		
-		leftMotor.stop();
-		rightMotor.stop();
-		
-		cycleMFs(0.1);
-		testBuzzer();
+		testMotors_rotate(0.25, 250);
+		wait_ms(250);
+		testMotors_rotate(-0.25, 250);
 	}
 
 #endif
