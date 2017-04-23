@@ -1,15 +1,8 @@
 #include "maze.h"
 #include "math.h"
 #include <stdio.h>
-#include <iostream>
 #include <stdlib.h>
 
-
-Cell *maze[MAZE_SIZE][MAZE_SIZE];
-Cell *mazeIn[MAZE_SIZE][MAZE_SIZE];
-
-// FUNCTION for mouse direction
-//TODO Function for mouse direction
 
 //FUNCTION to take the minimum of 4 distances
 int min4(int a, int b, int c, int d) {
@@ -27,44 +20,26 @@ int manhattan_dist(int x1, int x2, int y1, int y2) {
 
 
 // FUNCTION to grab the minimum neighbor of the
-int min_open_neighbor(vector<Cell*> cells) {
+int min_open_neighbor(vector<unsigned char> cells) {
     int min = UCHAR_MAX;
-    for (vector<Cell *>::iterator it = cells.begin(); it != cells.end(); it++) {
-        if ((*it)->dist < min) {
-            min = (*it)->dist;
+    for (vector<unsigned char>::iterator it = cells.begin(); it != cells.end(); it++) {
+        
+        // Get the indices of the encoded index
+        int y = decodeYIndex(*it);
+        int x = decodeXIndex(*it);
+
+        // Check if distance of cell is less than min
+        if (Maze::decodeDist(y, x) < min) {
+            min = Maze::decodeDist(y, x);
         }
     }
     return min;
 }
 
-// FUNCTION to initialize the maze
-void init_maze() {
-    int goal1 = MAZE_SIZE / 2;
-    int goal2 = MAZE_SIZE / 2 - 1;
-    for (int i = 0; i < MAZE_SIZE; i++) {
-        for (int j = 0; j < MAZE_SIZE; j++) {
-            maze[i][j] = new Cell(i, j, min4(manhattan_dist(i, goal1, j, goal1),
-                                             manhattan_dist(i, goal1, j, goal2),
-                                             manhattan_dist(i, goal2, j, goal1),
-                                             manhattan_dist(i, goal2, j, goal2)));
-            
-            if (i == MAZE_SIZE - 1) maze[i][j]->top_wall = true;
-
-            if (j == MAZE_SIZE - 1) maze[i][j]->right_wall = true;
-        }
-    }
-    // Mouse starts at bottom right side maze pointing north
-    maze[0][0]->mouse = true;
-    maze[0][0]->right_wall = true;
-    maze[1][0]->right_wall = true;
-    maze[2][0]->right_wall = true;
-
-}
-
-// FUNCTION to check whether the cell is the center cell
-bool is_center(Cell *cell) {
-  int x = cell->x;
-  int y = cell->y;
+// FUNCTION to check whether the mouse is at the center cell
+bool is_center(unsigned char cell) { // cell is encoded index
+  int x = decodeXIndex(cell);
+  int y = decodeYIndex(cell);
   int goal1 = MAZE_SIZE / 2;
   int goal2 = (MAZE_SIZE - 1) / 2;
 
@@ -81,7 +56,7 @@ bool is_center(Cell *cell) {
 
 
 // FUNCTION to figure out the next move by the smallest distance
-Cell* next_move(Cell *current) {
+unsigned char next_move(int currX, int currY) { // (Maze::Cell *current)
     int x, y, minx, miny, i, j;
     int x_goal = MAZE_SIZE / 2;
     int y_goal = MAZE_SIZE - 1 / 2;
@@ -89,30 +64,30 @@ Cell* next_move(Cell *current) {
     minx = 0;
     miny = 0;
     // Initial position of mouse
-    x = current->x;
-    y = current->y;
+    x = Maze::getMousex();
+    y = Maze::getMousey();
     // checks the next cell with the smallest distance
     for(i = -1; i <= 1; i++){
         for(j = -1; j <= 1; j++){
             int next_x = x + i;
             int next_y = y + j;
             // pass over non open right neighbors
-            if (current->right_wall == true && next_x == x + 1) continue;
+            if (Maze::has_right_wall(y, x) == true && next_x == x + 1) continue;
             // pass over non open top neightbors
-            if (current->top_wall == true && next_y == y + 1) continue;
+            if (Maze::has_top_wall(y, x) == true && next_y == y + 1) continue;
             // border cells are ignored
             if(next_x < 0 || next_y < 0)  continue;
             // means cell does not exist
-            if(maze[next_x][next_y] == 0) continue;
+            if(next_y < 0 || next_y >= MAZE_SIZE || next_x < 0 || next_x >= MAZE_SIZE) continue;
             // ignore diagonal cells for now
-            if((next_x != current->x) && (next_y != current->y))  continue;
+            if((next_x != Maze::getMousex()) && (next_y != Maze::getMousey()))  continue;
             // if the next cell has a smaller distance then check
-            if(maze[next_x][next_y]->dist < current->dist){
+            if(Maze::decodeDist(next_y,next_x) < Maze::decodeDist(y, x)){
                 // breaking ties
                 if((next_x == minx) && (next_y == miny)){
                     // check if the mouse is facing straight 0->1->2->3 counter-clockwise
-                   if((current_direction == TOP && next_x > y) || (current_direction == DOWN && next_y < y) ||
-                      (current_direction == LEFT && next_x < x) || (current_direction == RIGHT && next_x > x)){
+                   if((Maze::current_direction == Maze::NORTH && next_x > y) || (Maze::current_direction == Maze::SOUTH && next_y < y) ||
+                      (Maze::current_direction == Maze::WEST && next_x < x) || (Maze::current_direction == Maze::EAST && next_x > x)){
                        minx = x + i;
                        miny = y + j;
                        continue;
@@ -132,120 +107,162 @@ Cell* next_move(Cell *current) {
                     // not tie condition
                     minx = x + i;
                     miny = y + j;
+                    cout << "minx = " << minx << endl;
+                    cout << "miny = " << miny << endl;
                 }
             }
             
         }
     }
-   // signals next cell's direction
-   if((minx < x) && (miny == y)){
-       next_direction = LEFT;
-   }
+  // signals next cell's direction
+//   if((minx < x) && (miny == y)){
+//       next_direction = LEFT;
+//   }
+//
+//   if((minx == x) && (miny > y)){
+//       next_direction = TOP;
+//   }
+//
+//   if((minx > x) && (miny == y)){
+//       next_direction = RIGHT;
+//   }
+//
+//   if((minx == x) && (miny < y)){
+//       next_direction = DOWN;
+//   }
+   
 
-   if((minx == x) && (miny > y)){
-       next_direction = TOP;
-   }
-
-   if((minx > x) && (miny == y)){
-       next_direction = RIGHT;
-   }
-
-   if((minx == x) && (miny < y)){
-       next_direction = DOWN;
-   }
-    return maze[minx][miny];
+    // Returns cell to be moved to
+    return encodeCellIndex(miny, minx);
 }
 
-// Cell* next_move(Cell *current) {
-//     int x, y, minx, miny, i, j;
-//     int x_goal = MAZE_SIZE / 2;
-//     int y_goal = MAZE_SIZE - 1 / 2;
-//     // Initial positions of the next move
-//     minx = 0;
-//     miny = 0;
-//     // Initial position of mouse
-//     x = current->x;
-//     y = current->y;
-
-//     vector<Cell*> neighbors;
-
-//     // check top neighbor
-//     if (y < MAZE_SIZE - 1) {
-//         neighbors.push_back(maze[y + 1][x]);
-//     }
-//     // check right neighbor
-//     if (x < MAZE_SIZE - 1) {
-//         neighbors.push_back(maze[y][x + 1]);
-//     }
-//     // check bottom neighbor
-//     if (y > 0) {
-//         neighbors.push_back(maze[y - 1][x]);
-//         if (!maze[y - 1][x]->top_wall) {
-//             open_neighbors.push_back(maze[y - 1][x]);
+// // FUNCTION to check if the maze has been fully explored
+// bool fully_explored() {
+//     for (int y = 0; y < MAZE_SIZE; y++) {
+//         for (int x = 0; x < MAZE_SIZE; x++) {
+//             if (maze[y][x]->visited == false) {
+//                 return false;
+//             }
 //         }
 //     }
-//     // check left neighbor
-//     if (x > 0) {
-//         neighbors.push_back(maze[y][x - 1]);
-//         if (!maze[y][x - 1]->right_wall) {
-//             open_neighbors.push_back(maze[y][x - 1]);
-//         }
-//     }
-
-
-
+//     return true;
 // }
 
-// FUNCTION to generate walls for the maze
-void generate_random_walls() {
-    string s;
-    srand((unsigned) time(0));
-    int numCells = MAZE_SIZE * MAZE_SIZE;
-    int numWalls = rand() % (numCells / 4) + (numCells * 3 / 4);
+// FUNCTION to update the distances
+void update_distances(vector <unsigned char> &stack) {
+    unsigned char current;
+    vector<unsigned char> open_neighbors;
+    vector<unsigned char> neighbors;
     
-    for (int i = 0; i < MAZE_SIZE; i++) {
-        for (int j = 0; j < MAZE_SIZE; j++) {
-            int y = MAZE_SIZE - 1 - i;
-            int type = rand() % 4;
-            if (numWalls > 0) {
-                if (type == 1) {
-                    maze[y][j]->top_wall = true;
-                    numWalls--;
-                    s += "T_\t";
-                }
-                else if (type == 2) {
-                    maze[y][j]->right_wall = true;
-                    numWalls--;
-                    s += "_R\t";
-                }
-                else if (type == 3) {
-                    maze[y][j]->top_wall = true;
-                    maze[y][j]->right_wall = true;
-                    numWalls--;
-                    s += "TR\t";
-                }
-                else {
-                    s += "__\t";
-                }
-            }
-            else {
-                s += "__\t";
+    int x, y;
+    int min;
+    while (!stack.empty()) {
+        current = stack.back();
+        stack.pop_back();
+
+        x = decodeXIndex(current);
+        y = decodeYIndex(current);
+        
+        if (is_center(current)) {
+            continue;
+        }
+        
+        // check top neighbor
+        if (y < MAZE_SIZE - 1) {
+            neighbors.push_back(current);
+            if (!Maze::has_top_wall(y, x)) {
+                open_neighbors.push_back(current);
             }
         }
-        s += "\n";
+        // check right neighbor
+        if (x < MAZE_SIZE - 1) {
+            neighbors.push_back(current);
+            if (!Maze::has_right_wall(y, x)) {
+                open_neighbors.push_back(current);
+            }
+        }
+        // check bottom neighbor
+        if (y > 0) {
+            neighbors.push_back(current);
+            if (!Maze::has_top_wall(y - 1, x)) {
+                open_neighbors.push_back(current);
+            }
+        }
+        // check left neighbor
+        if (x > 0) {
+            neighbors.push_back(current);
+            if (!Maze::has_right_wall(y, x - 1)) {
+                open_neighbors.push_back(current);
+            }
+        }
+        if (open_neighbors.empty()) {
+            neighbors.clear();
+            continue;
+        }
+        min = min_open_neighbor(open_neighbors);
+        open_neighbors.clear();
+        if (Maze::decodeDist(y, x) - 1 != min) {
+            Maze::encodeDist(y, x, (unsigned char) min + 1);
+            for (vector<unsigned char>::iterator it = neighbors.begin(); it != neighbors.end(); it++) {
+                if (!is_center(*it)) {
+                    stack.push_back(*it);
+                }
+            }
+            neighbors.clear();
+        }
+        
     }
 }
 
-// FUNCTION to check if the maze has been fully explored
-bool fully_explored() {
-    for (int y = 0; y < MAZE_SIZE; y++) {
-        for (int x = 0; x < MAZE_SIZE; x++) {
-            if (maze[y][x]->visited == false) {
-                return false;
-            }
-        }
+// FUNCTION to explore the cells
+void explore(vector<unsigned char> &stack, int y, int x) {
+
+	if (is_center(encodeCellIndex(y, x))) {
+		return;
+	}
+    // Print the maze
+    print_maze();
+
+    getchar();
+    // /** 
+    //  * if the cell at position x, y has already been visited,
+    //  * then we don't care want to explore it again
+    //  **/
+    // if (maze[y][x]->visited) {
+    //     return;
+    // }
+    // // else set the cell->visited to true
+    // else maze[y][x]->visited = true;
+
+    // * 
+    //  * If micromouse encounters a wall, then push the cell onto the
+    //  * stack and update the distances
+    //  *
+    cout << Maze::has_top_wall(y, x) << endl;
+    cout << Maze::has_right_wall(y, x) << endl;
+
+    if (Maze::has_top_wall(y, x) || Maze::has_right_wall(y, x)) {
+        stack.push_back(encodeCellIndex(y, x));
+        update_distances(stack);
+        explore(stack, y, x);
     }
-    return true;
+
+    // Generate the next move's encoded index based on the distances, and explore
+    unsigned char next_cell = next_move(Maze::getMousey(), Maze::getMousex());
+
+    cout << "next_cell =" << next_cell << endl;
+
+    // Decode the cell indices
+    int next_y = decodeYIndex(next_cell);
+    int next_x = decodeXIndex(next_cell);
+
+    // Update the mouse position
+    Maze::setMousex(next_x);
+    Maze::setMousey(next_y);
+
+    explore(stack, Maze::getMousey(), Maze::getMousex());
+
+
 }
 
 // FUNCTION to print maze
@@ -270,7 +287,7 @@ void print_maze() {
         for (int j = 0; j < MAZE_SIZE; j++) {
             
             if (i % 2 != 0) {
-                if (maze[y][j]->top_wall) {
+                if (Maze::decodeWalls(y, j) >> 3 == 1) {
                     printf("+---");
                 }
                 else {
@@ -286,8 +303,8 @@ void print_maze() {
                     printf("|");
                 }
                 
-                int dist = maze[y][j]->dist;
-                if (maze[y][j]->mouse) {
+                int dist = (int) Maze::decodeDist(y, j);
+                if (y == Maze::getMousey() && j == Maze::getMousex()) {
                     printf(" M ");
 
                 }
@@ -304,7 +321,7 @@ void print_maze() {
                     printf(" %d ", dist);
                 }
                 
-                if (maze[y][j]->right_wall || j == MAZE_SIZE - 1) {
+                if ((Maze::decodeWalls(y, j) << 13 >> 15) == 1 || j == MAZE_SIZE - 1) {
                     printf("|");
                 }
                 else {
@@ -320,203 +337,23 @@ void print_maze() {
         printf("+---");
     }
     printf("+\n\n");
+    cout << "End Print Function" << endl;
 }
 
-// FUNCTION to update the distances
-void update_distances(vector <Cell*> &stack) {
-    Cell *current;
-    vector<Cell*> open_neighbors;
-    vector<Cell*> neighbors;
-    
-    int x, y;
-    int min;
-    while (!stack.empty()) {
-        current = stack.back();
-        stack.pop_back();
-        x = current->x;
-        y = current->y;
-        
-        if (is_center(current)) {
-            continue;
-        }
-        
-        // check top neighbor
-        if (y < MAZE_SIZE - 1) {
-            neighbors.push_back(maze[y + 1][x]);
-            if (!current->top_wall) {
-                open_neighbors.push_back(maze[y + 1][x]);
-            }
-        }
-        // check right neighbor
-        if (x < MAZE_SIZE - 1) {
-            neighbors.push_back(maze[y][x + 1]);
-            if (!current->right_wall) {
-                open_neighbors.push_back(maze[y][x + 1]);
-            }
-        }
-        // check bottom neighbor
-        if (y > 0) {
-            neighbors.push_back(maze[y - 1][x]);
-            if (!maze[y - 1][x]->top_wall) {
-                open_neighbors.push_back(maze[y - 1][x]);
-            }
-        }
-        // check left neighbor
-        if (x > 0) {
-            neighbors.push_back(maze[y][x - 1]);
-            if (!maze[y][x - 1]->right_wall) {
-                open_neighbors.push_back(maze[y][x - 1]);
-            }
-        }
-        if (open_neighbors.empty()) {
-            neighbors.clear();
-            continue;
-        }
-        min = min_open_neighbor(open_neighbors);
-        open_neighbors.clear();
-        if (current->dist - 1 != min) {
-            current->dist = min + 1;
-            for (vector<Cell *>::iterator it = neighbors.begin(); it != neighbors.end(); it++) {
-                if (!is_center(*it)) {
-                    stack.push_back(*it);
-                }
-            }
-            neighbors.clear();
-        }
-        
-    }
-}
+int main() {
+        //Internal for elsewhere
+    // int next_cell_direction = 0; //TOP
+    // int direction; //maze internal
 
-/**
- * Explore is the function that runs the micromouse from a given starting
- * position, and a stack, the mouse explores the maze, and actively figures
- * the map of the maze, while finding its way to the goal
- * @param vector<Cell*> &stack to update the distances
- * @param int x, y the position of the micromouse in the maze
- * @return void
- **/ 
- void explore(vector<Cell*> &stack, int y, int x) {
-    
-    // Print the maze
+    // //Signals from/to elsewhere:
+    // int current_direction = 0;
+    // int next_direction = -1; //A direction or AT_BEGINNING or AT_CENTER
+    // int drive_distance = 1; //MAZE MUST SPECIFY DISTANCE TO DRIVE IN SPEED DRIVE MODE
+    vector<unsigned char> stack;
+
+    Maze();
+    explore(stack, 0, 0);
     print_maze();
-    getchar();
 
-    /** 
-     * if the cell at position x, y has already been visited,
-     * then we don't care want to explore it again
-     **/
-    if (maze[y][x]->visited) {
-        return;
-    }
-    // else set the cell->visited to true
-    else maze[y][x]->visited = true;
+}
 
-    /** 
-     * If micromouse encounters a wall, then push the cell onto the
-     * stack and update the distances
-     **/
-    if (maze[y][x]->top_wall || maze[y][x]->right_wall) {
-        stack.push_back(maze[y][x]);
-        update_distances(stack);
-        explore(stack, y, x);
-    }
-
-    // Generate the next move based on the distances, and explore
-    Cell* next_cell = next_move(maze[y][x]);
-    maze[y][x]->mouse = false;
-    next_cell->mouse = true;
-    explore(stack, next_cell->y, next_cell->x);
-
-
- }
-
-
-// void explore(vector<Cell*> &stack, int y, int x) {
-//     if (maze[y][x]->visited) {
-//         return;
-//     }
-//     else {
-//         maze[y][x]->visited = true;
-//         //set_wall(y,x);
-//     }
-//     if (maze[y][x]->top_wall || maze[y][x]->right_wall) {
-//         stack.push_back(maze[y][x]);
-//         update_distances(stack);
-//     }
-//     // if mouse is located bottom left of center then we want to prioritize exploring top/right
-//     if (y < MAZE_SIZE / 2 && x < MAZE_SIZE / 2) {
-//         // explore top
-//         if (y < MAZE_SIZE - 1) {
-//             explore(stack, y + 1, x);
-//         }
-//         // explore right
-//         if (x < MAZE_SIZE - 1) {
-//             explore(stack, y, x + 1);
-//         }
-//         // explore down
-//         if (y > 0) {
-//             explore(stack, y - 1, x);
-//         }
-//         // explore left
-//         if (x > 0) {
-//             explore(stack, y, x - 1);
-//         }
-//     }
-//     // if mouse is located top left of center then we want to prioritize exploring bottom/right
-//     else if (y > MAZE_SIZE / 2 && x < MAZE_SIZE / 2) {
-//         // explore right
-//         if (x < MAZE_SIZE - 1) {
-//             explore(stack, y, x + 1);
-//         }
-//         // explore down
-//         if (y > 0) {
-//             explore(stack, y - 1, x);
-//         }
-//         // explore top
-//         if (y < MAZE_SIZE - 1) {
-//             explore(stack, y + 1, x);
-//         }
-//         // explore left
-//         if (x > 0) {
-//             explore(stack, y, x - 1);
-//         }
-//     }
-//     // if mouse is located top right of center then we want to prioritize exploring bottom/left
-//     else if (y > MAZE_SIZE / 2 && x > MAZE_SIZE / 2) {
-//         // explore down
-//         if (y > 0) {
-//             explore(stack, y - 1, x);
-//         }
-//         // explore left
-//         if (x > 0) {
-//             explore(stack, y, x - 1);
-//         }
-//         // explore top
-//         if (y < MAZE_SIZE - 1) {
-//             explore(stack, y + 1, x);
-//         }
-//         // explore right
-//         if (x < MAZE_SIZE - 1) {
-//             explore(stack, y, x + 1);
-//         }
-//     }
-//     // if mouse is located bottom right of center then we want to prioritize exploring bottom/right
-//     else if (y < MAZE_SIZE / 2 && x > MAZE_SIZE / 2) {
-//         // explore left
-//         if (x > 0) {
-//             explore(stack, y, x - 1);
-//         }
-//         // explore top
-//         if (y < MAZE_SIZE - 1) {
-//             explore(stack, y + 1, x);
-//         }
-//         // explore down
-//         if (y > 0) {
-//             explore(stack, y - 1, x);
-//         }
-//         // explore right
-//         if (x < MAZE_SIZE - 1) {
-//             explore(stack, y, x + 1);
-//         }
-//     }
-// }

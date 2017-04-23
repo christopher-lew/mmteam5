@@ -16,74 +16,208 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-
-#define TOP 0
-#define RIGHT 1
-#define DOWN 2
-#define LEFT 3
+#include <iostream>
 
 using namespace std;
 
-const int MAZE_SIZE = 4;
+const int MAZE_SIZE = 16;
 
-extern int next_cell_direction;
-extern int direction;
-extern bool has_right_wall;
-extern bool has_left_wall;
-extern int current_direction;
-extern int next_direction;
-extern int drive_distance;
-
-/**
- * Cell inner class for the maze
- */
-class Cell {
-    
+class Maze {
 public:
-    int y;
-    int x;
-    int dist;
-    bool top_wall;
-    bool right_wall;
-    bool visited;
-    bool mouse;
+
+	enum Dir {
+	    NORTH,
+	    SOUTH,
+	    EAST,
+	    WEST,
+	    INVALID
+	};
+
+    class Cell {
+    public:
+        int y;
+        int x;
+        Cell(int y, int x) : y(y), x(x) {}
+
+        int getCellY() {
+            return this->y;
+        }
+
+        int getCellX() {
+            return this->x;
+        }
+
+    };
+
+    // Encoding for the maze in column major order. Walls represent 4 LSB, where
+    // 0001 = W, 0010 = S, 0100 = E, 1000 = N, where 1 represents bit that direction
+    static unsigned char the_maze[MAZE_SIZE][MAZE_SIZE];
+    static int mousey;
+    static int mousex;
     
-    Cell(int y, int x) : y(y), x(x), dist(0), top_wall(false), right_wall(false) {}
-    Cell(int y, int x, int dist) : y(y), x(x), dist(dist), top_wall(false), right_wall(false) {}
-    Cell(int y, int x, bool top_wall, bool right_wall) : y(y), x(x), top_wall(top_wall), right_wall(right_wall) {}
+    // Directions to Move
+    static Dir current_direction;
+
+
+    // Constructor Definition (it has none LOL)
+    Maze() {
+    }
+
+    // Return the x coordinate of the mouse position
+    static int getMousex() {
+        return mousex;
+    }
+
+    // Return the y coordinate of the mouse position
+    static int getMousey() {
+        return mousey;
+    }
+
+    // Set the x coordinate of the mouse position
+    static void setMousex(int x) {
+        mousex = x;
+    }
+
+    // Set the y coordinate of the mouse position
+    static void setMousey(int y) {
+        mousey = y;
+    }
+
+    // Return the 4 LSB by pushing the bits that represent distance off, then bringing them back to LSB
+    static unsigned char decodeWalls (int y, int x){
+        unsigned char cell = the_maze[y][x];
+        return cell << 12 >> 12;
+    }
+
+    // Push all bits off. If LSB == 1: right wall exists
+    static bool has_right_wall(int y, int x) {
+        unsigned char walls = Maze::decodeWalls(y, x);
+        walls = walls & 4;
+        return walls >> 2; 
+    }
+
+    // Push all bits off. If LSB == 1: top wall exists
+    static bool has_top_wall(int y, int x) {
+        unsigned char walls = Maze::decodeWalls(y, x);
+        walls = walls & 8;
+        return walls >> 3; 
+    }
+    // Return the 12 MSB by pushing the bits that represent walls off
+    static int decodeDist (int y, int x) {
+        unsigned char cell = the_maze[y][x];
+        return (int) cell >> 4;
+    }
+
+    // Update the walls using AND operator
+    static void encodeWalls (int y, int x, unsigned char newWall) {
+        // Save the dist in a temporary mask
+        unsigned char dist = decodeDist(y,x);
+
+        dist = dist << 4;
+
+        // Set the new wall to the maze index with dist using OR operator
+        the_maze[y][x] = dist | newWall;
+    }
+
+    // Update the distance using the AND operator
+    static void encodeDist (int y, int x, unsigned char newDist) {
+        // Save the walls in a temporary mask
+        unsigned char walls = decodeWalls(y, x);
+
+        newDist = newDist << 4;
+
+        // Set the newDist to the maze index with walls using OR operator
+        the_maze[y][x] = newDist | walls;
+        
+    }
+
+    // // Return an int value representing an index in maze as 1 int
+    // unsigned char encodeCellIndex(int y, int x) {
+    //     y = y << 5;
+    //     return (unsigned char) y | x; // 10 LSB matters: Y is in 5 MSB, X in 5 LSB. 6 MSB are DONT CARES
+    // }
+
+    // // Return an x value from encoded index
+    // int decodeXIndex(unsigned char encodedIndex) {
+    //     return  (int) encodedIndex & 31; // Will return the x index of encoded index via mask 0000011111
+    // }
+
+    // // Return a y value from encoded index
+    // int decodeYIndex(unsigned char encodedIndex) {
+    //     return (int) encodedIndex & 992; // Will return y index of encoded index via mask 1111100000
+    // }
+
 };
 
+// Initialize static member of maze
+unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
+            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
 
-extern Cell *maze[MAZE_SIZE][MAZE_SIZE];
-extern Cell *mazeIn[MAZE_SIZE][MAZE_SIZE];
+};
 
-vector<Cell*> get_open_neighbors(int y, int x, Cell* current);
+// Initialize static members for mousex and mousey
+int Maze::mousex = 0;
+int Maze::mousey = 0;
+Maze::Dir Maze::current_direction = Maze::NORTH;
+
+//vector<unsigned char> get_open_neighbors(int y, int x, );
 
 int manhattan_dist(int x1, int x2, int y1, int y2);
 
 int min4(int a, int b, int c, int d);
 
-void update_distances(vector<Cell*> &stack);
+void update_distances(vector<unsigned char> &stack);
 
-bool fully_explored();
+// bool fully_explored();
 
-void explore(vector<Cell*> &stack, int y, int x);
+void explore(vector<unsigned char> &stack, int y, int x);
 
 bool is_solved();
+// TODO
 
-void generate_random_walls();
 
-void init_maze();
+// void generate_random_walls();
 
-void print_maze();
+bool is_center(unsigned char cell);
 
-bool is_center(Cell* cell);
+// void set_wall(int y,int x);
 
-void set_wall(int y,int x);
-
-Cell* next_move(Cell* cell);
+unsigned char next_move(int y, int x);
 
 void print_maze();
+
+    // Return an int value representing an index in maze as 1 int
+    unsigned char encodeCellIndex(int y, int x) {
+        y = y << 5;
+        unsigned char encodedVal = y | x;
+        cout << "encoded value = " << encodedVal << endl;
+        return encodedVal; // 10 LSB matters: Y is in 5 MSB, X in 5 LSB. 6 MSB are DONT CARES
+    }
+
+    // Return an x value from encoded index
+    int decodeXIndex(unsigned char encodedIndex) {
+        return  (int) encodedIndex & 31; // Will return the x index of encoded index via mask 0000011111
+    }
+
+    // Return a y value from encoded index
+    int decodeYIndex(unsigned char encodedIndex) {
+        return (int) encodedIndex & 992; // Will return y index of encoded index via mask 1111100000
+    }
 
 
 #endif
