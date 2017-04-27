@@ -4,11 +4,6 @@
 
 #include "testFunctions.hpp"
 
-extern Buzzer buzzer;
-extern PwmOut ledMf;
-extern DigitalOut ledRed;
-extern DigitalOut ledYellow;
-extern DigitalOut ledGreen;
 
 void cycleLEDs(float flashPeriod)
 {
@@ -53,4 +48,50 @@ void testBuzzer()
 	//wait(0.1);
 	//buzzer.levelComplete();
 	//buzzer.imperialMarch();
+}
+
+// +speed == Forward
+void testMotors_straight(float speed, int duration_ms)
+{
+	leftMotor.go(speed);
+	rightMotor.go(speed);
+	
+	wait_ms(duration_ms);
+	
+	leftMotor.stop();
+	rightMotor.stop();
+}
+
+// +speed = CW rotation
+void testMotors_rotate(float speed, int duration_ms)
+{
+	leftMotor.go(speed);
+	rightMotor.go(-speed);
+	
+	wait_ms(duration_ms);
+	
+	leftMotor.stop();
+	rightMotor.stop();
+}
+
+void simpleDemo() 
+{
+	cycleLEDs(0.1);
+	buzzer.testSound();
+	print_battery();
+	
+	
+	testMotors_straight(0.2, 200);
+	wait_ms(250);
+	testMotors_straight(-0.2, 200);
+	
+	wait_ms(500);
+	
+	testMotors_rotate(0.25, 250);
+	wait_ms(250);
+	testMotors_rotate(-0.25, 250);
+	
+	wait_ms(250);
+	buzzer.levelComplete();
+	cycleMFs(0.2);
 }

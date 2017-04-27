@@ -17,9 +17,9 @@ public:
 	void stop();
 
 private:
-	DigitalOut ctrlDir;
-	PwmOut ctrlPwm;
-	float speed;
+	PwmOut pwm_ChA;
+	PwmOut pwm_ChB;
+	//!!!float speed;
 };
 
 #endif

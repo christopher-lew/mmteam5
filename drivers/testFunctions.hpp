@@ -9,11 +9,18 @@
 #include "mbed.h"
 #include "../config/initModes.hpp"
 #include "../config/initDevices.hpp"
+ #include "debug_io.hpp"
 
 void cycleLEDs(float flashPeriod);
 
 void cycleMFs(float flashPeriod);
 
 void testBuzzer();
+
+void testMotors_straight(float speed, int duration_ms);
+
+void testMotors_rotate(float speed, int duration_ms);
+
+void simpleDemo();
 
 #endif

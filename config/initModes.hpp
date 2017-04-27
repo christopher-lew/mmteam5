@@ -27,7 +27,8 @@
 /*
  * M: Falcon runs using the Maze class
  * D: Falcon operates in general debugging mode
+ * T: Falcon operates in testing mode
  */
-#define _OPERATING_MODE 'D'
+#define _OPERATING_MODE 'T'
 
 #endif
