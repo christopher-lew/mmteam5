@@ -3,26 +3,23 @@
  * rather than using hardware interrupt pins.
  */
 
+
 #ifndef ENCODER_H
 #define ENCODER_H
 
 #include "mbed.h"
+#include "QEI.hpp"
 
 
 class Encoder
 {
-public:
-	volatile int count;
-	
-	Encoder(PinName channelA_pin, PinName channelB_pin);
+public:	
+	Encoder(PinName channelA, PinName channelB);
 	int read();
 	void reset();
 
 private:
-	InterruptIn channelA;
-	InterruptIn channelB;
-	
-	void countChange();
+	QEI myEncoder;
 };
 
 #endif
