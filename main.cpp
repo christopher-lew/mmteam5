@@ -1,9 +1,9 @@
 #include "config/initModes.hpp"
 
 
-#if _OPERATING_MODE == 'M'
+//#if _OPERATING_MODE == 'M'
 
-	#include "src/maze.h"
+	#include "src/maze.cpp"
 	#include <stdio.h>
 	#include <iostream>
 	#include <vector>
@@ -19,32 +19,30 @@
 	#define IS_AT_BEGINNING 8
 	#define IS_AT_CENTER 9
 
+	using namespace std;
 
 	//Internal for elsewhere
-	int next_cell_direction = 0; //TOP
-	int direction; //maze internal
+	// int next_cell_direction = 0; //TOP
+	// int direction; //maze internal
 
 	//Signals from/to elsewhere:
-	int current_direction = NORTH;
-	int next_direction = -1; //A direction or AT_BEGINNING or AT_CENTER
-	int drive_distance = 1; //MAZE MUST SPECIFY DISTANCE TO DRIVE IN SPEED DRIVE MODE
+	// int current_direction = NORTH;
+	// int next_direction = -1; //A direction or AT_BEGINNING or AT_CENTER
+	// int drive_distance = 1; //MAZE MUST SPECIFY DISTANCE TO DRIVE IN SPEED DRIVE MODE
 
 	int mouse_x = 0;
 	int mouse_y = 0;
 
-	vector<Cell*> stack;
+	vector<unsigned char> stack;
 
 
-	float drive_top_speed = 0.1;
-	float turn_top_speed = 0.2;
-
-	bool has_left_wall = true;
-	bool has_right_wall = true;
+	// float drive_top_speed = 0.1;
+	// float turn_top_speed = 0.2;
 
 	int main() {
-		vector<Cell*> stack;
-	    init_maze();
-	    //generate_random_walls();
+		Maze();
+		print_maze();
+		vector<unsigned char> stack;
 	    update_distances(stack);
 	    explore(stack, mouse_x, mouse_y);
 	}
@@ -54,20 +52,22 @@
 
 
 
-#elif _OPERATING_MODE == 'D'
+// #elif _OPERATING_MODE == 'D'
 
-	#include "mbed.h"
-	#include "config/initDevices.hpp"
-	#include "drivers/testFunctions.hpp"
-	#include "drivers/debug_io.hpp"
+// 	#include "mbed.h"
+// 	#include "config/initDevices.hpp"
+// 	#include "drivers/testFunctions.hpp"
+// 	#include "drivers/debug_io.hpp"
 
-	int main()
-	{
-		cycleLEDs(0.25);
-		testBuzzer();
+// 	int main()
+// 	{
+// 		maze();
 
-		print_battery();
-		cycleLEDs(0.1);
-	}
+// 		cycleLEDs(0.25);
+// 		testBuzzer();
 
-#endif
+// 		print_battery();
+// 		cycleLEDs(0.1);
+// 	}
+
+//#endif
