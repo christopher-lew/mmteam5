@@ -21,8 +21,8 @@ void print_ir(IRPair ir);
 
 void print_ir_all();
 
-void print_encoder();
+void print_encoder(char encChoice);
 
-void print_motor();
+void print_gyro();
 
 #endif

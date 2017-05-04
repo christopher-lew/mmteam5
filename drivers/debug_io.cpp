@@ -27,3 +27,12 @@ void print_ir(IRPair ir)
 	}
 	pc.printf("Avg Dist To Wall = %3.9f\r\n\n", dist);
 }
+
+void print_encoder(char encChoice)
+{
+	int encCount;
+	if (encChoice == 'L') { encCount = leftEncoder.read(); }
+	else { encCount = rightEncoder.read(); }
+	
+	pc.printf("Encoder count = %d\r\n\n", encCount);
+}

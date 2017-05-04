@@ -1,7 +1,7 @@
 #include "config/initModes.hpp"
 
 
-//#if _OPERATING_MODE == 'M'
+#if _OPERATING_MODE == 'M'
 
 	#include "src/maze.cpp"
 	#include <stdio.h>
@@ -52,12 +52,12 @@
 
 
 
-// #elif _OPERATING_MODE == 'D'
+#elif _OPERATING_MODE == 'D'
 
-// 	#include "mbed.h"
-// 	#include "config/initDevices.hpp"
-// 	#include "drivers/testFunctions.hpp"
-// 	#include "drivers/debug_io.hpp"
+	#include "mbed.h"
+	#include "config/initDevices.hpp"
+	#include "drivers/testFunctions.hpp"
+	#include "drivers/debug_io.hpp"
 
 
 	int main()
@@ -65,16 +65,22 @@
 		cycleLEDs(0.1);
 		testBuzzer();
 		print_battery();
-		
+
+		print_battery();
 		testMotors_straight(0.2, 200);
+		
+		print_encoder('R');	
 		wait_ms(250);
 		testMotors_straight(-0.2, 200);
 
 		wait_ms(500);
+		print_encoder('R');	
 		
 		testMotors_rotate(0.25, 250);
+		print_encoder('R');	
 		wait_ms(250);
 		testMotors_rotate(-0.25, 250);
+		print_encoder('R');
 	}
 // END
 
@@ -100,4 +106,4 @@
 	}
 
 
-//#endif
+#endif
