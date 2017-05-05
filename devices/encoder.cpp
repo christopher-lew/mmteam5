@@ -25,6 +25,7 @@ void Encoder::reset()
 
 
 /*
+// HARDWARE IMPLEMENTATION
 // Constructor 
 Encoder::Encoder()
 {

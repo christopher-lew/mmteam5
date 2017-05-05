@@ -17,7 +17,7 @@
  * 2: Two-Cell Battery (8.4V)
  * 3: Three-Cell Battery (12.6V)
  */ 
-#define _BATTERIES 3
+#define _BATTERIES 2
 
 /*
  *
@@ -29,6 +29,6 @@
  * D: Falcon operates in general Demo mode
  * T: Falcon operates in Testing mode
  */
-#define _OPERATING_MODE 'D'
+#define _OPERATING_MODE 'T'
 
 #endif

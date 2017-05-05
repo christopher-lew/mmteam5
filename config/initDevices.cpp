@@ -15,6 +15,8 @@
 	
 	Encoder leftEncoder(PB_10, PA_5);
 	Encoder rightEncoder(PA_0, PA_1); 
+
+	Gyro gyro(PB_1);
 	
 
 	// LEDs

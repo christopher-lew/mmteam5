@@ -62,6 +62,23 @@
 
 	int main()
 	{
+		simpleDemo();
+	}
+// END
+
+
+
+
+
+#elif _OPERATING_MODE == 'T'
+	#include "mbed.h"
+	#include "config/initDevices.hpp"
+	#include "drivers/testFunctions.hpp"
+	#include "drivers/debug_io.hpp"
+
+	int main()
+	{
+		/*
 		cycleLEDs(0.1);
 		testBuzzer();
 		print_battery();
@@ -81,28 +98,13 @@
 		wait_ms(250);
 		testMotors_rotate(-0.25, 250);
 		print_encoder('R');
-	}
-// END
-
-
-
-
-
-#elif _OPERATING_MODE == 'T'
-	#include "mbed.h"
-	#include "config/initDevices.hpp"
-	#include "drivers/testFunctions.hpp"
-	#include "drivers/debug_io.hpp"
-
-	//QEI rightEncoder(PA_0, PA_1, NC, 1024, QEI::X4_ENCODING);
-	Encoder rightEncoder(PA_0, PA_1);
-
-	int main()
-	{
+		*/
+		
 		while(1) {
 			wait(0.1);
-			pc.printf("Right Pulse Count = %i\r\n", rightEncoder.read());
+			print_gyro();
 		}
+		
 	}
 
 

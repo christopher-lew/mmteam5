@@ -36,3 +36,9 @@ void print_encoder(char encChoice)
 	
 	pc.printf("Encoder count = %d\r\n\n", encCount);
 }
+
+void print_gyro()
+{
+	int gyroRead = gyro.read();
+	pc.printf("Gyro read = %1.4f\r\n", gyroRead);
+}

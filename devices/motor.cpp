@@ -13,7 +13,6 @@ Motor::Motor(PinName PwmA, PinName PwmB)
 	this->pwm_ChB.write(0);
 	this->pwm_ChA.period_ms(1);
 	this->pwm_ChB.period_ms(1);
-	//!!!this->speed = 0;
 }
 
 
