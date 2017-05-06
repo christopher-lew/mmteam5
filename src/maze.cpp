@@ -1,8 +1,34 @@
 #include "maze.h"
-#include "math.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
+Maze::Dir Maze::current_direction = Maze::NORTH;
+
+// Initialize static member of maze
+unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
+            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+
+};
+
+// Initialize static members for mousex and mousey
+int Maze::mousex = 0;
+int Maze::mousey = 0;
 
 //FUNCTION to take the minimum of 4 distances
 int min4(int a, int b, int c, int d) {
@@ -115,21 +141,21 @@ unsigned char next_move(int currX, int currY) { // (Maze::Cell *current)
         }
     }
   // signals next cell's direction
-//   if((minx < x) && (miny == y)){
-//       next_direction = LEFT;
-//   }
-//
-//   if((minx == x) && (miny > y)){
-//       next_direction = TOP;
-//   }
-//
-//   if((minx > x) && (miny == y)){
-//       next_direction = RIGHT;
-//   }
-//
-//   if((minx == x) && (miny < y)){
-//       next_direction = DOWN;
-//   }
+  if((minx < x) && (miny == y)){
+      Maze::current_direction = Maze::WEST;
+  }
+
+  if((minx == x) && (miny > y)){
+      Maze::current_direction = Maze::NORTH;
+  }
+
+  if((minx > x) && (miny == y)){
+      Maze::current_direction = Maze::EAST;
+  }
+
+  if((minx == x) && (miny < y)){
+      Maze::current_direction = Maze::SOUTH;
+  }
    
 
     // Returns cell to be moved to
@@ -217,9 +243,9 @@ void update_distances(vector <unsigned char> &stack) {
 // FUNCTION to explore the cells
 void explore(vector<unsigned char> &stack, int y, int x) {
 
-	if (is_center(encodeCellIndex(y, x))) {
-		return;
-	}
+    if (is_center(encodeCellIndex(y, x))) {
+        return;
+    }
     // Print the maze
     print_maze();
 
@@ -269,9 +295,11 @@ void explore(vector<unsigned char> &stack, int y, int x) {
 void print_maze() {
     
     // print top wall
-    for (int i = 0; i < MAZE_SIZE; i++) {
+    for (int i = 0; i < 16; i++) {
+        //pc.printf("+---");
         printf("+---");
     }
+//    pc.printf("+\n");
     printf("+\n");
     
     int rows = MAZE_SIZE + (MAZE_SIZE - 1);
@@ -288,18 +316,22 @@ void print_maze() {
             
             if (i % 2 != 0) {
                 if (Maze::decodeWalls(y, j) >> 3 == 1) {
+//                    pc.printf("+---");
                     printf("+---");
                 }
                 else {
+//                    pc.printf("+   ");
                     printf("+   ");
                 }
                 if (j == MAZE_SIZE - 1) {
+//                    pc.printf("+");
                     printf("+");
                 }
             }
             
             else {
                 if (j == 0) {
+//                    pc.printf("|");
                     printf("|");
                 }
                 
@@ -312,19 +344,24 @@ void print_maze() {
                 //     printf(" * ");
                 // }
                 else if (dist > 99) {
+//                    pc.printf("%d", dist);
                     printf("%d", dist);
                 }
                 else if (dist > 9) {
+//                    pc.printf(" %d", dist);
                     printf(" %d", dist);
                 }
                 else {
+//                    pc.printf(" %d ", dist);
                     printf(" %d ", dist);
                 }
                 
                 if ((Maze::decodeWalls(y, j) << 13 >> 15) == 1 || j == MAZE_SIZE - 1) {
+//                    pc.printf("|");
                     printf("|");
                 }
                 else {
+//                    pc.printf(" ");
                     printf(" ");
                 }
             }
@@ -334,26 +371,30 @@ void print_maze() {
     
     // print bottom wall
     for (int i = 0; i < MAZE_SIZE; i++) {
+//        pc.printf("+---");
         printf("+---");
     }
+//    pc.printf("+\n\n End Print Function\n");
     printf("+\n\n");
+    
     cout << "End Print Function" << endl;
 }
 
-int main() {
-        //Internal for elsewhere
-    // int next_cell_direction = 0; //TOP
-    // int direction; //maze internal
+// Return an int value representing an index in maze as 1 int
+    unsigned char encodeCellIndex(int y, int x) {
+        y = y << 5;
+        unsigned char encodedVal = y | x;
+        cout << "encoded value = " << encodedVal << endl;
+        return encodedVal; // 10 LSB matters: Y is in 5 MSB, X in 5 LSB. 6 MSB are DONT CARES
+    }
 
-    // //Signals from/to elsewhere:
-    // int current_direction = 0;
-    // int next_direction = -1; //A direction or AT_BEGINNING or AT_CENTER
-    // int drive_distance = 1; //MAZE MUST SPECIFY DISTANCE TO DRIVE IN SPEED DRIVE MODE
-    vector<unsigned char> stack;
+    // Return an x value from encoded index
+    int decodeXIndex(unsigned char encodedIndex) {
+        return  (int) encodedIndex & 31; // Will return the x index of encoded index via mask 0000011111
+    }
 
-    Maze();
-    explore(stack, 0, 0);
-    print_maze();
-
-}
+    // Return a y value from encoded index
+    int decodeYIndex(unsigned char encodedIndex) {
+        return (int) encodedIndex & 992; // Will return y index of encoded index via mask 1111100000
+    }
 

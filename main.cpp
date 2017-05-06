@@ -1,7 +1,7 @@
 #include "config/initModes.hpp"
 
 
-//#if _OPERATING_MODE == 'M'
+#if _OPERATING_MODE == 'M'
 
 	#include "src/maze.cpp"
 	#include <stdio.h>
@@ -40,6 +40,7 @@
 	// float turn_top_speed = 0.2;
 
 	int main() {
+		cycleLEDs(0.1);
 		Maze();
 		print_maze();
 		vector<unsigned char> stack;
@@ -52,12 +53,12 @@
 
 
 
-// #elif _OPERATING_MODE == 'D'
+#elif _OPERATING_MODE == 'D'
 
-// 	#include "mbed.h"
-// 	#include "config/initDevices.hpp"
-// 	#include "drivers/testFunctions.hpp"
-// 	#include "drivers/debug_io.hpp"
+	#include "mbed.h"
+	#include "config/initDevices.hpp"
+	#include "drivers/testFunctions.hpp"
+	#include "drivers/debug_io.hpp"
 
 
 	int main()
@@ -100,4 +101,4 @@
 	}
 
 
-//#endif
+#endif
