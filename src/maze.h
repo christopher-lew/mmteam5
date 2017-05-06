@@ -10,6 +10,7 @@
  * @version 0.1
  */
 
+#include "dir.h"
 #include <cmath>
 #include <ctime>
 #include <climits>
@@ -24,14 +25,6 @@ const int MAZE_SIZE = 16;
 
 class Maze {
 public:
-
-	enum Dir {
-	    NORTH,
-	    SOUTH,
-	    EAST,
-	    WEST,
-	    INVALID
-	};
 
     class Cell {
     public:
@@ -149,31 +142,31 @@ public:
 
 };
 
-// Initialize static member of maze
-unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
-            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
-            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
-            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
-            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
-            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
-            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
-            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
-            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
-            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
-            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
-            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
-            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
-            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
-            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
-            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
-            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+//// Initialize static member of maze
+//unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
+//            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+//            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+//            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+//            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+//            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+//            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+//            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+//            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+//            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+//            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+//            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+//            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+//            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+//            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+//            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+//            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+//
+//};
 
-};
-
-// Initialize static members for mousex and mousey
-int Maze::mousex = 0;
-int Maze::mousey = 0;
-Maze::Dir Maze::current_direction = Maze::NORTH;
+// Init//ialize static members for mousex and mousey
+//int Maze::mousex = 0;
+//int Maze::mousey = 0;
+//Maze::Dir Maze::current_direction = Maze::NORTH;
 
 //vector<unsigned char> get_open_neighbors(int y, int x, );
 
@@ -201,23 +194,12 @@ unsigned char next_move(int y, int x);
 
 void print_maze();
 
-    // Return an int value representing an index in maze as 1 int
-    unsigned char encodeCellIndex(int y, int x) {
-        y = y << 5;
-        unsigned char encodedVal = y | x;
-        cout << "encoded value = " << encodedVal << endl;
-        return encodedVal; // 10 LSB matters: Y is in 5 MSB, X in 5 LSB. 6 MSB are DONT CARES
-    }
+unsigned char encodeCellIndex(int y, int x);
 
-    // Return an x value from encoded index
-    int decodeXIndex(unsigned char encodedIndex) {
-        return  (int) encodedIndex & 31; // Will return the x index of encoded index via mask 0000011111
-    }
+int decodeXIndex(unsigned char encodedIndex);
 
-    // Return a y value from encoded index
-    int decodeYIndex(unsigned char encodedIndex) {
-        return (int) encodedIndex & 992; // Will return y index of encoded index via mask 1111100000
-    }
+int decodeYIndex(unsigned char encodedIndex);
+    
 
 
 #endif

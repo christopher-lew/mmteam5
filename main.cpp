@@ -40,6 +40,7 @@
 	// float turn_top_speed = 0.2;
 
 	int main() {
+		cycleLEDs(0.1);
 		Maze();
 		print_maze();
 		vector<unsigned char> stack;
