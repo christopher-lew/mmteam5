@@ -12,5 +12,6 @@
 
 float Gyro::read()
 {
-	return outZ.read();
+	float zRead = outZ.read();
+	return zRead;
 }
