@@ -76,35 +76,24 @@
 	#include "config/initDevices.hpp"
 	#include "drivers/testFunctions.hpp"
 	#include "drivers/debug_io.hpp"
+	#include "drivers/drive_controller.hpp"
 
 	int main()
-	{
-		/*
-		cycleLEDs(0.1);
-		testBuzzer();
-		print_battery();
+	{		
+		cycleLEDs(0.05);
 
-		print_battery();
-		testMotors_straight(0.2, 200);
-		
-		print_encoder('R');	
-		wait_ms(250);
-		testMotors_straight(-0.2, 200);
-
-		wait_ms(500);
-		print_encoder('R');	
-		
-		testMotors_rotate(0.25, 250);
-		print_encoder('R');	
-		wait_ms(250);
-		testMotors_rotate(-0.25, 250);
-		print_encoder('R');
-		*/
-		
 		while(1) {
 			wait(0.1);
 			print_gyro();
+			testBuzzer();
 		}
+
+		/*
+		turnLeft();
+		wait(0.1);
+		turnRight();
+		*/
+
 		
 	}
 

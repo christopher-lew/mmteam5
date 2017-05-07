@@ -14,7 +14,7 @@ Encoder::Encoder(PinName channelA, PinName channelB)
 
 int Encoder::read()
 {
-	return myEncoder.getPulses();
+	return -myEncoder.getPulses();
 }
 
 

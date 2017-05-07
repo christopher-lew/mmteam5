@@ -23,6 +23,8 @@ void print_ir_all();
 
 void print_encoder(char encChoice);
 
+void print_both_encoders(char turnDirection, int leftRead, int rightRead);
+
 void print_gyro();
 
 #endif
