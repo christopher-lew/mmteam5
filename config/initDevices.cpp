@@ -29,7 +29,7 @@
 	// Other IO Devices
 	AnalogIn battery(PC_0);
 
-	Serial pc(PC_10, PC_11);
+	Serial bluetooth(PC_10, PC_11);
 
 
 
@@ -60,7 +60,7 @@
 	// Other IO Devices
 	AnalogIn battery(PA_3);
 
-	Serial pc(PA_9, PA_10);
+	Serial bluetooth(PA_9, PA_10);
 
 	DigitalIn userButton(PC_10);
 

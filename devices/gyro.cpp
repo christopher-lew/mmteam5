@@ -7,8 +7,16 @@
 
  /* Constructor */
  Gyro::Gyro(PinName outZPin)
- 	: outZ(outZPin) { }
+ 	: outZ(outZPin) 
+{
+	this->currentAngle = 0.0;
+}
 
+
+float Gyro::reset()
+{
+	this->currentAngle = 0.0;
+}
 
 float Gyro::read()
 {

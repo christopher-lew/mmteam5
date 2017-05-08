@@ -22,8 +22,8 @@ void resetEncoders()
 // Go forward 1 cell
 void forward() 
 {
-	float constSpeed = 0.2;
-	int encoderLimit = 30000;
+	float constSpeed = 0.3;
+	int encoderLimit = 20000;
 
 	leftMotor.go(constSpeed);
 	rightMotor.go(constSpeed);
@@ -40,13 +40,15 @@ void forward()
 void turnLeft()
 {
 	float constSpeed = 0.2;
-	int encoderLimit = 14500;
+	int encoderLimit = 17500;
 
-	int leftRead = leftEncoder.read();
-	int rightRead = rightEncoder.read();
-
+	int leftRead;
+	int rightRead;
 	
 	resetEncoders();
+	leftRead = leftEncoder.read();
+	rightRead = rightEncoder.read();
+	
 	leftMotor.go(-constSpeed);
 	rightMotor.go(constSpeed);
 
@@ -67,13 +69,15 @@ void turnLeft()
 void turnRight()
 {
 	float constSpeed = 0.2;
-	int encoderLimit = 14500;
+	int encoderLimit = 17500;
 
-	int leftRead = leftEncoder.read();
-	int rightRead = rightEncoder.read();
-
-
+	int leftRead;
+	int rightRead;
+	
 	resetEncoders();
+	leftRead = leftEncoder.read();
+	rightRead = rightEncoder.read();
+	
 	leftMotor.go(constSpeed);
 	rightMotor.go(-constSpeed);
 

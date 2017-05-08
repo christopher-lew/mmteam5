@@ -82,19 +82,41 @@
 	{		
 		cycleLEDs(0.05);
 
+		/*
 		while(1) {
 			wait(0.1);
 			print_gyro();
 			testBuzzer();
 		}
-
+		*/
+		
 		/*
+		bluetooth.printf("Executing...\r\n");
+		bluetooth.printf("Left Motor:  InvFwd = %d \t InvBkwd = %d\r\n", leftMotor.invFwd, leftMotor.invBkwd);
+		bluetooth.printf("Right Motor: InvFwd = %d \t InvBkwd = %d\r\n\n", rightMotor.invFwd, rightMotor.invBkwd);
+		
 		turnLeft();
 		wait(0.1);
 		turnRight();
-		*/
-
 		
+		bluetooth.printf("\r\n");
+		*/
+		
+		forward();
+		wait(0.5);
+		turnLeft();
+		wait(0.5);
+		forward();
+		wait(0.5);
+		turnLeft();
+		wait(0.5);
+		forward();
+		wait(0.5);
+		turnLeft();
+		wait(0.5);
+		forward();
+		wait(0.5);
+		turnLeft();
 	}
 
 

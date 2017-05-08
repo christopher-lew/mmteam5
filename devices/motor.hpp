@@ -9,6 +9,9 @@
 
 #include "mbed.h"
 
+#define ACC_STEPS 4
+#define ACC_WAIT_MS 5
+
 
 class Motor
 {
@@ -20,6 +23,10 @@ public:
 private:
 	PwmOut pwm_ChA;
 	PwmOut pwm_ChB;
+
+	float curSpeed;
+	//int invFwd;
+	//int invBkwd;
 };
 
 #endif

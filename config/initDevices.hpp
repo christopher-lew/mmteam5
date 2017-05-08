@@ -44,7 +44,7 @@ extern DigitalOut ledGreen;
 // Other IO Devices
 extern AnalogIn battery;
 
-extern Serial pc;
+extern Serial bluetooth;
 
 extern DigitalIn userButton; // Falcon v2.0
 
