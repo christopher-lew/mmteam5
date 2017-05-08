@@ -61,6 +61,6 @@ void print_both_encoders(char turnDirection, int leftRead, int rightRead)
 
 void print_gyro()
 {
-	float gyroRead = gyro.read();
-	bluetooth.printf("Gyro read = %1.9f\r\n", gyroRead);
+	float ADCRead = gyro.getADCRead();
+	bluetooth.printf("Gyro ADC Read = %1.15f\r\n", ADCRead);
 }

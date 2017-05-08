@@ -25,8 +25,8 @@ void forward()
 	float constSpeed = 0.3;
 	int encoderLimit = 20000;
 
-	leftMotor.go(constSpeed);
-	rightMotor.go(constSpeed);
+	leftMotor.accel(constSpeed);
+	rightMotor.accel(constSpeed);
 
 	//&stopMotors( leftMotor.stop(), rightMotor.stop());
 	while(getEncoderDistance() < encoderLimit) { }
@@ -49,8 +49,8 @@ void turnLeft()
 	leftRead = leftEncoder.read();
 	rightRead = rightEncoder.read();
 	
-	leftMotor.go(-constSpeed);
-	rightMotor.go(constSpeed);
+	leftMotor.accel(-constSpeed);
+	rightMotor.accel(constSpeed);
 
 	//&stopMotors( leftMotor.stop(), rightMotor.stop());
 	while ((leftRead > -encoderLimit) && (rightRead < encoderLimit)) { 
@@ -78,8 +78,8 @@ void turnRight()
 	leftRead = leftEncoder.read();
 	rightRead = rightEncoder.read();
 	
-	leftMotor.go(constSpeed);
-	rightMotor.go(-constSpeed);
+	leftMotor.accel(constSpeed);
+	rightMotor.accel(-constSpeed);
 
 	//&stopMotors( leftMotor.stop(), rightMotor.stop());
 	//while ((leftEncoder.read() < encoderLimit) || (rightEncoder.read() > -encoderLimit)) { 

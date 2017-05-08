@@ -13,13 +13,31 @@
 }
 
 
-float Gyro::reset()
+float Gyro::getAngle()
 {
-	this->currentAngle = 0.0;
+	return currentAngle;
 }
 
-float Gyro::read()
+
+float Gyro::getADCRead()
 {
-	float zRead = outZ.read();
-	return zRead;
+	return outZ.read();
+}
+
+
+void Gyro::start_reading()
+{	
+	//TODO
+}
+
+
+void Gyro::stop_reading()
+{
+	//TODO
+}
+
+
+void Gyro::reset()
+{
+	this->currentAngle = 0.0;
 }

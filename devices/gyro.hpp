@@ -7,7 +7,6 @@
 #define GYRO_H
 
 #include "mbed.h"
-#include "../config/initConstants.hpp"
 
 #define G_OFFSET 0.515
 #define G_SAMPLE_TIME 1000 // usecs
@@ -17,8 +16,12 @@ class Gyro
 {
 public:	
 	Gyro(PinName outZPin);
-	//float getAngle();
-	float read();
+	
+	float getAngle();
+	float getADCRead();
+
+	void start_reading();
+	void stop_reading();
 	void reset();
 
 private:

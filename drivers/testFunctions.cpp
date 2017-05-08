@@ -1,5 +1,6 @@
 /**
- * Implementation of test functions.
+ * Implementation of test functions used to validate that all devices 
+ * on the mouse are working as expected.
  */
 
 #include "testFunctions.hpp"
@@ -56,8 +57,8 @@ void testBuzzer()
 // +speed == Forward
 void testMotors_straight(float speed, int duration_ms)
 {
-	leftMotor.go(speed);
-	rightMotor.go(speed);
+	leftMotor.accel(speed);
+	rightMotor.accel(speed);
 	
 	wait_ms(duration_ms);
 	
@@ -69,8 +70,8 @@ void testMotors_straight(float speed, int duration_ms)
 // +speed = CW rotation
 void testMotors_rotate(float speed, int duration_ms)
 {
-	leftMotor.go(speed);
-	rightMotor.go(-speed);
+	leftMotor.accel(speed);
+	rightMotor.accel(-speed);
 	
 	wait_ms(duration_ms);
 	

@@ -20,8 +20,8 @@
 extern Buzzer buzzer;
 
 extern IRPair leftIR;
-extern IRPair leftFrontIR;
-extern IRPair rightFrontIR;
+extern IRPair frontLeftIR;
+extern IRPair frontRightIR;
 extern IRPair rightIR;
 extern IRPair testIR;
 

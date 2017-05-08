@@ -10,6 +10,7 @@
 #include "../config/initConstants.hpp"
 #include "../config/initDevices.hpp"
 #include "debug_io.hpp"
+#include "pid.hpp"
 
 
 int getEncoderDistance();
@@ -23,7 +24,6 @@ void turnLeft();
 void turnRight();
 
 void turnAround();
-
 
 
 #endif 
