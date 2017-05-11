@@ -25,19 +25,26 @@ float Gyro::getADCRead()
 }
 
 
+void Gyro::updateAngle()
+{
+	//TODO
+}
+
+
+void Gyro::resetAngle()
+{
+	this->currentAngle = 0.0;
+}
+
+
 void Gyro::start_reading()
 {	
-	//TODO
+	this->resetAngle();
+	gyroTicker.attach_us(this, &Gyro::updateAngle, G_SAMPLE_TIME);
 }
 
 
 void Gyro::stop_reading()
 {
-	//TODO
-}
-
-
-void Gyro::reset()
-{
-	this->currentAngle = 0.0;
+	gyroTicker.detach();
 }

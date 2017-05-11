@@ -9,7 +9,7 @@
 #include "mbed.h"
 
 #define G_OFFSET 0.515
-#define G_SAMPLE_TIME 1000 // usecs
+#define G_SAMPLE_TIME 50 // usecs
 
 
 class Gyro
@@ -19,14 +19,18 @@ public:
 	
 	float getAngle();
 	float getADCRead();
-
+	
 	void start_reading();
 	void stop_reading();
-	void reset();
 
 private:
-	AnalogIn outZ;
 	float currentAngle;
+
+	AnalogIn outZ;
+	Ticker gyroTicker;
+
+	void updateAngle();
+	void resetAngle();
 };
 
 #endif

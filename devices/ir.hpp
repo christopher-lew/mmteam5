@@ -13,8 +13,8 @@
 #define IR_SIGDELAY 6 // Wait for firing capacitor signal (usec)
 #define IR_SIGREST 75 // Allows firing cap to recharge
 
-#define ADJ_WALL_LIMIT 10 // If a wall is closer than this, then it is touching the currently occupied cell
-#define CELL_LENGTH 18 // each cell is 18 cm long
+#define ADJ_WALL_LIMIT 8.0 // If a wall is closer than this, then it is touching the currently occupied cell
+#define CELL_LENGTH 18.0 // each cell is 18 cm long
 
 
 // Class for the IR Transmitter and Receiver Pair
@@ -25,12 +25,16 @@ public:
 	
 	IRPair(PinName rxPin, PinName txPin);
 	
+	int adjWall(); 
 	float distToWall(); // Returns dist in cm
 	int cellsToWall(); // Returns how many cells away a wall is
 	
 private:
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;
+
+	float fireAndRead();
+	float getDistance(float ADC_read);
 };
 
 #endif 

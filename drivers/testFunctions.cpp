@@ -101,3 +101,32 @@ void simpleDemo()
 	buzzer.levelComplete();
 	cycleMFs(0.2);
 }
+
+
+
+void ticker_switch1() {
+	ledRed = !ledRed;
+}
+void ticker_switch2() {
+	ledGreen = !ledGreen;
+}
+
+void tickerExample() 
+{
+	Ticker tick1;
+	Ticker tick2;
+
+	ledRed = 0;
+	ledGreen = 0;
+
+	tick1.attach(&ticker_switch1, 0.2);
+	tick2.attach(&ticker_switch2, 1.0);
+
+	wait(5);
+	tick1.detach();
+	ledRed = 0;
+	
+	wait(5);
+	tick2.detach();		
+	ledGreen = 0;
+}

@@ -23,4 +23,8 @@ void testMotors_rotate(float speed, int duration_ms);
 
 void simpleDemo();
 
+void ticker_switch1();
+void ticker_switch2();
+void tickerExample();
+
 #endif

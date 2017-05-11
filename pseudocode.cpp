@@ -70,12 +70,21 @@ void moveFalcon(char nextMove, float speed)
 
 void forward(speed)
 {
+	int pid_state = 0;
+
 	resetEncoders();
 	leftMotor.accel(speed);
 	rightMotor.accel(speed);
 
 	while(getEncoderDistance() < CELL_DISTANCE) {
-		PID_keepStraight(); // use timer to execute every 1 ms
+		pid_state = PID_keepStraight(); // use timer to execute every 1 ms
+		if (pid_state) {
+			break;
+		}
+	}
+
+	if (pid_state) {
+		PID_alignToFrontWall();
 	}
 
 	leftMotor.stop();
@@ -124,7 +133,7 @@ void turnLeft()
 
 // PID MONITORING FUNCTIONS (/drivers/PID.cpp)
 // this function should adjust both motors to keep moving straight in a forward direction
-void PID_keepStraight()
+int PID_keepStraight()
 {
 	// Boolean flags:
 	int leftWall = 	 	leftIR.adjWall();
@@ -133,22 +142,42 @@ void PID_keepStraight()
 	int frontRightWall=	frontRightIR.adjWall();
 
 	if (frontLeftWall && frontLeftWall) {
-		alignFront();
+		return 1;
 	}
+	
 	else if (leftWall || rightWall) {
-		alignSides(leftWall, rightWall);
+		PID_alignUsingSides(leftWall, rightWall);
 	}
-	else { /* Hope for the best */ }
+	
+	else { 
+		PID_HailMary(); // Try and get a read 2 walls away or just match the encoder counts on L&R
+	}
+
+	return 0;
 }
 
-void alignFront()
+/* Use frontLeft & frontRight IRs to keep the motors straight */
+void PID_alignToFrontWall()
 {
 
 }
 
-void alignSides(int leftWall, int rightWall)
-{
 
+#define PID_ALIGN_FRONT_DIST 3 // centimeters
+void PID_alignUsingSides(int leftWall, int rightWall)
+{	
+	// Use both walls to align
+	if (leftWall && rightWall) {
+
+	}
+	// Use only left wall to align
+	else if (leftWall) {
+
+	}
+	// Use only right wall to align
+	else {
+
+	}
 }
 
 
