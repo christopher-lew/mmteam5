@@ -27,8 +27,9 @@
 /*
  * M: Falcon runs using the Maze class
  * D: Falcon operates in general Demo mode
+ * W: Falcon operates in Wall Following mode
  * T: Falcon operates in Testing mode
  */
-#define _OPERATING_MODE 'T'
+#define _OPERATING_MODE 'W'
 
 #endif

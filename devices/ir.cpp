@@ -12,6 +12,55 @@ IRPair::IRPair(PinName rxPin, PinName txPin)
 	this->IR_Emitter.write(0);
 }
 
+
+/* Fires a single cycle of the IR Pair and returns the ADC read value. */
+float IRPair::fireAndRead()
+{
+	IR_Emitter.write(1);
+	wait_us(IR_SIGDELAY); // Wait for firing capacitor
+
+	float read = IR_Receiver.read();
+	IR_Emitter.write(0);
+	wait_us(IR_SIGREST); // Recharge firing capacitor
+
+	return read;
+}
+
+
+/* Use polynomial regression formula to generate distance to wall from ADC reading. */
+float IRPair::getDistance(float ADC_read)
+{
+	float dist = 0;
+	float square = ADC_read * ADC_read;
+	float cube = square * ADC_read;
+	
+	dist += IR_C13 / cube;
+	dist += IR_C12 / square;
+	dist += IR_C11 / ADC_read;
+	dist += IR_C00;
+	dist += IR_C01 * ADC_read;
+	dist += IR_C02 * square;
+	dist += IR_C03 * cube;
+		
+	return dist;
+}
+
+
+/* Returns True(1) or False(0) if there is a wall right next to the sensor */
+bool IRPair::adjWall()
+{
+	fireAndRead(); // Noisy initial read
+	float read = fireAndRead();
+	float dist = getDistance(read);
+
+	if (dist < ADJ_WALL_LIMIT) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 	
 /*
  * Gets the distance to the wall.
@@ -21,46 +70,16 @@ IRPair::IRPair(PinName rxPin, PinName txPin)
 float IRPair::distToWall()
 {
 	float avgRead = 0;
-	
-	IR_Emitter.write(1);
-	wait_us(IR_SIGDELAY);
-	IR_Receiver.read();
-	IR_Emitter.write(0);
-	wait_us(IR_SIGREST);
+	fireAndRead(); // Noisy initial read
 	
 	for (int i = 0; i < IR_SAMPLES; i++) {
-		// Turn on IR
-		IR_Emitter.write(1);
-		
-		// Wait for firing capacitor
-		wait_us(IR_SIGDELAY);
-		
-		// Read IR 
-		readLog[i] = IR_Receiver.read();
+		readLog[i] = fireAndRead();
 		avgRead += readLog[i];
-		
-		// Turn off IR
-		IR_Emitter.write(0);
-		
-		// Recharge
-		wait_us(IR_SIGREST);
 	}
+	
 	avgRead /= IR_SAMPLES;
-	
-	// Use polynomial regression formula to generate distance to wall
-	float dist = 0;
-	float square = avgRead * avgRead;
-	float cube = square * avgRead;
-	
-	dist += IR_C13 / cube;
-	dist += IR_C12 / square;
-	dist += IR_C11 / avgRead;
-	dist += IR_C00;
-	dist += IR_C01 * avgRead;
-	dist += IR_C02 * square;
-	dist += IR_C03 * cube;
 		
-	return dist;
+	return getDistance(avgRead);
 }
 
 
@@ -79,7 +98,7 @@ float IRPair::distToWall()
  */
 int IRPair::cellsToWall()
 {
-	float dist = this->distToWall();
+	float dist = distToWall();
 	int cellsAway;
 	
 	if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*0) {

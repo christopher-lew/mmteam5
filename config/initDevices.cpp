@@ -5,8 +5,8 @@
 	Buzzer buzzer(PB_15);
 	
 	IRPair leftIR(PB_0, PC_9);
-	IRPair leftFrontIR(PC_5, PA_4);
-	IRPair rightFrontIR(PC_4, PC_1);
+	IRPair frontLeftIR(PC_5, PA_4);
+	IRPair frontRightIR(PC_4, PC_1);
 	IRPair rightIR(PA_6, PC_14);
 	IRPair testIR(PA_7, PH_0);
 	
@@ -29,7 +29,7 @@
 	// Other IO Devices
 	AnalogIn battery(PC_0);
 
-	Serial pc(PC_10, PC_11);
+	Serial bluetooth(PC_10, PC_11);
 
 
 
@@ -38,8 +38,8 @@
 	Buzzer buzzer(PA_2);
 	
 	IRPair leftIR(PC_3, PC_5);
-	IRPair leftFrontIR(PC_1, PA_7);
-	IRPair rightFrontIR(PC_0, PA_6);
+	IRPair frontLeftIR(PC_1, PA_7);
+	IRPair frontRightIR(PC_0, PA_6);
 	IRPair rightIR(PH_0, PA_4);
 
 	Motor leftMotor(PC_8, PC_7);
@@ -60,7 +60,7 @@
 	// Other IO Devices
 	AnalogIn battery(PA_3);
 
-	Serial pc(PA_9, PA_10);
+	Serial bluetooth(PA_9, PA_10);
 
 	DigitalIn userButton(PC_10);
 

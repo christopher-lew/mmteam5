@@ -20,8 +20,8 @@
 extern Buzzer buzzer;
 
 extern IRPair leftIR;
-extern IRPair leftFrontIR;
-extern IRPair rightFrontIR;
+extern IRPair frontLeftIR;
+extern IRPair frontRightIR;
 extern IRPair rightIR;
 extern IRPair testIR;
 
@@ -44,7 +44,7 @@ extern DigitalOut ledGreen;
 // Other IO Devices
 extern AnalogIn battery;
 
-extern Serial pc;
+extern Serial bluetooth;
 
 extern DigitalIn userButton; // Falcon v2.0
 

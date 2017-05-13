@@ -1,5 +1,6 @@
 /**
- * Implementation of test functions.
+ * Implementation of test functions used to validate that all devices 
+ * on the mouse are working as expected.
  */
 
 #include "testFunctions.hpp"
@@ -56,8 +57,8 @@ void testBuzzer()
 // +speed == Forward
 void testMotors_straight(float speed, int duration_ms)
 {
-	leftMotor.go(speed);
-	rightMotor.go(speed);
+	leftMotor.accel(speed);
+	rightMotor.accel(speed);
 	
 	wait_ms(duration_ms);
 	
@@ -69,8 +70,8 @@ void testMotors_straight(float speed, int duration_ms)
 // +speed = CW rotation
 void testMotors_rotate(float speed, int duration_ms)
 {
-	leftMotor.go(speed);
-	rightMotor.go(-speed);
+	leftMotor.accel(speed);
+	rightMotor.accel(-speed);
 	
 	wait_ms(duration_ms);
 	
@@ -99,4 +100,33 @@ void simpleDemo()
 	wait_ms(250);
 	buzzer.levelComplete();
 	cycleMFs(0.2);
+}
+
+
+
+void ticker_switch1() {
+	ledRed = !ledRed;
+}
+void ticker_switch2() {
+	ledGreen = !ledGreen;
+}
+
+void tickerExample() 
+{
+	Ticker tick1;
+	Ticker tick2;
+
+	ledRed = 0;
+	ledGreen = 0;
+
+	tick1.attach(&ticker_switch1, 0.2);
+	tick2.attach(&ticker_switch2, 1.0);
+
+	wait(5);
+	tick1.detach();
+	ledRed = 0;
+	
+	wait(5);
+	tick2.detach();		
+	ledGreen = 0;
 }

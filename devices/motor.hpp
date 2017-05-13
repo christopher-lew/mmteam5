@@ -9,17 +9,27 @@
 
 #include "mbed.h"
 
+#define ACC_STEPS 4
+#define ACC_WAIT_MS 3
+#define ACC_INSTANT_WAIT_US 200
+#define MOTOR_PERIOD_US 50
+
 
 class Motor
 {
 public:
 	Motor(PinName dirPin, PinName pwmPin);
-	void go(float speed);
+	void instantAccel(float newSpeed);
+	void accel(float newSpeed);
 	void stop();
 
 private:
 	PwmOut pwm_ChA;
 	PwmOut pwm_ChB;
+
+	float curSpeed;
+	//int invFwd;
+	//int invBkwd;
 };
 
 #endif
