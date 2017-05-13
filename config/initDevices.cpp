@@ -12,10 +12,12 @@
 	
 	Motor leftMotor(PB_5, PC_6);
 	Motor rightMotor(PB_9, PB_8);
-	/*
+	
 	Encoder leftEncoder(PB_10, PA_5);
 	Encoder rightEncoder(PA_0, PA_1); 
-	*/
+
+	Gyro gyro(PB_1);
+	
 
 	// LEDs
 	PwmOut ledMf(PA_2);

@@ -9,6 +9,7 @@
 
 #include "mbed.h"
 
+
 class Motor
 {
 public:
@@ -19,7 +20,6 @@ public:
 private:
 	PwmOut pwm_ChA;
 	PwmOut pwm_ChB;
-	//!!!float speed;
 };
 
 #endif

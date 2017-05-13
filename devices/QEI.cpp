@@ -1,3 +1,5 @@
+// Cookbook & code can be found at: https://developer.mbed.org/cookbook/QEI#api
+
 /**
  * @author Aaron Berk
  *

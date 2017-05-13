@@ -13,6 +13,7 @@
 #include "../devices/ir.hpp"
 #include "../devices/motor.hpp"
 #include "../devices/encoder.hpp"
+#include "../devices/gyro.hpp"
 
 
 // Sensor Classes
@@ -29,6 +30,8 @@ extern Motor rightMotor;
 
 extern Encoder leftEncoder;
 extern Encoder rightEncoder; 
+
+extern Gyro gyro;
 
 
 // LEDs

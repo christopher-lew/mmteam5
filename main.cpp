@@ -63,19 +63,7 @@
 
 	int main()
 	{
-		cycleLEDs(0.1);
-		testBuzzer();
-		print_battery();
-		
-		testMotors_straight(0.2, 200);
-		wait_ms(250);
-		testMotors_straight(-0.2, 200);
-
-		wait_ms(500);
-		
-		testMotors_rotate(0.25, 250);
-		wait_ms(250);
-		testMotors_rotate(-0.25, 250);
+		simpleDemo();
 	}
 // END
 
@@ -88,16 +76,25 @@
 	#include "config/initDevices.hpp"
 	#include "drivers/testFunctions.hpp"
 	#include "drivers/debug_io.hpp"
-
-	//QEI rightEncoder(PA_0, PA_1, NC, 1024, QEI::X4_ENCODING);
-	Encoder rightEncoder(PA_0, PA_1);
+	#include "drivers/drive_controller.hpp"
 
 	int main()
-	{
+	{		
+		cycleLEDs(0.05);
+
 		while(1) {
 			wait(0.1);
-			pc.printf("Right Pulse Count = %i\r\n", rightEncoder.read());
+			print_gyro();
+			testBuzzer();
 		}
+
+		/*
+		turnLeft();
+		wait(0.1);
+		turnRight();
+		*/
+
+		
 	}
 
 

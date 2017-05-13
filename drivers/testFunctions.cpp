@@ -27,6 +27,7 @@ void cycleLEDs(float flashPeriod)
 	}
 }
 
+
 void cycleMFs(float flashPeriod)
 {
 	float a = 0.0;
@@ -42,6 +43,7 @@ void cycleMFs(float flashPeriod)
 	ledMf.write(0);
 }
 
+
 void testBuzzer()
 {
 	buzzer.testSound();
@@ -49,6 +51,7 @@ void testBuzzer()
 	//buzzer.levelComplete();
 	//buzzer.imperialMarch();
 }
+
 
 // +speed == Forward
 void testMotors_straight(float speed, int duration_ms)
@@ -62,6 +65,7 @@ void testMotors_straight(float speed, int duration_ms)
 	rightMotor.stop();
 }
 
+
 // +speed = CW rotation
 void testMotors_rotate(float speed, int duration_ms)
 {
@@ -73,6 +77,7 @@ void testMotors_rotate(float speed, int duration_ms)
 	leftMotor.stop();
 	rightMotor.stop();
 }
+
 
 void simpleDemo() 
 {
