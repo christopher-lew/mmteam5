@@ -10,7 +10,7 @@
 #include "mbed.h"
 
 #define ACC_STEPS 4
-#define ACC_WAIT_MS 5
+#define ACC_WAIT_MS 3
 #define ACC_INSTANT_WAIT_US 200
 #define MOTOR_PERIOD_US 50
 

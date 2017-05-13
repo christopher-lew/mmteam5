@@ -47,17 +47,17 @@ float IRPair::getDistance(float ADC_read)
 
 
 /* Returns True(1) or False(0) if there is a wall right next to the sensor */
-int IRPair::adjWall()
+bool IRPair::adjWall()
 {
 	fireAndRead(); // Noisy initial read
 	float read = fireAndRead();
 	float dist = getDistance(read);
 
 	if (dist < ADJ_WALL_LIMIT) {
-		return 1;
+		return true;
 	}
 	else {
-		return 0;
+		return false;
 	}
 }
 
@@ -98,7 +98,7 @@ float IRPair::distToWall()
  */
 int IRPair::cellsToWall()
 {
-	float dist = this->distToWall();
+	float dist = distToWall();
 	int cellsAway;
 	
 	if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*0) {

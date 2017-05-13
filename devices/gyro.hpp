@@ -1,5 +1,6 @@
 /**
  * Creates a Gyroscope class that allows for reading of the device.
+ * ADXRS620: Clockwise rotation is positive!
  */
 
 
@@ -9,7 +10,8 @@
 #include "mbed.h"
 
 #define G_OFFSET 0.515
-#define G_SAMPLE_TIME 50 // usecs
+#define G_SAMPLE_TIME 0.001 // secs
+#define ADC_TO_DEG 100 // converts gyro ADC angle to degrees
 
 
 class Gyro
@@ -20,11 +22,11 @@ public:
 	float getAngle();
 	float getADCRead();
 	
-	void start_reading();
-	void stop_reading();
+	void start_sampling();
+	void stop_sampling();
 
 private:
-	float currentAngle;
+	float currentADCAngle; // In ADC units 
 
 	AnalogIn outZ;
 	Ticker gyroTicker;

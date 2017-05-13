@@ -9,14 +9,16 @@
 #include "../config/initModes.hpp"
 #include "../config/initConstants.hpp"
 #include "../config/initDevices.hpp"
-#include "debug_io.hpp"
 
 
-void PID_keepStraight();
+bool PID_keepStraight();
 
-void alignFront();
+void PID_alignToFrontWall();
 
-void alignSides(int leftWall, int rightWall);
+void PID_alignUsingSides(bool leftWall, bool rightWall);
+
+void PID_HailMary();
+
 
 void PID_turn(char direction);
 

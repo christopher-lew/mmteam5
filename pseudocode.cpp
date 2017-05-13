@@ -11,7 +11,7 @@
 
 #define _EXPLORING 1
 #define _RUNNING 2
-#define _GO_HOME ???
+#define _RETURNING 3
 
 
 
@@ -25,7 +25,11 @@ int main()
 	{
 		char nextMove = maze.getNextMove(); 	
 		moveFalcon(nextMove, EXPLORING_SPEED);	
+		
 		maze.updatePosition(nextMove)	// Assume that the last movement was a success and update maze
+		char adjWalls = getAdjacentWalls();
+		maze.updateMaze(adjWalls);
+			
 	}
 
 	// Once the maze has been solved, mouse will never be in _EXPLORING STATE AGAIN
@@ -45,7 +49,7 @@ int main()
 }
 
 
-
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 // ELEMENTARY MOVEMENT FUNCTIONS (/drivers/drive_controller.cpp)
 void moveFalcon(char nextMove, float speed)
 {
@@ -70,20 +74,20 @@ void moveFalcon(char nextMove, float speed)
 
 void forward(speed)
 {
-	int pid_state = 0;
+	bool alignToFront = false;
 
 	resetEncoders();
 	leftMotor.accel(speed);
 	rightMotor.accel(speed);
 
 	while(getEncoderDistance() < CELL_DISTANCE) {
-		pid_state = PID_keepStraight(); // use timer to execute every 1 ms
-		if (pid_state) {
+		alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
+		if (alignToFront) {
 			break;
 		}
 	}
 
-	if (pid_state) {
+	if (alignToFront) {
 		PID_alignToFrontWall();
 	}
 
@@ -130,7 +134,7 @@ void turnLeft()
 }
 
 
-
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 // PID MONITORING FUNCTIONS (/drivers/PID.cpp)
 // this function should adjust both motors to keep moving straight in a forward direction
 int PID_keepStraight()

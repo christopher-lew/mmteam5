@@ -25,7 +25,7 @@ public:
 	
 	IRPair(PinName rxPin, PinName txPin);
 	
-	int adjWall(); 
+	bool adjWall(); 
 	float distToWall(); // Returns dist in cm
 	int cellsToWall(); // Returns how many cells away a wall is
 	

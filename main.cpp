@@ -71,52 +71,60 @@
 
 
 
+#elif _OPERATING_MODE == 'W'
+
+	#include "mbed.h"
+	#include "config/initDevices.hpp"
+	#include "drivers/debug_io.hpp"
+	#include "drivers/drive_control.hpp"
+	#include "drivers/pid.hpp"
+	#include "drivers/testFunctions.hpp"
+
+
+	#define EXPLORING_SPEED 0.3
+	#define _EXPLORING 1
+	#define _RUNNING 2
+	#define _RETURNING 3
+
+	volatile int MOUSE_STATE = _EXPLORING;
+
+
+	int main()
+	{
+		cycleLEDs(0.2);
+		char nextMove;
+
+		while (MOUSE_STATE == _EXPLORING)
+		{
+			nextMove = rightWallFollower();
+			moveFalcon(nextMove, EXPLORING_SPEED);
+		}
+	}
+
+// END
+
+
+
+
+
 #elif _OPERATING_MODE == 'T'
+
 	#include "mbed.h"
 	#include "config/initDevices.hpp"
 	#include "drivers/testFunctions.hpp"
 	#include "drivers/debug_io.hpp"
-	#include "drivers/drive_controller.hpp"
+	#include "drivers/drive_control.hpp"
 
 	int main()
 	{		
 		cycleLEDs(0.05);
 
-		/*
 		while(1) {
 			wait(0.1);
 			print_gyro();
 			testBuzzer();
 		}
-		*/
-		
-		/*
-		bluetooth.printf("Executing...\r\n");
-		bluetooth.printf("Left Motor:  InvFwd = %d \t InvBkwd = %d\r\n", leftMotor.invFwd, leftMotor.invBkwd);
-		bluetooth.printf("Right Motor: InvFwd = %d \t InvBkwd = %d\r\n\n", rightMotor.invFwd, rightMotor.invBkwd);
-		
-		turnLeft();
-		wait(0.1);
-		turnRight();
-		
-		bluetooth.printf("\r\n");
-		*/
-		
-		forward();
-		wait(0.5);
-		turnLeft();
-		wait(0.5);
-		forward();
-		wait(0.5);
-		turnLeft();
-		wait(0.5);
-		forward();
-		wait(0.5);
-		turnLeft();
-		wait(0.5);
-		forward();
-		wait(0.5);
-		turnLeft();
+
 	}
 
 
