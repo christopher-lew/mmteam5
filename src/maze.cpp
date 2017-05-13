@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// 
+
 Maze::Dir Maze::current_direction = Maze::NORTH;
 
 // Initialize static member of maze
@@ -397,4 +399,6 @@ void print_maze() {
     int decodeYIndex(unsigned char encodedIndex) {
         return (int) encodedIndex & 992; // Will return y index of encoded index via mask 1111100000
     }
+
+
 
