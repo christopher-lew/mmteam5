@@ -10,7 +10,6 @@
  * @version 0.1
  */
 
-#include "dir.h"
 #include <cmath>
 #include <ctime>
 #include <climits>
@@ -18,10 +17,20 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "../config/initDevices.hpp"
 
 using namespace std;
 
 const int MAZE_SIZE = 16;
+
+enum Dir {
+
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    NVALID
+};
 
 class Maze {
 public:
@@ -48,7 +57,7 @@ public:
     static int mousey;
     static int mousex;
     
-    // Directions to Move
+    // // Directions to Move
     static Dir current_direction;
 
 
@@ -124,73 +133,34 @@ public:
         
     }
 
-    // // Return an int value representing an index in maze as 1 int
-    // unsigned char encodeCellIndex(int y, int x) {
-    //     y = y << 5;
-    //     return (unsigned char) y | x; // 10 LSB matters: Y is in 5 MSB, X in 5 LSB. 6 MSB are DONT CARES
-    // }
+    // Get Current Direction
+    static Dir getCurrentDirection () {
+        return current_direction;
+    }
 
-    // // Return an x value from encoded index
-    // int decodeXIndex(unsigned char encodedIndex) {
-    //     return  (int) encodedIndex & 31; // Will return the x index of encoded index via mask 0000011111
-    // }
-
-    // // Return a y value from encoded index
-    // int decodeYIndex(unsigned char encodedIndex) {
-    //     return (int) encodedIndex & 992; // Will return y index of encoded index via mask 1111100000
-    // }
+    // Set Current Direction
+    static void setCurrentDirection (Dir direction) {
+        current_direction = direction;
+    }
 
 };
 
-//// Initialize static member of maze
-//unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
-//            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
-//            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
-//            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
-//            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
-//            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
-//            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
-//            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
-//            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
-//            { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
-//            { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
-//            { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
-//            { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
-//            { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
-//            { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
-//            { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
-//            { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
-//
-//};
-
-// Init//ialize static members for mousex and mousey
-//int Maze::mousex = 0;
-//int Maze::mousey = 0;
-//Maze::Dir Maze::current_direction = Maze::NORTH;
-
-//vector<unsigned char> get_open_neighbors(int y, int x, );
+int getMinOfNeighbors(int y, int x);
 
 int manhattan_dist(int x1, int x2, int y1, int y2);
 
 int min4(int a, int b, int c, int d);
 
-void update_distances(vector<unsigned char> &stack);
-
-// bool fully_explored();
+void update_distances();
 
 void explore(vector<unsigned char> &stack, int y, int x);
 
 bool is_solved();
 // TODO
 
-
-// void generate_random_walls();
-
 bool is_center(unsigned char cell);
 
-// void set_wall(int y,int x);
-
-unsigned char next_move(int y, int x);
+char next_move(int y, int x);
 
 void print_maze();
 
