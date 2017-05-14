@@ -75,7 +75,7 @@ void forward(float speed)
 void turnLeft(float speed)  // TODO: USING "speed"
 {
 	float turnLeft_speed = 0.2;
-	float turnLeft_angle = -85.0;
+	float turnLeft_angle = -80.0;
 
 
 	resetEncoders();
@@ -97,7 +97,7 @@ void turnLeft(float speed)  // TODO: USING "speed"
 void turnRight(float speed) // TODO: USING "speed"
 {
 	float turnRight_speed = 0.2;
-	float turnRight_angle = 85.0;
+	float turnRight_angle = 80.0;
 	
 	
 	resetEncoders();

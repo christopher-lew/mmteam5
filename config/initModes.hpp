@@ -22,12 +22,13 @@
 /*
  *
  */
-#define _IR_COEFF 1
+#define _IR_COEFF 2
 
 /*
  * M: Falcon runs using the Maze class
  * D: Falcon operates in general Demo mode
  * W: Falcon operates in Wall Following mode
+ * I: Used for IR Sensor calibration/testing
  * T: Falcon operates in Testing mode
  */
 #define _OPERATING_MODE 'W'

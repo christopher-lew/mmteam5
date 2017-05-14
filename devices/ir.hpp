@@ -10,10 +10,8 @@
 #include "../config/initConstants.hpp"
 
 #define IR_SAMPLES 3
-#define IR_SIGDELAY 6 // Wait for firing capacitor signal (usec)
-#define IR_SIGREST 75 // Allows firing cap to recharge
 
-#define ADJ_WALL_LIMIT 8.0 // If a wall is closer than this, then it is touching the currently occupied cell
+#define ADJ_WALL_LIMIT 12.5 // If a wall is closer than this, then it is touching the currently occupied cell
 #define CELL_LENGTH 18.0 // each cell is 18 cm long
 
 
@@ -28,12 +26,14 @@ public:
 	bool adjWall(); 
 	float distToWall(); // Returns dist in cm
 	int cellsToWall(); // Returns how many cells away a wall is
+	float calibration(int signal_delay_us, int signal_rest_us);
 	
 private:
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;
 
 	float fireAndRead();
+	float calib_fireAndRead(int signal_delay_us, int signal_rest_us);
 	float getDistance(float ADC_read);
 };
 

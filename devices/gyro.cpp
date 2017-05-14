@@ -15,9 +15,7 @@
 
 float Gyro::getAngle()
 {
-	float currentAngle = this->currentADCAngle * G_SAMPLE_TIME;
-	currentAngle = currentAngle * ADC_TO_DEG; // Convert ADC angle to degrees
-	return currentAngle;
+	return this->currentADCAngle * (mV_ADC / degSec_mV);
 }
 
 
@@ -34,7 +32,8 @@ void Gyro::updateAngle()
 	 * ADC_angle = angular_speed * G_SAMPLE_TIME
 	 * totalAngle += ADC_angle
 	 */
-	this->currentADCAngle += outZ.read() - G_OFFSET;
+	float angular_speed = outZ.read() - G_OFFSET;
+	this->currentADCAngle += angular_speed * G_SAMPLE_TIME;
 }
 
 

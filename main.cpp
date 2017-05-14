@@ -91,14 +91,50 @@
 
 	int main()
 	{
-		cycleLEDs(0.2);
 		char nextMove;
 
-		while (MOUSE_STATE == _EXPLORING)
+		cycleLEDs(0.1);
+		wait(2);
+		cycleLEDs(0.1);
+
+		/*while (MOUSE_STATE == _EXPLORING)
 		{
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);
-		}
+		}*/
+		nextMove = rightWallFollower();
+		moveFalcon(nextMove, EXPLORING_SPEED);
+
+		nextMove = rightWallFollower();
+		moveFalcon(nextMove, EXPLORING_SPEED);
+
+		nextMove = rightWallFollower();
+		moveFalcon(nextMove, EXPLORING_SPEED);
+	}
+
+// END
+
+
+
+
+#elif _OPERATING_MODE == 'I'
+
+	#include "mbed.h"
+	#include "config/initDevices.hpp"
+	#include "drivers/debug_io.hpp"
+	#include "drivers/drive_control.hpp"
+	#include "drivers/pid.hpp"
+	#include "drivers/testFunctions.hpp"
+
+	int main()
+	{
+		cycleLEDs(0.05);
+		
+		//bluetooth.printf("Front Right:\r\n");
+		//IR_calibration(frontRightIR, IR_SIGDELAY, IR_SIGREST);
+		print_ir(frontRightIR);
+
+		cycleLEDs(0.05);
 	}
 
 // END
@@ -116,15 +152,24 @@
 	#include "drivers/drive_control.hpp"
 
 	int main()
-	{		
+	{	
+		/*
+		float gyroAvg = 0;
+		float gyroRead = 0;
+
 		cycleLEDs(0.05);
+		gyro.start_sampling();
 
-		while(1) {
-			wait(0.1);
-			print_gyro();
-			testBuzzer();
+		for (int i = 0; i < 20; i++) {
+			wait(0.2);
+			gyroRead = gyro.getADCRead();
+			gyroAvg += gyroRead;
+			bluetooth.printf("Gyro:\r\nADC Read = %1.15f\r\n", gyroRead);
 		}
-
+		
+		gyroAvg /= 20;
+		bluetooth.printf("\r\nGyro Average = %1.15f\r\n", gyroAvg);
+		*/
 	}
 
 

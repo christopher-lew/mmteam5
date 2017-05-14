@@ -130,3 +130,33 @@ void tickerExample()
 	tick2.detach();		
 	ledGreen = 0;
 }
+
+
+
+void IR_calibration(IRPair ir, int signal_delay_us, int signal_rest_us)
+{
+	int numBursts = 3;
+	float avgBurstRead = 0.0;
+	
+	bluetooth.printf("********** %d us **********\r\n", signal_delay_us);
+
+	for (int i = 0; i < numBursts; i++) {
+		float avgDist = ir.calibration(signal_delay_us, signal_rest_us);
+		float avgRead = 0.0;
+		
+		//bluetooth.printf("Avg Dist To Wall = %3.6f\r\n", avgDist);
+		for (int i = 0; i < IR_SAMPLES; i++) {
+			avgRead += ir.readLog[i];
+			bluetooth.printf("%3.6f\r\n", ir.readLog[i]);
+		}
+
+		avgRead /= IR_SAMPLES;
+		bluetooth.printf("Avg ADC Read = %3.6f\r\n", avgRead);
+		
+		avgBurstRead += avgRead;
+		testBuzzer();
+	}
+	
+	avgBurstRead /= numBursts;
+	bluetooth.printf("Average burst read = %3.4f\r\n\n", avgBurstRead);
+}
