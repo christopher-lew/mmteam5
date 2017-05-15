@@ -17,9 +17,11 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "../config/initDevices.hpp"
+//#include "../config/initDevices.hpp"
 
 using namespace std;
+
+//#define const int MAZE_SIZE = 4;
 
 const int MAZE_SIZE = 16;
 
@@ -30,6 +32,7 @@ enum Dir {
     SOUTH,
     WEST,
     NVALID
+
 };
 
 class Maze {
@@ -56,6 +59,7 @@ public:
     static unsigned char the_maze[MAZE_SIZE][MAZE_SIZE];
     static int mousey;
     static int mousex;
+    static bool center;
     
     // // Directions to Move
     static Dir current_direction;
@@ -85,12 +89,6 @@ public:
         mousey = y;
     }
 
-    // Return the 4 LSB by pushing the bits that represent distance off, then bringing them back to LSB
-    static unsigned char decodeWalls (int y, int x){
-        unsigned char cell = the_maze[y][x];
-        return cell << 12 >> 12;
-    }
-
     // Push all bits off. If LSB == 1: right wall exists
     static bool has_right_wall(int y, int x) {
         unsigned char walls = Maze::decodeWalls(y, x);
@@ -109,16 +107,35 @@ public:
         unsigned char cell = the_maze[y][x];
         return (int) cell >> 4;
     }
+     // 0001 = W, 0010 = S, 0100 = E, 1000 = N, where 1 represents bit that direction
+    // Return the 4 LSB by pushing the bits that represent distance off, then bringing them back to LSB
+    static int decodeWalls (int y, int x){
+        unsigned char cell = the_maze[y][x];
+        return cell & 15;
+    }
 
     // Update the walls using AND operator
     static void encodeWalls (int y, int x, unsigned char newWall) {
         // Save the dist in a temporary mask
-        unsigned char dist = decodeDist(y,x);
+        // unsigned char dist = decodeDist(y,x);
 
-        dist = dist << 4;
+        // dist = dist << 4;
 
         // Set the new wall to the maze index with dist using OR operator
-        the_maze[y][x] = dist | newWall;
+        the_maze[y][x] = the_maze[y][x] | newWall;
+    }
+
+    // Code to updateWalls
+    static void updateWalls(int y, int x, unsigned char wall) {
+        // bool leftWall =         leftIR.adjWall(); 
+        // if (leftWall) Maze::updateWalls(Maze::getMousey(), Maze::getMousex(), 1);
+
+        // bool rightWall =        rightIR.adjWall();
+        // if (rightWall) Maze::updateWalls(Maze::getMousey(), Maze::getMousex(), 100);
+
+        // bool frontLeftWall =    frontLeftIR.adjWall();
+        // bool frontRightWall =   frontRightIR.adjWall();
+        // if (frontLeftWall && frontRightWall) Maze::updateWalls(Maze::getMousey(), Maze::getMousex(), 1000);
     }
 
     // Update the distance using the AND operator
@@ -143,6 +160,12 @@ public:
         current_direction = direction;
     }
 
+    // Flag for found center
+    static void setFound (bool found) {
+        center = found;
+    }
+
+
 };
 
 int getMinOfNeighbors(int y, int x);
@@ -158,18 +181,16 @@ void explore(vector<unsigned char> &stack, int y, int x);
 bool is_solved();
 // TODO
 
-bool is_center(unsigned char cell);
+bool is_center(int cell);
 
 char next_move(int y, int x);
 
 void print_maze();
 
-unsigned char encodeCellIndex(int y, int x);
+int encodeCellIndex(int y, int x);
 
-int decodeXIndex(unsigned char encodedIndex);
+int decodeXIndex(int encodedIndex);
 
-int decodeYIndex(unsigned char encodedIndex);
-    
-
+int decodeYIndex(int encodedIndex);
 
 #endif
