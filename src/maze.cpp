@@ -5,26 +5,127 @@
 
 // 
 
-Dir Maze::current_direction = NORTH;
+Direction Maze::current_direction = NORTH;
+
 // Japan 1991 
-unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] = {
-    { 228, 209, 200, 184, 168, 152, 136, 120, 120, 136, 152, 168, 184, 200, 216, 224 },
-    { 208, 196, 187, 170, 146, 138, 114,  106,  106, 122, 138, 154, 170, 186, 194, 209 },
-    { 196, 177, 170, 146, 132, 127,  101,  83,  90,  106, 122, 130, 154, 166, 181, 193 },
-    { 180, 169, 154, 140, 113,  106,  88,  64,  74,  90,  102, 117, 143, 149, 165, 177 },
-    { 168, 152, 130, 122,  104,  90,  70,  57,  54,  73,  90,  105, 122, 132, 149, 161 },
-    { 154, 138, 120,  98,  90,  74,  56,  38,  41,  54,  73,  90,  102, 118, 134, 145 },
-    { 138, 122, 106,  88,  66,  50,  42,  24,  30,  41,  54,  79,  86,  102, 118, 129 },
-    { 114,  106,  90,  70,  54,  38,  19,   2,   6,  23,  41,  44,  70,  86,  102, 113 },
-    { 112,  102,  95,  70,  57,  44,  22,   9,   12,  22,  39,  57,  64,  92,  102, 113 },
-    { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
-    { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
-    { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
-    { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
-    { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
-    { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
-    { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+// unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] = {
+//     { 228, 209, 200, 184, 168, 152, 136, 120, 120, 136, 152, 168, 184, 200, 216, 224 },
+//     { 208, 196, 187, 170, 146, 138, 114,  106,  106, 122, 138, 154, 170, 186, 194, 209 },
+//     { 196, 177, 170, 146, 132, 127,  101,  83,  90,  106, 122, 130, 154, 166, 181, 193 },
+//     { 180, 169, 154, 140, 113,  106,  88,  64,  74,  90,  102, 117, 143, 149, 165, 177 },
+//     { 168, 152, 130, 122,  104,  90,  70,  57,  54,  73,  90,  105, 122, 132, 149, 161 },
+//     { 154, 138, 120,  98,  90,  74,  56,  38,  41,  54,  73,  90,  102, 118, 134, 145 },
+//     { 138, 122, 106,  88,  66,  50,  42,  24,  30,  41,  54,  79,  86,  102, 118, 129 },
+//     { 114,  106,  90,  70,  54,  38,  19,   2,   6,  23,  41,  44,  70,  86,  102, 113 },
+//     { 112,  102,  95,  70,  57,  44,  22,   9,   12,  22,  39,  57,  64,  92,  102, 113 },
+//     { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+//     { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+//     { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+//     { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+//     { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+//     { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+//     { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+// };
+
+//Initialize static member of maze
+// unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
+//     { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+//     { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+//     { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+//     { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+//     { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+//     { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+//     { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+//     { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+//     { 112,  96,  80,  64,  48,  32,  16,   0,   0,  16,  32,  48,  64,  80,  96, 112 },
+//     { 128, 112,  96,  80,  64,  48,  32,  16,  16,  32,  48,  64,  80,  96, 112, 128 },
+//     { 144, 128, 112,  96,  80,  64,  48,  32,  32,  48,  64,  80,  96, 112, 128, 144 },
+//     { 160, 144, 128, 112,  96,  80,  64,  48,  48,  64,  80,  96, 112, 128, 144, 160 },
+//     { 176, 160, 144, 128, 112,  96,  80,  64,  64,  80,  96, 112, 128, 144, 160, 176 },
+//     { 192, 176, 160, 144, 128, 112,  96,  80,  80,  96, 112, 128, 144, 160, 176, 192 },
+//     { 208, 192, 176, 160, 144, 128, 112,  96,  96, 112, 128, 144, 160, 176, 192, 208 },
+//     { 224, 208, 192, 176, 160, 144, 128, 112, 112, 128, 144, 160, 176, 192, 208, 224 },
+
+// };
+
+// int Maze::maze_actual[MAZE_SIZE][MAZE_SIZE] = {
+//     { 4, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0},
+//     { 0, 4, 11, 10, 2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 6, 1},
+//     { 4, 1, 10, 2, 4 , 15, 5, 3, 10, 10, 10, 2, 10, 6, 5, 1 },
+//     { 4, 9, 10, 12, 1 , 10, 8, 0, 10, 10, 6, 5, 15, 5, 5, 1 },
+//     { 8, 10, 2, 10, 8 , 10, 6, 9, 6, 15, 5, 9, 10, 4, 5, 1 },
+//     { 10, 10, 8, 2, 10 , 10, 8, 6, 9, 6, 9, 10, 6, 5, 5, 1 },
+//     { 10, 10, 10, 8, 2 , 2, 10, 8, 14, 9, 6, 15, 5, 5, 5, 1 },
+//     { 2, 10, 10, 6, 5 , 5, 3, 2, 6, 7, 9, 6, 5, 5, 5, 1 },
+//     { 0, 6, 15, 5, 9 , 12, 5, 9, 12, 5, 7, 9, 0, 12, 5, 1 },
+//     { 4, 9, 6, 9, 10 , 6, 1, 14, 3, 8, 0, 6, 5, 3, 12, 1 },
+//     { 0, 6, 9, 6, 15 , 5, 5, 11, 0, 10, 4, 13, 5, 9, 10, 0 },
+//     { 4, 9, 6, 9, 6 , 9, 4, 11, 0, 14, 1, 10, 8, 10, 2, 0 },
+//     { 0, 6, 9, 6, 9 , 10, 8, 11, 0, 14, 9, 2, 10, 2, 12, 1 },
+//     { 4, 9, 6, 9, 6 , 11, 2, 10, 0, 14, 3, 8, 2, 8, 10, 0 },
+//     { 4, 15, 9, 6, 9 , 6, 5, 11, 0, 14, 3, 2, 8, 10, 2, 8 },
+//     { 0, 2, 2, 0, 2 , 0, 0, 2, 0, 2, 2, 0, 2, 2, 4, 3 },
+// };
+
+// int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+
+//     { 14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14},
+//     { 13, 12, 11, 10,  9, 8, 7, 6, 6, 7, 8,  9, 10, 11, 12, 13},
+//     { 12, 11, 10,  9,  8, 7, 6, 5, 5, 6, 7,  8,  9, 10, 11, 12},
+//     { 11, 10,  9,  8,  7, 6, 5, 4, 4, 5, 6,  7,  8,  9, 10, 11},
+//     { 10,  9,  8,  7,  6, 5, 4, 3, 3, 4, 5,  6,  7,  8,  9, 10},
+//     {  9,  8,  7,  6,  5, 4, 3, 2, 2, 3, 4,  5,  6,  7,  8,  9},
+//     {  8,  7,  6,  5,  4, 3, 2, 1, 1, 2, 3,  4,  5,  6,  7,  8},
+//     {  7,  6,  5,  4,  3, 2, 1, 0, 0, 1, 2,  3,  4,  5,  6,  7},
+//     {  7,  6,  5,  4,  3, 2, 1, 0, 0, 1, 2,  3,  4,  5,  6,  7},
+//     {  8,  7,  6,  5,  4, 3, 2, 1, 1, 2, 3,  4,  5,  6,  7,  8},
+//     {  9,  8,  7,  6,  5, 4, 3, 2, 2, 3, 4,  5,  6,  7,  8,  9},
+//     { 10,  9,  8,  7,  6, 5, 4, 3, 3, 4, 5,  6,  7,  8,  9, 10},
+//     { 11, 10,  9,  8,  7, 6, 5, 4, 4, 5, 6,  7,  8,  9, 10, 11},
+//     { 12, 11, 10,  9,  8, 7, 6, 5, 5, 6, 7,  8,  9, 10, 11, 12},
+//     { 13, 12, 11, 10,  9, 8, 7, 6, 6, 7, 8,  9, 10, 11, 12, 13},
+//     { 14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14},
+
+// };
+
+// int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
+
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+// };
+
+int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+
+    {2, 1, 2},
+    {1, 0, 1},
+    {2, 1, 2},
+
 };
+
+int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
+    {0, 0, 0},
+    {0, 0, 0},
+    {0, 0, 0},
+};
+
+bool Maze::center = false;
+bool Maze::backAtStart = false;
+
 // #if MAZE_SIZE == 16
 // Initialize static member of maze
 // unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] =  {
@@ -47,33 +148,6 @@ unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] = {
 
 // };
 
-//#elif MAZE_SIZE == 4
-// Test 4x4 Maze
-// unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] = {
-//     { 36, 17, 24, 32 },
-//     { 20,  1,  6, 17 },
-//     { 20,  9, 12, 17 },
-//     { 32, 18, 18, 32 }
-// };
-
-// unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] = {
-//     { 32, 16, 16, 32 },
-//     { 16,  1,  0, 17 },
-//     { 16,  9,  0, 17 },
-//     { 32, 16, 16, 32 }
-// };
-
-// #elif MAZE_SIZE == 3
-// // Test 3x3 Maze
-// unsigned char Maze::the_maze[MAZE_SIZE][MAZE_SIZE] = {
-// //     { 32, 16, 32 },
-// //     { 16, 0 , 16 },
-// //     { 32, 16, 32 },
-
-// };
-
-// #endif
-
 // Initialize static members for mousex and mousey
 int Maze::mousex = 0;
 int Maze::mousey = 0;
@@ -90,6 +164,18 @@ int min4(int a, int b, int c, int d) {
 // FUNCTION to calculate the manhatten distance between two points
 int manhattan_dist(int x1, int x2, int y1, int y2) {
     return abs(x1 - x2) + abs(y1 - y2);
+}
+
+// FUNCTIOn to check whether mouse is back at start
+bool is_start(int cell) {
+    int x = decodeXIndex(cell);
+    int y = decodeYIndex(cell);
+    int xgoal = 0;
+    int ygoal = 0;
+
+    if (manhattan_dist(y, ygoal, x, xgoal) == 0) { return true; }
+
+    return false;
 }
 
 // FUNCTION to check whether the mouse is at the center cell
@@ -112,11 +198,12 @@ bool is_center(int cell) { // cell is encoded index
 
 // FUNCTION to figure out the next move by the smallest distance
 char next_move(int currX, int currY) { // (Maze::Cell *current)
+    bool hasNextMove = false;
     int x, y, minx, miny, i, j;
     int x_goal = MAZE_SIZE / 2;
     int y_goal = MAZE_SIZE - 1 / 2;
 
-    Dir currDir = Maze::getCurrentDirection();
+    Direction currDir = Maze::getCurrentDirection();
     // Initial positions of the next move
     minx = 0;
     miny = 0;
@@ -126,49 +213,58 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     // checks the next cell with the smallest distance
     for(i = -1; i <= 1; i++){
         for(j = -1; j <= 1; j++){
+
             int next_x = x + i;
             int next_y = y + j;
-            // pass over non open right neighbors
-            if (Maze::has_right_wall(y, x) == true && next_x == x + 1) continue;
-            // pass over non open top neightbors
-            if (Maze::has_top_wall(y, x) == true && next_y == y + 1) continue;
-            // border cells are ignored
-            if(next_x < 0 || next_y < 0)  continue;
-            // means cell does not exist
-            if(next_y < 0 || next_y >= MAZE_SIZE || next_x < 0 || next_x >= MAZE_SIZE) continue;
+
             // ignore diagonal cells for now
-            if((next_x != Maze::getMousex()) && (next_y != Maze::getMousey()))  continue;
+            if (next_x != x && next_y != y)  continue;
+
+            // pass over non open right neighbors
+            else if (Maze::has_right_wall(y, x) && next_x == x + 1) continue;
+            // pass over non open top neightbors
+            else if (Maze::has_top_wall(y, x) && next_y == y + 1) continue;
+            // pass over non open left neighbors
+            else if (Maze::has_left_wall(y, x) && next_x == x - 1) continue;
+            // pass over non open bottom neighbors
+            else if (Maze::has_bottom_wall(y, x) && next_y == y - 1) continue;
+
+            // means cell does not exist, these are border cells
+            else if(next_y < 0 || next_y >= MAZE_SIZE || next_x < 0 || next_x >= MAZE_SIZE) continue;
+
             // if the next cell has a smaller distance then check
-            if(Maze::decodeDist(next_y,next_x) < Maze::decodeDist(y, x)){
-                // // breaking ties
-                // if((next_x == minx) && (next_y == miny)){
-                //     // check if the mouse is facing straight 0->1->2->3 counter-clockwise
-                //    if((currDir == NORTH && next_x > y) || (currDir == SOUTH && next_y < y) ||
-                //       (currDir == WEST && next_x < x) || (currDir == EAST && next_x > x)){
-                //        minx = x + i;
-                //        miny = y + j;
-                //        cout << "minx = " << minx << endl;
-                //        cout << "miny = " << miny << endl;
-                //        continue;
-                //    }
-                //     //check for whichever is closer to the center of the maze
-                //    else{
-                //        double prev_to_goal = sqrt(pow(x_goal - minx, 2.0) + pow(y_goal - miny, 2.0));
-                //        double curr_to_goal = sqrt(pow(x_goal - next_x, 2.0) + pow(y_goal - next_y, 2.0));
-                //        if(curr_to_goal < prev_to_goal){
-                //             minx = x + i;
-                //             miny = y + j;
-                //             cout << "minx = " << minx << endl;
-                //             cout << "miny = " << miny << endl;
-                //            continue;
-                //        }
-                //    }
-                // }
-                // else{
+            if (Maze::decodeDist(next_y,next_x) < Maze::decodeDist(y, x)){
+                // breaking ties
+                if((next_x == minx) && (next_y == miny)){
+                    // check if the mouse is facing straight 0->1->2->3 counter-clockwise
+                   if((currDir == NORTH && next_x > y) || (currDir == SOUTH && next_y < y) ||
+                      (currDir == WEST && next_x < x) || (currDir == EAST && next_x > x)){
+                       minx = x + i;
+                       miny = y + j;
+                       cout << "minx = " << minx << endl;
+                       cout << "miny = " << miny << endl;
+                       continue;
+                   }
+                    //check for whichever is closer to the center of the maze
+                   else{
+                       double prev_to_goal = sqrt(pow(x_goal - minx, 2.0) + pow(y_goal - miny, 2.0));
+                       double curr_to_goal = sqrt(pow(x_goal - next_x, 2.0) + pow(y_goal - next_y, 2.0));
+                       if(curr_to_goal < prev_to_goal){
+                            minx = x + i;
+                            miny = y + j;
+                            cout << "minx = " << minx << endl;
+                            cout << "miny = " << miny << endl;
+                           continue;
+                       }
+                   }
+                }
+                else {
                     // not tie condition
                     minx = x + i;
                     miny = y + j;
-                //}
+                }
+
+                hasNextMove = true;
 
             }
             
@@ -181,11 +277,14 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
 
     int newX = minx;
     int newY = miny;
+    if (!hasNextMove) return 'Z';
     // Update the mouse position
     Maze::setMousex(newX);
     Maze::setMousey(newY);
+    // Mark the new mouse position as visited
+    Maze::setVisited(newY, newX);
 
-    Dir turning = NVALID;
+    Direction turning = NVALID;
 
     // signals next cell's direction
     // We want to go left in the maze! 
@@ -295,7 +394,7 @@ int getMinOfNeighbors(int y, int x) {
     // check bottom neighbor
     if (y > 0) {
         int bottomNeighbor = Maze::decodeDist(y - 1, x);
-        if (!Maze::has_top_wall(y - 1, x) && bottomNeighbor < min) {
+        if (!Maze::has_bottom_wall(y, x) && bottomNeighbor < min) {
             min = bottomNeighbor;
         }
 
@@ -303,7 +402,7 @@ int getMinOfNeighbors(int y, int x) {
     // check left neighbor
     if (x > 0) {
         int leftNeightbor = Maze::decodeDist(y, x - 1);
-        if (!Maze::has_right_wall(y, x - 1) && leftNeightbor < min) {
+        if (!Maze::has_left_wall(y, x) && leftNeightbor < min) {
             min = leftNeightbor;
         }
     }
@@ -360,19 +459,24 @@ void update_distances() {
         printf("currentDist = %d\n", currentDist);
 
         // This means that the current cell is unreachable, so continue WHO CARES ABOUT IT LOLOLOL
-        if (min == 256) continue;
+        if (min == 256) {
+            cout << "JSDA:LKDJ:LKWJE BAD" << endl;
+            continue;
+        }
 
-        // Check if min value is exactly 1 less than current value, if not, it means that it is less than min
-        if (min + 1 != currentDist) {
+        // Is current cell 1 + min of adjacent cells
+        if (currentDist == 1 + min) { continue; }
+
+        else {
 
             printf("Making maze[%d][%d] = %d\n", y, x, min + 1);
-            Maze::encodeDist(y, x, (unsigned char) min + 1); // Since it is less than min, make it 1 greater than min
+            Maze::encodeDist(y, x, min + 1); // Since it is less than min, make it 1 greater than min
 
             // Pushback all the neighbors again to the stack if they exist
-            if (y < MAZE_SIZE - 1 && !Maze::has_top_wall(y, x)) stack.push_back(encodeCellIndex(y + 1, x)); // Top neighbor
-            if (y > 0 && !Maze::has_top_wall(y - 1, x)) stack.push_back(encodeCellIndex(y - 1, x)); // Bottom Neighbor
-            if (x < MAZE_SIZE - 1 && !Maze::has_right_wall(y, x)) stack.push_back(encodeCellIndex(y, x + 1)); // Right Neighbor
-            if (x > 0 && !Maze::has_right_wall(y, x - 1)) stack.push_back(encodeCellIndex(y, x - 1)); // Left Neighbor
+            if (y  < MAZE_SIZE - 1 && !Maze::has_top_wall(y, x)) stack.push_back(encodeCellIndex(y + 1, x)); // Top neighbor
+            if (y  > 0 && !Maze::has_bottom_wall(y, x)) stack.push_back(encodeCellIndex(y - 1, x)); // Bottom Neighbor
+            if (x  < MAZE_SIZE - 1 && !Maze::has_right_wall(y, x)) stack.push_back(encodeCellIndex(y, x + 1)); // Right Neighbor
+            if (x  > 0 && !Maze::has_left_wall(y, x)) stack.push_back(encodeCellIndex(y, x - 1)); // Left Neighbor
         }
     }
 
@@ -401,7 +505,7 @@ void print_maze() {
         for (int j = 0; j < MAZE_SIZE; j++) {
             
             if (i % 2 != 0) {
-                if (Maze::decodeWalls(y, j) >> 3 == 1) {
+                if (Maze::has_top_wall(y, j)) {
                     printf("+---");
                 }
                 else {
@@ -435,8 +539,8 @@ void print_maze() {
                     printf(" %d ", dist);
                 }
                 
-                if ((Maze::decodeWalls(y, j) << 13 >> 15) == 1 || j == MAZE_SIZE - 1) {
-                    printf("|");
+                if ((Maze::has_right_wall(y, j) || j == MAZE_SIZE - 1)) {
+                    printf("|"); 
                 }
                 else {
                     printf(" ");
@@ -463,14 +567,14 @@ int encodeCellIndex(int y, int x) {
     printf("%d, %d, is being encoded : ", x, y);
     y = y << 5;
     int encodedVal = y | x;
-    cout << "encoded value = " << encodedVal << endl;
+    // cout << "encoded value = " << encodedVal << endl;
     return encodedVal; // 10 LSB matters: Y is in 5 MSB, X in 5 LSB. 6 MSB are DONT CARES
 }
 
 // Return an x value from encoded index
 int decodeXIndex(int encodedIndex) {
     int toReturn = encodedIndex & 31;
-    cout << "decoded x value = " << toReturn << endl;
+    // cout << "decoded x value = " << toReturn << endl;
     return  toReturn; // Will return the x index of encoded index via mask 0000011111
 }
 
@@ -478,182 +582,71 @@ int decodeXIndex(int encodedIndex) {
 int decodeYIndex(int encodedIndex) {
     int toReturn = encodedIndex & 992;
     if (encodedIndex > 31) toReturn = toReturn >> 5;
-    cout << "decoded y value = " << toReturn << endl;
+    // cout << "decoded y value = " << toReturn << endl;
     return toReturn; // Will return y index of encoded index via mask 1111100000
 }
 
-int main() {
-    Maze();
-    print_maze();
+//int main() {
+//    Maze();
+//    print_maze();
 
-    update_distances();
-    next_move(
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
+    // // Has all walls
+    // Maze::encodeWalls(0, 0, 15);
+    // cout << Maze::decodeWalls(0, 0) << endl;
+    // cout << Maze::has_right_wall(0, 0) << endl;
+    // cout << Maze::has_top_wall(0, 0) << endl;
+    // cout << Maze::has_left_wall(0, 0) << endl;
+    // cout << Maze::has_bottom_wall(0, 0) << endl;
 
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
+    // // Has NS Walls
+    // Maze::encodeWalls(0, 1, 10);
+    // cout << Maze::has_right_wall(0, 1) << endl;
+    // cout << Maze::has_top_wall(0, 1) << endl;
+    // cout << Maze::has_left_wall(0, 1) << endl;
+    // cout << Maze::has_bottom_wall(0, 1) << endl;
 
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
+    // // Has EW walls
+    // Maze::encodeWalls(1, 0, 5);
+    // cout << Maze::has_right_wall(1, 0) << endl;
+    // cout << Maze::has_top_wall(1, 0) << endl;
+    // cout << Maze::has_left_wall(1, 0) << endl;
+    // cout << Maze::has_bottom_wall(1, 0) << endl;
 
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
+  //  while (1) {
+//
+//        bool dontcomeback = false;
+//
+//        if(is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex())) && !dontcomeback) {
+//
+//                Maze::setCenter();
+//                printf("HI\n");
+//                Maze::setStartAsGoal();
+//                dontcomeback = true;
+//
+//        }
 
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
+        // if (Maze::getCenter()) {
 
+        //     if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+        //         // Place walls around every non visited cell, update distances on every cell
+        //         printf("HI\n");
+        //         Maze::speedRunPrep();
 
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
+        //         //Maze::mazeDistInit();
+        //         dontcomeback = true;
+        //     }
 
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze();
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-    // printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-    // update_distances();
-    // printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-    // print_maze(); 
-
-
-
+        // } 
+   //     getchar();
+//        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+//        update_distances();
+//        printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
+//        printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
+//        print_maze();
+//    }
     
 
 
-}
+//}
 
 
