@@ -9,11 +9,11 @@
 
 #include "mbed.h"
 
-#define G_OFFSET 0.5115
+#define G_OFFSET 0.5118
 #define G_SAMPLE_TIME 0.001 // secs
 
 #define mV_ADC 3300 // mV per ADC = (3.3V / 1.0)
-#define degSec_mV 6 // angularSpeed per mV = [ (1 deg/sec) / 6 mV ]
+#define degSec_mV 3 // angularSpeed per mV = [ (1 deg/sec) / 6 mV ]
 
 
 class Gyro

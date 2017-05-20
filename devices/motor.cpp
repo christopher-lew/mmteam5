@@ -24,10 +24,11 @@ void Motor::instantAccel(float newSpeed)
 
 	// Request to go forwards
 	if (newSpeed > 0) {
+		this->pwm_ChA.write(0);
 		// If current speed is in the opposite direction, stop the motor first
 		if (this->curSpeed < 0) {
-			this->pwm_ChA.write(0);
-			this->pwm_ChB.write(0);
+			this->curSpeed = 0;
+			this->pwm_ChB.write(this->curSpeed);
 			wait_us(ACC_INSTANT_WAIT_US);
 		}
 
@@ -37,15 +38,16 @@ void Motor::instantAccel(float newSpeed)
 
 	// Request to go backwards
 	else {
+		this->pwm_ChB.write(0);
 		// If current speed is in the opposite direction, stop the motor first
-		if (this->curSpeed < 0) {
-			this->pwm_ChA.write(0);
-			this->pwm_ChB.write(0);
+		if (this->curSpeed > 0) {
+			this->curSpeed = 0;
+			this->pwm_ChA.write(this->curSpeed);
 			wait_us(ACC_INSTANT_WAIT_US);
 		}
 
 		this->curSpeed = newSpeed;
-		this->pwm_ChA.write(this->curSpeed);
+		this->pwm_ChB.write(this->curSpeed*-1);	
 	}
 }
 
@@ -53,13 +55,20 @@ void Motor::instantAccel(float newSpeed)
 /* Accelerates the motor to the given speed in ACC_STEPS */
 void Motor::accel(float newSpeed) 
 {
-	float speed_step = (newSpeed - this->curSpeed)/ACC_STEPS;
+	float speed_step;
 	this->pwm_ChA.period_us(MOTOR_PERIOD_US);
 	this->pwm_ChB.period_us(MOTOR_PERIOD_US);
 
 	// Forwards
 	if (newSpeed > 0) {
 		this->pwm_ChA.write(0);
+		// If current speed is in the opposite direction, stop the motor first
+		if (this->curSpeed < 0) {
+			this->curSpeed = 0;
+			this->pwm_ChB.write(this->curSpeed);
+			wait_us(ACC_INSTANT_WAIT_US);
+		}
+		speed_step = (newSpeed - this->curSpeed)/ACC_STEPS;
 
 		for (int i = 0; i < ACC_STEPS; i++) {
 			wait_ms(ACC_WAIT_MS);
@@ -71,11 +80,19 @@ void Motor::accel(float newSpeed)
 	// Backwards
 	else {
 		this->pwm_ChB.write(0);
+		// If current speed is in the opposite direction, stop the motor first
+		if (this->curSpeed > 0) {
+			this->curSpeed = 0;
+			this->pwm_ChA.write(this->curSpeed);
+			wait_us(ACC_INSTANT_WAIT_US);
+		}
+
+		speed_step = (newSpeed - this->curSpeed)/ACC_STEPS;
 
 		for (int i = 0; i < ACC_STEPS; i++) {
 			wait_ms(ACC_WAIT_MS);
 			this->curSpeed += speed_step;
-			this->pwm_ChA.write(this->curSpeed);
+			this->pwm_ChA.write(this->curSpeed*-1);
 		}		
 	}
 }

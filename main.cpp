@@ -81,7 +81,7 @@
 	#include "drivers/testFunctions.hpp"
 
 
-	#define EXPLORING_SPEED 0.3
+	#define EXPLORING_SPEED 0.2
 	#define _EXPLORING 1
 	#define _RUNNING 2
 	#define _RETURNING 3
@@ -102,14 +102,15 @@
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);
 		}*/
-		nextMove = rightWallFollower();
-		moveFalcon(nextMove, EXPLORING_SPEED);
+		int i = 0;
+		int moves = 4;
+		while (i < moves) {
+			nextMove = rightWallFollower();
+			moveFalcon(nextMove, EXPLORING_SPEED);
+			i++;
+			wait(0.5);
+		}
 
-		nextMove = rightWallFollower();
-		moveFalcon(nextMove, EXPLORING_SPEED);
-
-		nextMove = rightWallFollower();
-		moveFalcon(nextMove, EXPLORING_SPEED);
 	}
 
 // END
@@ -120,6 +121,7 @@
 #elif _OPERATING_MODE == 'I'
 
 	#include "mbed.h"
+	#include "config/initConstants.hpp"
 	#include "config/initDevices.hpp"
 	#include "drivers/debug_io.hpp"
 	#include "drivers/drive_control.hpp"
@@ -129,12 +131,17 @@
 	int main()
 	{
 		cycleLEDs(0.05);
-		
-		//bluetooth.printf("Front Right:\r\n");
-		//IR_calibration(frontRightIR, IR_SIGDELAY, IR_SIGREST);
-		print_ir(frontRightIR);
+		/*
+		bluetooth.printf("Left:\r\n", );
+		IR_calibration(frontLeftIR, IR_SIGDELAY, IR_SIGREST);
+		bluetooth.printf("Right:\r\n");
+		IR_calibration(frontRightIR, IR_SIGDELAY, IR_SIGREST);
+		*/
+		bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
+		bluetooth.printf("Front Right Dist: %1.4f\r\n", frontRightIR.distToWall());
+		//Gyro_calibration(150, 100);
 
-		cycleLEDs(0.05);
+		testBuzzer();
 	}
 
 // END
@@ -150,9 +157,23 @@
 	#include "drivers/testFunctions.hpp"
 	#include "drivers/debug_io.hpp"
 	#include "drivers/drive_control.hpp"
+	#include "devices/QEI_HW.hpp"
 
 	int main()
 	{	
+		cycleLEDs(0.05);
+		QEI_HW rightEncoder(5);
+		cycleMFs(0.05);
+		int encRead = 0;
+		
+		bluetooth.printf("\r\nTimer choice = TIM_%d\r\n", rightEncoder.TIM_X);
+		for (int i = 0; i < 20; i++) {
+			encRead = rightEncoder.read();
+			bluetooth.printf("Right Encoder = %d\r\n", encRead);
+			rightEncoder.reset();
+			wait(0.2);
+		}
+		
 		/*
 		float gyroAvg = 0;
 		float gyroRead = 0;

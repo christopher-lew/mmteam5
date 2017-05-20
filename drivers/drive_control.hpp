@@ -26,6 +26,8 @@ void turnLeft(float speed);
 
 void turnRight(float speed);
 
+void turnAround(float speed);
+
 
 char rightWallFollower();
 

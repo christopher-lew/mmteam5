@@ -27,6 +27,9 @@ void ticker_switch1();
 void ticker_switch2();
 void tickerExample();
 
+
 void IR_calibration(IRPair ir, int signal_delay_us, int signal_rest_us);
+
+void Gyro_calibration(int num_samples, int sample_freq);
 
 #endif
