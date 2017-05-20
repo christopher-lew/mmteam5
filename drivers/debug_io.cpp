@@ -23,11 +23,17 @@ void print_battery()
 
 void print_ir(IRPair ir) 
 {
-	float dist = ir.distToWall();
+	float avgDist = ir.distToWall();
+	float avgRead = 0.0;
+	
+	bluetooth.printf("Avg Dist To Wall = %3.6f\r\n", avgDist);
 	for (int i = 0; i < IR_SAMPLES; i++) {
-		bluetooth.printf("%3.9f\r\n", ir.readLog[i]);
+		avgRead += ir.readLog[i];
+		bluetooth.printf("%3.6f\r\n", ir.readLog[i]);
 	}
-	bluetooth.printf("Avg Dist To Wall = %3.9f\r\n\n", dist);
+
+	avgRead /= IR_SAMPLES;
+	bluetooth.printf("Avg ADC Read = %3.6f\r\n\n", avgRead);
 }
 
 
@@ -62,5 +68,6 @@ void print_both_encoders(char turnDirection, int leftRead, int rightRead)
 void print_gyro()
 {
 	float ADCRead = gyro.getADCRead();
-	bluetooth.printf("Gyro ADC Read = %1.15f\r\n", ADCRead);
+	float curAngle = gyro.getAngle();
+	bluetooth.printf("Gyro:\r\nADC Read = %1.6f\r\nCurrent Angle = %3.6f\r\n\n", ADCRead, curAngle);
 }

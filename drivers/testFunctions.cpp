@@ -130,3 +130,67 @@ void tickerExample()
 	tick2.detach();		
 	ledGreen = 0;
 }
+
+// ----- ----- ----- ----- SENSOR CALIBRATION ----- ----- ----- ----- ----- ----- ----- 
+
+/*
+ * Fires a burst of IR on/off cycles given the
+ * 		ir
+ * 		signal delay time (between turning on Emitter and reading Receiver)
+ *		signal rest time (how much time we need to turn off the Emitter to allow firing capacitor to recharge)
+ */
+void IR_calibration(IRPair ir, int signal_delay_us, int signal_rest_us)
+{
+	int numBursts = 3;
+	float avgBurstRead = 0.0;
+	
+	bluetooth.printf("********** %d us **********\r\n", signal_delay_us);
+
+	for (int i = 0; i < numBursts; i++) {
+		float avgDist = ir.calibration(signal_delay_us, signal_rest_us);
+		float avgRead = 0.0;
+		
+		//bluetooth.printf("Avg Dist To Wall = %3.6f\r\n", avgDist);
+		for (int i = 0; i < IR_SAMPLES; i++) {
+			avgRead += ir.readLog[i];
+			bluetooth.printf("%3.6f\r\n", ir.readLog[i]);
+		}
+
+		avgRead /= IR_SAMPLES;
+		bluetooth.printf("Avg ADC Read = %3.6f\r\n", avgRead);
+		
+		avgBurstRead += avgRead;
+		testBuzzer();
+	}
+	
+	avgBurstRead /= numBursts;
+	bluetooth.printf("Average burst read = %3.4f\r\n\n", avgBurstRead);
+}
+
+
+
+void Gyro_calibration(int num_samples, int sample_freq)
+{
+	Timer gyroTimer;
+	float gyroAvg = 0.0;
+	float gyroLog[num_samples];
+	float sample_period = 1.0 / sample_freq;
+
+	gyro.start_sampling();
+	gyroTimer.start();
+	for (int i = 0; i < num_samples; i++) {
+		gyroTimer.reset();
+		gyroLog[i] = gyro.getADCRead();
+		while(gyroTimer.read() < sample_period) {}
+	}
+	gyro.stop_sampling();
+
+	// Print out the information
+	bluetooth.printf("Gyro Calibration Readings @ %d Hz\r\n", sample_freq);
+	for (int i = 0; i < num_samples; i++) {
+		gyroAvg += gyroLog[i];
+		bluetooth.printf("%1.6f\r\n", gyroLog[i]);
+	}
+	gyroAvg /= num_samples;
+	bluetooth.printf("Average = %1.4f\r\n\n", gyroAvg);
+}

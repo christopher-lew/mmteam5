@@ -46,7 +46,7 @@ float IRPair::getDistance(float ADC_read)
 }
 
 
-/* Returns True(1) or False(0) if there is a wall right next to the sensor */
+/* Returns True or False if there is a wall right next to the sensor */
 bool IRPair::adjWall()
 {
 	fireAndRead(); // Noisy initial read
@@ -70,16 +70,16 @@ bool IRPair::adjWall()
 float IRPair::distToWall()
 {
 	float avgRead = 0;
-	fireAndRead(); // Noisy initial read
+	this->fireAndRead(); // Noisy initial read
 	
 	for (int i = 0; i < IR_SAMPLES; i++) {
-		readLog[i] = fireAndRead();
+		readLog[i] = this->fireAndRead();
 		avgRead += readLog[i];
 	}
 	
 	avgRead /= IR_SAMPLES;
 		
-	return getDistance(avgRead);
+	return this->getDistance(avgRead);
 }
 
 
@@ -98,7 +98,7 @@ float IRPair::distToWall()
  */
 int IRPair::cellsToWall()
 {
-	float dist = distToWall();
+	float dist = this->distToWall();
 	int cellsAway;
 	
 	if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*0) {
@@ -118,4 +118,35 @@ int IRPair::cellsToWall()
 	}
 	
 	return cellsAway;
+}
+
+
+
+
+
+float IRPair::calib_fireAndRead(int signal_delay_us, int signal_rest_us)
+{
+	IR_Emitter.write(1);
+	wait_us(signal_delay_us); // Wait for firing capacitor
+
+	float read = IR_Receiver.read();
+	IR_Emitter.write(0);
+	wait_us(signal_rest_us); // Recharge firing capacitor
+
+	return read;
+}
+
+float IRPair::calibration(int signal_delay_us, int signal_rest_us)
+{
+	float avgRead = 0;
+	this->calib_fireAndRead(signal_delay_us, signal_rest_us); // Noisy initial read
+	
+	for (int i = 0; i < IR_SAMPLES; i++) {
+		readLog[i] = this->calib_fireAndRead(signal_delay_us, signal_rest_us);
+		avgRead += readLog[i];
+	}
+	
+	avgRead /= IR_SAMPLES;
+		
+	return this->getDistance(avgRead);
 }

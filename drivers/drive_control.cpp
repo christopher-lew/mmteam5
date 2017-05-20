@@ -38,8 +38,7 @@ void moveFalcon(char nextMove, float speed)
 		forward(speed);
 	}
 	else {
-		turnRight(speed);
-		turnRight(speed);
+		turnAround(speed);
 		forward(speed);
 	}
 }
@@ -48,7 +47,7 @@ void moveFalcon(char nextMove, float speed)
 void forward(float speed) 
 {
 	// TODO: float constSpeed = 0.3;
-	int CELL_DISTANCE = 20000; // TODO: implement as #define
+	int CELL_DISTANCE = 28000; // TODO: implement as #define
 	bool alignToFront = false;
 
 	resetEncoders();
@@ -59,12 +58,12 @@ void forward(float speed)
 	while(getEncoderDistance() < CELL_DISTANCE) {
 		alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
 		if (alignToFront) {
-			break;
+			//break;
 		}
 	}
 
 	if (alignToFront) {
-		PID_alignToFrontWall();
+		//PID_alignToFrontWall();
 	}
 
 	leftMotor.stop();
@@ -75,7 +74,7 @@ void forward(float speed)
 void turnLeft(float speed)  // TODO: USING "speed"
 {
 	float turnLeft_speed = 0.2;
-	float turnLeft_angle = -85.0;
+	float turnLeft_angle = -70.0;
 
 
 	resetEncoders();
@@ -91,13 +90,14 @@ void turnLeft(float speed)  // TODO: USING "speed"
 	gyro.stop_sampling();
 	leftMotor.stop();
 	rightMotor.stop();
+	wait_ms(100);
 }
 
 
 void turnRight(float speed) // TODO: USING "speed"
 {
 	float turnRight_speed = 0.2;
-	float turnRight_angle = 85.0;
+	float turnRight_angle = 70.0;
 	
 	
 	resetEncoders();
@@ -113,6 +113,30 @@ void turnRight(float speed) // TODO: USING "speed"
 	gyro.stop_sampling();
 	leftMotor.stop();
 	rightMotor.stop();
+	wait_ms(100);
+}
+
+
+void turnAround(float speed) // TODO: USING "speed"
+{
+	float turnAround_speed = 0.2;
+	float turnAround_angle = 165.0;
+	
+	
+	resetEncoders();
+	gyro.start_sampling();
+	leftMotor.accel(turnAround_speed);
+	rightMotor.accel(-turnAround_speed);
+
+
+	while(gyro.getAngle() < turnAround_angle) {
+		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+	}
+
+	gyro.stop_sampling();
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(100);
 }
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 

@@ -34,6 +34,13 @@ bool PID_keepStraight()
 void PID_alignToFrontWall()
 {
 	// TODO
+	float right = frontRightIR.distToWall();
+	while (right > PID_ALIGN_FRONT_DIST) {
+		right = frontRightIR.distToWall();
+	}
+
+	leftMotor.stop();
+	rightMotor.stop();
 }
 
 
