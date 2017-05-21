@@ -10,7 +10,7 @@
 #include "../config/initConstants.hpp"
 #include "../config/initDevices.hpp"
 
-#define PID_ALIGN_FRONT_DIST 3 // centimeters
+#define PID_ALIGN_FRONT_DIST 5.5 // centimeters
 
 
 bool PID_keepStraight();
