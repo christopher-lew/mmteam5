@@ -116,40 +116,46 @@ Direction Maze::current_direction = NORTH;
 
 // };
 
-// int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+ int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+     {2, 1, 2},
+     {1, 0, 1},
+     {2, 1, 2},
+ };
 
-//     {2, 1, 2},
-//     {1, 0, 1},
-//     {2, 1, 2},
-
-// };
-
-// int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
-//     {0, 0, 0},
-//     {0, 0, 0},
-//     {0, 0, 0},
-// };
+ int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
+     {0, 0, 0},
+     {0, 0, 0},
+     {0, 0, 0},
+ };
 
 // 5x5
-int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
-    
-    {4, 3, 2, 3, 4},
-    {3, 2, 1, 2, 3},
-    {2, 1, 0, 1, 2},
-    {3, 2, 1, 2, 3},
-    {4, 3, 2, 3, 4},
-
-};
-
-int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
-
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-
-};
+//int Maze::maze_actual[MAZE_SIZE][MAZE_SIZE] = {
+//
+//    {4, 1, 8, 8, 8},
+//    {4, 1, 10, 10, 2},
+//    {4, 5, 7, 3, 0},
+//    {0, 4, 1, 12, 1},
+//    {4, 5, 1, 2, 0},
+//};
+//int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+//    
+//    {4, 3, 2, 3, 4},
+//    {3, 2, 1, 2, 3},
+//    {2, 1, 0, 1, 2},
+//    {3, 2, 1, 2, 3},
+//    {4, 3, 2, 3, 4},
+//
+//};
+//
+//int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
+//
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//
+//};
 
 
 bool Maze::center = false;
@@ -378,7 +384,7 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     }
 
     // We want to go south in the maze!
-    else if((minx == x) && (miny < y)){
+    else {// if((minx == x) && (miny < y)){
        if (currDir == NORTH) {
             Maze::setCurrentDirection(turning=SOUTH);
             return 'S';
@@ -397,7 +403,7 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
         }
     }
 
-    return 'F'; // Should never reach, but choooses to go forward lawls.
+    return 'Z'; // Should never reach, but choooses to go forward lawls.
 }
 
 // FUNCTION to get open neighbors of given cell index, and return minimum value
@@ -614,36 +620,36 @@ int decodeYIndex(int encodedIndex) {
     return toReturn; // Will return y index of encoded index via mask 1111100000
 }
 
-int main() {
-   Maze();
-   print_maze();
+// int main() {
+//    Maze();
+//    print_maze();
 
-   bool stop = false;
-   bool goaway = false;
+//    bool stop = false;
+//    bool goaway = false;
 
-   while (1) {
+//    while (1) {
 
-       if(!stop && is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-               Maze::setStartAsGoal();
-               stop = true;
+//        if(!stop && is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+//                Maze::setStartAsGoal();
+//                stop = true;
 
-       }
-       if (!goaway && stop && is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-            Maze::speedRunPrep();
-            goaway = true;
-       }
+//        }
+//        if (!goaway && stop && is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+//             Maze::speedRunPrep();
+//             goaway = true;
+//        }
 
 
-       getchar();
-       Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
-       update_distances();
-       printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-       printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-       print_maze();
-   }
+//        getchar();
+//        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+//        update_distances();
+//        printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
+//        printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
+//        print_maze();
+//    }
     
 
 
-}
+// }
 
 
