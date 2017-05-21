@@ -4,19 +4,7 @@
 
 #include "drive_control.hpp"
 
-
-/* Returns the average number of pulses across both encoders since last reset. Unit is encoder pulses; intended for straight driving only. */
-int getEncoderDistance()
-{
-	return (leftEncoder.read() + rightEncoder.read()) >> 1;
-}
-
-
-void resetEncoders()
-{
-	leftEncoder.reset();
-	rightEncoder.reset();
-}
+#define MVMT_WAIT_MS 250
 
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
@@ -47,36 +35,111 @@ void moveFalcon(char nextMove, float speed)
 void forward(float speed) 
 {
 	// TODO: float constSpeed = 0.3;
-	int CELL_DISTANCE = 28000; // TODO: implement as #define
+	//float speed = 0.2;
+	//int CELL_DISTANCE = 28000; // TODO: implement as #define
+	float fwd_speed = 0.14;
+	int CELL_DISTANCE = 38000;
 	bool alignToFront = false;
 
 	resetEncoders();
-	leftMotor.accel(speed);
-	rightMotor.accel(speed);
-
+	leftMotor.accel(fwd_speed);
+	rightMotor.accel(fwd_speed);
 
 	while(getEncoderDistance() < CELL_DISTANCE) {
-		wait_ms(10);
-		//alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
+		alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
 		if (alignToFront) {
-			//break;
+			PID_alignToFrontWall();
+			break;
 		}
 	}
 
-	if (alignToFront) {
-		//PID_alignToFrontWall();
-	}
+	//if (alignToFront) {
+	//	PID_alignToFrontWall();	
+	//}
 
 	leftMotor.stop();
 	rightMotor.stop();
 }
 
 
+void turnRight(float speed) // TODO: USING "speed"
+{
+	float turnRight_speed = 0.16;
+	int encLimit = 15700;
+
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(MVMT_WAIT_MS);
+	
+	resetEncoders();
+	leftMotor.accel(turnRight_speed);
+	rightMotor.accel(-turnRight_speed);
+
+	while((leftEncoder.read() < encLimit) && (rightEncoder.read() > -encLimit)) {
+		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+	}
+
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(MVMT_WAIT_MS);
+}
+
+void turnLeft(float speed)
+{
+	float turnRight_speed = 0.16;
+	int encLimit = 51000;
+
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(MVMT_WAIT_MS);
+	
+	resetEncoders();
+	leftMotor.accel(turnRight_speed);
+	rightMotor.accel(-turnRight_speed);
+
+	while((leftEncoder.read() < encLimit) && (rightEncoder.read() > -encLimit)) {
+		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+	}
+
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(MVMT_WAIT_MS);
+}
+
+void turnAround(float speed)
+{
+	float turnRight_speed = 0.16;
+	int encLimit = 34500;
+
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(MVMT_WAIT_MS);
+	
+	resetEncoders();
+	leftMotor.accel(turnRight_speed);
+	rightMotor.accel(-turnRight_speed);
+
+	while((leftEncoder.read() < encLimit) && (rightEncoder.read() > -encLimit)) {
+		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+	}
+
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(MVMT_WAIT_MS);
+}
+
+/*
 void turnLeft(float speed)  // TODO: USING "speed"
 {
 	float turnLeft_speed = 0.17;
-	float turnLeft_angle = -65.0;
+	float turnLeft_angle = -70.0;
 
+	ledRed = 1;
+	ledYellow = 0;
+	ledGreen = 0;
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(100);
 
 	resetEncoders();
 	gyro.start_sampling();
@@ -98,8 +161,14 @@ void turnLeft(float speed)  // TODO: USING "speed"
 void turnRight(float speed) // TODO: USING "speed"
 {
 	float turnRight_speed = 0.2;
-	float turnRight_angle = 75.0;
-	
+	float turnRight_angle = 70.0;
+
+	ledRed = 0;
+	ledYellow = 0;
+	ledGreen = 1;
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(100);
 	
 	resetEncoders();
 	gyro.start_sampling();
@@ -120,17 +189,23 @@ void turnRight(float speed) // TODO: USING "speed"
 
 void turnAround(float speed) // TODO: USING "speed"
 {
-	float turnAround_speed = 0.2;
-	float turnAround_angle = 170.0;
-	
+	float turnRight_speed = 0.2;
+	float turnRight_angle = 140.0;
+
+	ledRed = 0;
+	ledYellow = 0;
+	ledGreen = 1;
+	leftMotor.stop();
+	rightMotor.stop();
+	wait_ms(100);
 	
 	resetEncoders();
 	gyro.start_sampling();
-	leftMotor.accel(turnAround_speed);
-	rightMotor.accel(-turnAround_speed);
+	leftMotor.accel(turnRight_speed);
+	rightMotor.accel(-turnRight_speed);
 
 
-	while(gyro.getAngle() < turnAround_angle) {
+	while(gyro.getAngle() < turnRight_angle) {
 		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
 	}
 
@@ -139,27 +214,32 @@ void turnAround(float speed) // TODO: USING "speed"
 	rightMotor.stop();
 	wait_ms(100);
 }
-
+*/
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 
 // ['F', 'R', 'L', 'A']
 char rightWallFollower()
 {
-	if ( !(rightIR.adjWall()) ) {
+	bool leftWall = leftIR.adjWall();
+	bool frontLeftWall = frontLeftIR.adjWall();
+	bool frontRightWall = frontRightIR.adjWall();
+	bool rightWall = rightIR.adjWall();
+		
+	if ( !(rightWall) ) {
 		ledRed = 0;
 		ledYellow = 0;
 		ledGreen = 1;
 		return 'R';
 	}
 
-	else if ( !(frontRightIR.adjWall()) ) {
+	else if ( !(frontLeftWall) && !(frontRightWall) ) {
 		ledRed = 0;
 		ledYellow = 1;
 		ledGreen = 0;
 		return 'F';
 	}
 
-	else if ( !(leftIR.adjWall()) ) {
+	else if ( !(leftWall) ) {
 		ledRed = 1;
 		ledYellow = 0;
 		ledGreen = 0;

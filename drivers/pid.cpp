@@ -5,8 +5,17 @@
 #include "pid.hpp"
 
 // Init all important PID variables & Constants
-#define Kp 0.0
-#define Kd 0.0
+//#define Kp 0.002
+//#define Kd 0.008
+
+//#define Kp 0.000203
+//#define Kd 0.000315
+
+//#define Kp 0.000075
+//#define Kd 0.00055
+
+#define Kp 0.000075
+#define Kd 0.00055
 
 volatile float errorP = 0;
 volatile float oldErrorP = 0;
@@ -36,27 +45,17 @@ bool PID_keepStraight()
 }
 
 
-/* Use frontLeft & frontRight IRs to keep the motors straight */
-void PID_alignToFrontWall()
-{
-	// TODO
-	float right = frontRightIR.distToWall();
-	while (right > PID_ALIGN_FRONT_DIST) {
-		right = frontRightIR.distToWall();
-	}
-
-	leftMotor.stop();
-	rightMotor.stop();
-}
-
-
 /* Uses left and/or right walls to align the mouse */
 void PID_alignUsingSides(bool leftWall, bool rightWall)
 {	
-	//#define PID_ALIGN_FRONT_DIST 3 // centimeters
+	float leftError = 0;
+	float rightError = 0;
 	// Use both walls to align
 	if (leftWall && rightWall) {
-		errorP = leftIR.distToWall() - rightIR.distToWall();
+		leftError = leftIR.distToWall() - PID_LEFT_ALIGN;
+		rightError = rightIR.distToWall() - PID_RIGHT_ALIGN;
+		
+		errorP = leftError - rightError;
 		errorD = errorP - oldErrorP;
 	}
 
@@ -82,8 +81,35 @@ void PID_alignUsingSides(bool leftWall, bool rightWall)
 	totalError = Kp*errorP + Kd*errorD;
 	oldErrorP = errorP;
 
-	leftMotor.accel(leftMotor.curSpeed - totalError);
-	rightMotor.accel(rightMotor.curSpeed + totalError);
+	leftMotor.instantAccel(leftMotor.curSpeed - totalError);
+	rightMotor.instantAccel(rightMotor.curSpeed + totalError);
+}
+
+
+/* Use frontLeft & frontRight IRs to keep the motors straight */
+void PID_alignToFrontWall()
+{
+	leftMotor.instantAccel(0);
+	rightMotor.instantAccel(0);
+	cycleMFs(0.025);
+	
+	leftMotor.instantAccel(COAST_SPEED);
+	rightMotor.instantAccel(COAST_SPEED);
+	
+	int fRightDist = frontRightIR.distToWall();
+	int fLeftDist = frontLeftIR.distToWall();
+
+	while ( (fRightDist > PID_FRONT_ALIGN) && (fLeftDist > PID_FRONT_ALIGN) ) {
+		//PID_alignUsingSides(leftIR.adjWall(), rightIR.adjWall());
+		fRightDist = frontRightIR.distToWall();
+		fLeftDist = frontLeftIR.distToWall();
+	}
+
+	leftMotor.instantAccel(-0.05);
+	rightMotor.instantAccel(-0.05);
+	wait_ms(100);
+	leftMotor.instantAccel(0);
+	rightMotor.instantAccel(0);
 }
 
 
@@ -98,4 +124,20 @@ void PID_HailMary()
 void PID_turn(char direction)
 {
 	// TODO
+}
+
+
+
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
+/* Returns the average number of pulses across both encoders since last reset. Unit is encoder pulses; intended for straight driving only. */
+int getEncoderDistance()
+{
+	return (leftEncoder.read() + rightEncoder.read()) >> 1;
+}
+
+
+void resetEncoders()
+{
+	leftEncoder.reset();
+	rightEncoder.reset();
 }

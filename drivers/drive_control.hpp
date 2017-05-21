@@ -11,11 +11,7 @@
 #include "../config/initDevices.hpp"
 #include "debug_io.hpp"
 #include "pid.hpp"
-
-
-int getEncoderDistance();
-
-void resetEncoders();
+#include "testFunctions.hpp"
 
 
 void moveFalcon(char nextMove, float speed);

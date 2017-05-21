@@ -11,7 +11,8 @@
 
 #define IR_SAMPLES 3
 
-#define ADJ_WALL_LIMIT 12.5 // If a wall is closer than this, then it is touching the currently occupied cell
+#define FRONT_WALL_LIMIT 11
+#define SIDE_WALL_LIMIT 13 // If a wall is closer than this, then it is touching the currently occupied cell
 #define CELL_LENGTH 18.0 // each cell is 18 cm long
 
 
@@ -19,9 +20,11 @@
 class IRPair
 {	
 public:
+	bool isFrontIR;
+	float wall_limit;
 	float readLog[IR_SAMPLES]; // used for logging IR read values
 	
-	IRPair(PinName rxPin, PinName txPin);
+	IRPair(PinName rxPin, PinName txPin, bool frontStatus);
 	
 	bool adjWall(); 
 	float distToWall(); // Returns dist in cm
@@ -29,6 +32,9 @@ public:
 	float calibration(int signal_delay_us, int signal_rest_us);
 	
 private:
+	
+	
+
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;
 
