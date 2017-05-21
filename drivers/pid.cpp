@@ -61,15 +61,14 @@ void PID_alignUsingSides(bool leftWall, bool rightWall)
 
 	// Use only left wall to align
 	else if (leftWall) {
-		//errorP = 2 * ()
-		errorP = 0;
-		errorD = 0;
+		errorP = 2 * (leftIR.distToWall() - PID_LEFT_ALIGN);
+		errorD = errorP - oldErrorP;
 	}
 
 	// Use only right wall to align
 	else if (rightWall) {
-		errorP = 0;
-		errorD = 0;
+		errorP = 2 * (rightIR.distToWall() - PID_RIGHT_ALIGN);
+		errorD = errorP - oldErrorP;
 	}
 
 	else {

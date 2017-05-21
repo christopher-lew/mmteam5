@@ -37,8 +37,8 @@ void forward(float speed)
 	// TODO: float constSpeed = 0.3;
 	//float speed = 0.2;
 	//int CELL_DISTANCE = 28000; // TODO: implement as #define
-	float fwd_speed = 0.14;
-	int CELL_DISTANCE = 38000;
+	float fwd_speed = 0.12;
+	int CELL_DISTANCE = 41000;
 	bool alignToFront = false;
 
 	resetEncoders();
@@ -226,30 +226,30 @@ char rightWallFollower()
 	bool rightWall = rightIR.adjWall();
 		
 	if ( !(rightWall) ) {
-		ledRed = 0;
-		ledYellow = 0;
-		ledGreen = 1;
+		//ledRed = 0;
+		//ledYellow = 0;
+		//ledGreen = 1;
 		return 'R';
 	}
 
 	else if ( !(frontLeftWall) && !(frontRightWall) ) {
-		ledRed = 0;
-		ledYellow = 1;
-		ledGreen = 0;
+		//ledRed = 0;
+		//ledYellow = 1;
+		//ledGreen = 0;
 		return 'F';
 	}
 
 	else if ( !(leftWall) ) {
-		ledRed = 1;
-		ledYellow = 0;
-		ledGreen = 0;
+		//ledRed = 1;
+		//ledYellow = 0;
+		//ledGreen = 0;
 		return 'L';
 	}
 
 	else {
-		ledRed = 1;
-		ledYellow = 1;
-		ledGreen = 1;
+		//ledRed = 1;
+		//ledYellow = 1;
+		//ledGreen = 1;
 		return 'A';
 	}
 }
