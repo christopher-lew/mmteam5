@@ -32,7 +32,7 @@
 				testBuzzer();
 
 				state++;
-				wait(5);
+				wait(1);
 			}		
 		}
 
@@ -44,7 +44,7 @@
             state++;
             continue;
         }
-        getchar();
+        //getchar();
         cycleMFs(0.02);
         Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
         update_distances(Maze::getMousey(), Maze::getMousex());
@@ -79,7 +79,7 @@
 
     while (state == 3) { // Speed Run State
 		wait(3);
-        getchar();
+        //getchar();
         if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
             printf("suck it\n");
             break;
@@ -90,7 +90,7 @@
         // next_move(Maze::getMousey(), Maze::getMousex());
         char next = next_move(Maze::getMousey(), Maze::getMousex()); 
         moveFalcon(next, 0.2);
-        print_maze();
+        //print_maze();
 
     }
     testBuzzer();
