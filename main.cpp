@@ -127,7 +127,7 @@
 
 	int main()
 	{
-		cycleLEDs(0.05);
+		cycleLEDs(0.1);
 		/*
 		bluetooth.printf("Left:\r\n");
 		IR_calibration(leftIR, IR_SIGDELAY, IR_SIGREST);
@@ -136,14 +136,16 @@
 		*/
 		
 		/*
-		bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
-		bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
-		bluetooth.printf("Front Left Dist: %1.4f\r\n\n", frontLeftIR.distToWall());
-		bluetooth.printf("Front Right Dist: %1.4f\r\n", frontRightIR.distToWall());
-		bluetooth.printf("Front Right Dist: %1.4f\r\n", frontRightIR.distToWall());
-		bluetooth.printf("Front Right Dist: %1.4f\r\n\n", frontRightIR.distToWall());
+		while(1) {
+			bluetooth.printf("Left:\r\n");
+			IR_calibration(leftIR, IR_SIGDELAY, IR_SIGREST);
+			bluetooth.printf("Right:\r\n");
+			IR_calibration(rightIR, IR_SIGDELAY, IR_SIGREST);
+			wait(0.2);
+		}
 		*/
 		
+		/*
 		bool frontLeftWall;
 		bool frontRightWall;
 		bool rightWall;
@@ -176,10 +178,12 @@
 		
 			wait_ms(100);
 		}
+		*/
 
 		//Gyro_calibration(150, 100);
-
-		testBuzzer();
+		wait(1);
+		turnAround(0.0);
+		//testBuzzer();
 	}
 
 // END
