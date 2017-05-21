@@ -22,12 +22,19 @@
 		cycleLEDs(0.1);
 		wait(3);
 		cycleLEDs(0.1);
+
+		bool stop = false;
 		
 		while (1) {
-			if(is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-				break;
+			if(!stop && is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+               Maze::setStartAsGoal();
+               stop = true;
 
-        }
+       }
+       // 		if (!goaway && stop && is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+       //      Maze::speedRunPrep();
+       //      goaway = true;
+       // }
 	        cycleMFs(0.02);
 	        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
 	        update_distances();
