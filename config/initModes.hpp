@@ -31,6 +31,6 @@
  * I: Used for IR Sensor calibration/testing
  * T: Falcon operates in Testing mode
  */
-#define _OPERATING_MODE 'W'
+#define _OPERATING_MODE 'M'
 
 #endif

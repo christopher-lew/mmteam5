@@ -21,8 +21,6 @@
 		int state = 0 ;
 		Maze();
 		cycleLEDs(0.1);
-		wait(5);
-		cycleLEDs(0.1);
 
 		while (state == 0) { // Runnable State
 			
@@ -37,7 +35,6 @@
 		}
 
 	    while (state == 1) {
-        wait(3);
         if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
             testBuzzer();
             Maze::setStartAsGoal();
@@ -45,7 +42,6 @@
             continue;
         }
         //getchar();
-        cycleMFs(0.02);
         Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
         update_distances(Maze::getMousey(), Maze::getMousex());
         //next_move(Maze::getMousey(), Maze::getMousex());
@@ -55,7 +51,6 @@
     }
 
     while (state == 2) { // Go Home State
-		wait(3);
         if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
             //print_maze();
             //getchar();
@@ -228,7 +223,8 @@
 
 		//Gyro_calibration(150, 100);
 		wait(2);
-		PID_alignToFrontWall();
+		bluetooth.printf("left Dist: %1.4f\r\n", leftIR.distToWall());
+		bluetooth.printf("right Dist: %1.4f\r\n", rightIR.distToWall());
 		//testBuzzer();
 	}
 

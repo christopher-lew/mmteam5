@@ -183,6 +183,17 @@ int Maze::the_maze_visited[MAZE_SIZE][MAZE_SIZE] = {
 //    {0, 0, 0, 0, 0},
 //
 //};
+//
+//int Maze::the_maze_visited[MAZE_SIZE][MAZE_SIZE] = {
+//
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//    {0, 0, 0, 0, 0},
+//
+//};
+
 
 
 bool Maze::center = false;
