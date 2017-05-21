@@ -99,14 +99,15 @@
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);
 		}*/
+		
 		int i = 0;
 		int moves = 8;
 		while (i < moves) {
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);
 			i++;
-			wait(0.25);
 		}
+		
 
 	}
 

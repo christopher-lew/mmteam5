@@ -6,10 +6,16 @@
 
 
 /* Constructor */
-IRPair::IRPair(PinName rxPin, PinName txPin)
-	: IR_Receiver(rxPin), IR_Emitter(txPin) 
+IRPair::IRPair(PinName rxPin, PinName txPin, bool isFrontIR))
+	: IR_Receiver(rxPin), IR_Emitter(txPin), front_IR(isFrontIR)
 {
 	this->IR_Emitter.write(0);
+	if (this->front_IR) {
+		this->wall_limit = FRONT_WALL_LIMIT;
+	}
+	else {
+		this->wall_limit = SIDE_WALL_LIMIT;
+	}
 }
 
 
@@ -53,7 +59,7 @@ bool IRPair::adjWall()
 	float read = fireAndRead();
 	float dist = getDistance(read);
 
-	if (dist < ADJ_WALL_LIMIT && dist >= 0) {
+	if (dist < this->wall_limit && dist >= 0) {
 		return true;
 	}
 	else {
@@ -101,16 +107,16 @@ int IRPair::cellsToWall()
 	float dist = this->distToWall();
 	int cellsAway;
 	
-	if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*0) {
+	if (dist < this->wall_limit + CELL_LENGTH*0) {
 		cellsAway = 0;
 	}
-	else if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*1) {
+	else if (dist < this->wall_limit + CELL_LENGTH*1) {
 		cellsAway = 1;
 	}
-	else if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*2) {
+	else if (dist < this->wall_limit + CELL_LENGTH*2) {
 		cellsAway = 2;
 	}
-	else if (dist < ADJ_WALL_LIMIT + CELL_LENGTH*3) {
+	else if (dist < this->wall_limit + CELL_LENGTH*3) {
 		cellsAway = 3;
 	}
 	else {

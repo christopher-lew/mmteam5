@@ -5,8 +5,8 @@
 #include "pid.hpp"
 
 // Init all important PID variables & Constants
-#define Kp 0.0
-#define Kd 0.0
+#define Kp 0.004
+#define Kd 0.008
 
 volatile float errorP = 0;
 volatile float oldErrorP = 0;

@@ -4,11 +4,11 @@
 	// Sensor Classes
 	Buzzer buzzer(PB_15);
 	
-	IRPair leftIR(PB_0, PC_9);
-	IRPair frontLeftIR(PC_5, PA_4);
-	IRPair frontRightIR(PC_4, PC_1);
-	IRPair rightIR(PA_6, PC_14);
-	IRPair testIR(PA_7, PH_0);
+	IRPair leftIR(PB_0, PC_9, false);
+	IRPair frontLeftIR(PC_5, PA_4, true);
+	IRPair frontRightIR(PC_4, PC_1, true);
+	IRPair rightIR(PA_6, PC_14, false);
+	IRPair testIR(PA_7, PH_0, false);
 	
 	Motor leftMotor(PB_5, PC_6);
 	Motor rightMotor(PB_9, PB_8);
@@ -37,10 +37,10 @@
 	// Sensor Classes
 	Buzzer buzzer(PA_2);
 	
-	IRPair leftIR(PC_3, PC_5);
-	IRPair frontLeftIR(PC_1, PA_7);
-	IRPair frontRightIR(PC_0, PA_6);
-	IRPair rightIR(PH_0, PA_4);
+	IRPair leftIR(PC_3, PC_5, false);
+	IRPair frontLeftIR(PC_1, PA_7, true);
+	IRPair frontRightIR(PC_0, PA_6, true);
+	IRPair rightIR(PH_0, PA_4, false);
 
 	Motor leftMotor(PC_8, PC_7);
 	Motor rightMotor(PB_9, PB_8);
