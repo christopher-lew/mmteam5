@@ -17,13 +17,13 @@
 #include <string>
 #include <vector>
 #include <iostream>
-// #include "../config/initDevices.hpp"
+#include "../config/initDevices.hpp"
 
 using namespace std;
 
 //#define const int MAZE_SIZE = 4;
 
-const int MAZE_SIZE = 16;
+const int MAZE_SIZE = 3;
 
 enum Direction {
 
@@ -238,6 +238,10 @@ public:
 
     // Code to updateWalls
     static void updateWalls(int y, int x) {
+        
+                ledRed = 0;
+        ledYellow = 0;
+        ledGreen = 0;
 
         bool topWall = false;
         bool bottomWall = false; 
@@ -245,17 +249,22 @@ public:
         bool rightWall = false;
 
         Direction orientation = Maze::getCurrentDirection();
+     
+//            leftIR = leftIR.adjWall();
+//            rightIR = rightIR.adjWall();
+//            frontIRs = frontLeftIR.adjWall() && frontRightIR.adjWall())
+
 
         if (orientation == NORTH) {
             leftWall = leftIR.adjWall();
-            rightWall = rightIR.adjWall();
+            rightWall = !rightIR.adjWall();
             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
                 topWall = true;
             }
         }
 
         else if (orientation == EAST) {
-            bottomWall = rightIR.adjWall();
+            bottomWall = !rightIR.adjWall();
             topWall = leftIR.adjWall();
             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
                 rightWall = true;
@@ -264,26 +273,42 @@ public:
 
         else if (orientation == WEST) {
             bottomWall = leftIR.adjWall();
-            topWall = rightIR.adjWall();
+            topWall = !rightIR.adjWall();
             if (frontRightIR.adjWall() && frontLeftIR.adjWall()) {
                 leftWall = true;
             }
         }
 
-        else if (orientation == SOUTH) {
+        else { //if (orientation == SOUTH) {
             rightWall = leftIR.adjWall();
-            leftWall = rightIR.adjWall();
+            leftWall = !rightIR.adjWall();
             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
                 bottomWall = true;
             }
         }
+        
+    if ( rightWall)  {
+        ledGreen = 1;
+    }
 
-        // Should not be invalid, but if it is, RIP
-        else {
+    if ( leftWall)  {
+        ledYellow = 1;
+    }
 
-        }
+    if ( topWall)  {
+        ledRed = 1;
+    }
 
-        if (leftWall) {
+    if (bottomWall) {
+        
+    }
+
+        // // Should not be invalid, but if it is, RIP
+        // else {
+
+        // }
+
+            if (leftWall) {
             Maze::encodeWalls(y, x, 1);
             if (x > 0) Maze::encodeWalls(y, x - 1, 4);
         }
@@ -301,7 +326,7 @@ public:
         if (bottomWall) {
             Maze::encodeWalls(y, x, 2);
             if (y > 0) Maze::encodeWalls(y - 1, x, 8);
-        }
+         }
 
 
         // if (Maze::actual_has_bottom_wall(y, x)) {
