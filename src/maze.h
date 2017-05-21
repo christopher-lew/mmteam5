@@ -17,13 +17,13 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "../config/initDevices.hpp"
+// #include "../config/initDevices.hpp"
 
 using namespace std;
 
 //#define const int MAZE_SIZE = 4;
 
-const int MAZE_SIZE = 3;
+const int MAZE_SIZE = 16;
 
 enum Direction {
 
@@ -111,12 +111,14 @@ public:
     // Return visited bit of the maze position
     static int getVisited(int y, int x) {
         int walls = decodeWalls(y, x);
-        return walls & 16 >> 4;
+        return (walls & 0b10000) >> 4;
     }
 
     // Set visited bit of the maze walls
     static void setVisited(int y, int x) {
-        encodeWalls(y, x, 16); // Sets the 5th LSB to one, marking it as visited
+        cout << "Setting " << x << "," << y << " as visited" << endl;
+        encodeWalls(y, x, 0b10000); // Sets the 5th LSB to one, marking it as visited
+        cout << getVisited(y, x) << endl;
     }
 
     // Return the x coordinate of the mouse position
@@ -231,27 +233,74 @@ public:
 
         // Set the new wall to the maze index with dist using OR operator
         the_maze_walls[y][x] = the_maze_walls[y][x] | newWall;
+        cout << the_maze_walls[y][x] << endl;
     }
 
     // Code to updateWalls
     static void updateWalls(int y, int x) {
-        bool leftWall =         leftIR.adjWall(); 
+
+        bool topWall = false;
+        bool bottomWall = false; 
+        bool leftWall = false; 
+        bool rightWall = false;
+
+        Direction orientation = Maze::getCurrentDirection();
+
+        if (orientation == NORTH) {
+            leftWall = leftIR.adjWall();
+            rightWall = rightIR.adjWall();
+            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+                topWall = true;
+            }
+        }
+
+        else if (orientation == EAST) {
+            bottomWall = rightIR.adjWall();
+            topWall = leftIR.adjWall();
+            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+                rightWall = true;
+            }
+        }
+
+        else if (orientation == WEST) {
+            bottomWall = leftIR.adjWall();
+            topWall = rightIR.adjWall();
+            if (frontRightIR.adjWall() && frontLeftIR.adjWall()) {
+                leftWall = true;
+            }
+        }
+
+        else if (orientation == SOUTH) {
+            rightWall = leftIR.adjWall();
+            leftWall = rightIR.adjWall();
+            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+                bottomWall = true;
+            }
+        }
+
+        // Should not be invalid, but if it is, RIP
+        else {
+
+        }
+
         if (leftWall) {
             Maze::encodeWalls(y, x, 1);
             if (x > 0) Maze::encodeWalls(y, x - 1, 4);
         }
 
-        bool rightWall =        rightIR.adjWall();
         if (rightWall) {
             Maze::encodeWalls(y, x, 4);
             if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
         }
 
-        bool frontLeftWall =    frontLeftIR.adjWall();
-        bool frontRightWall =   frontRightIR.adjWall();
-        if (frontLeftWall && frontRightWall) {
+        if (topWall) {
             Maze::encodeWalls(y, x, 8);
             if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        }
+
+        if (bottomWall) {
+            Maze::encodeWalls(y, x, 2);
+            if (y > 0) Maze::encodeWalls(y - 1, x, 8);
         }
 
 
@@ -260,8 +309,8 @@ public:
         //     if (y > 0) Maze::encodeWalls(y - 1, x, 8);
         // }
         // if (Maze::actual_has_top_wall(y, x)) {
-            // Maze::encodeWalls(y, x, 8);
-            // if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        //     Maze::encodeWalls(y, x, 8);
+        //     if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
         // }
         // if (Maze::actual_has_left_wall(y, x)) {
         //     Maze::encodeWalls(y, x, 1);
