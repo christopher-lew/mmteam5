@@ -53,7 +53,7 @@ bool IRPair::adjWall()
 	float read = fireAndRead();
 	float dist = getDistance(read);
 
-	if (dist < ADJ_WALL_LIMIT) {
+	if (dist < ADJ_WALL_LIMIT && dist >= 0) {
 		return true;
 	}
 	else {

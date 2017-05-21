@@ -90,9 +90,9 @@
 	{
 		char nextMove;
 
-		cycleLEDs(0.1);
-		wait(2);
-		cycleLEDs(0.1);
+		cycleLEDs(0.05);
+		wait(3);
+		cycleLEDs(0.05);
 
 		/*while (MOUSE_STATE == _EXPLORING)
 		{
@@ -100,12 +100,12 @@
 			moveFalcon(nextMove, EXPLORING_SPEED);
 		}*/
 		int i = 0;
-		int moves = 5;
+		int moves = 8;
 		while (i < moves) {
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);
 			i++;
-			wait(0.5);
+			wait(0.25);
 		}
 
 	}
@@ -129,13 +129,54 @@
 	{
 		cycleLEDs(0.05);
 		/*
-		bluetooth.printf("Left:\r\n", );
-		IR_calibration(frontLeftIR, IR_SIGDELAY, IR_SIGREST);
+		bluetooth.printf("Left:\r\n");
+		IR_calibration(leftIR, IR_SIGDELAY, IR_SIGREST);
 		bluetooth.printf("Right:\r\n");
-		IR_calibration(frontRightIR, IR_SIGDELAY, IR_SIGREST);
+		IR_calibration(rightIR, IR_SIGDELAY, IR_SIGREST);
 		*/
+		
+		/*
 		bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
+		bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
+		bluetooth.printf("Front Left Dist: %1.4f\r\n\n", frontLeftIR.distToWall());
 		bluetooth.printf("Front Right Dist: %1.4f\r\n", frontRightIR.distToWall());
+		bluetooth.printf("Front Right Dist: %1.4f\r\n", frontRightIR.distToWall());
+		bluetooth.printf("Front Right Dist: %1.4f\r\n\n", frontRightIR.distToWall());
+		*/
+		
+		bool frontLeftWall;
+		bool frontRightWall;
+		bool rightWall;
+		bool leftWall;
+
+		while(1) {
+			frontLeftWall = frontLeftIR.adjWall();
+			frontRightWall = frontRightIR.adjWall();
+			rightWall = rightIR.adjWall();
+			leftWall = leftIR.adjWall();
+
+			ledRed = 0;
+			ledYellow = 0;
+			ledGreen = 0;
+
+			if (frontLeftWall && frontRightWall) {
+				ledYellow = 1;
+			}
+			if (leftWall) {
+				ledRed = 1;
+			}
+			if (rightWall) {
+				ledGreen = 1;
+			}
+			
+			bluetooth.printf("Left Dist: %1.4f\r\n", leftIR.distToWall());
+			bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
+			bluetooth.printf("Front Right Dist: %1.4f\r\n\n", frontRightIR.distToWall());
+			bluetooth.printf("right Dist: %1.4f\r\n", rightIR.distToWall());
+		
+			wait_ms(100);
+		}
+
 		//Gyro_calibration(150, 100);
 
 		testBuzzer();

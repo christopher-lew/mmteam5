@@ -18,6 +18,8 @@
 class Motor
 {
 public:
+	float curSpeed;
+
 	Motor(PinName dirPin, PinName pwmPin);
 	void instantAccel(float newSpeed);
 	void accel(float newSpeed);
@@ -26,8 +28,7 @@ public:
 private:
 	PwmOut pwm_ChA;
 	PwmOut pwm_ChB;
-
-	float curSpeed;
+	
 	//int invFwd;
 	//int invBkwd;
 };

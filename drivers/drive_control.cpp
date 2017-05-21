@@ -56,7 +56,8 @@ void forward(float speed)
 
 
 	while(getEncoderDistance() < CELL_DISTANCE) {
-		alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
+		wait_ms(10);
+		//alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
 		if (alignToFront) {
 			//break;
 		}
