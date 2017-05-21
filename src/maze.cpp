@@ -314,7 +314,7 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                       (currDir == WEST && next_x < x) || (currDir == EAST && next_x > x)){
                        minx = x + i;
                        miny = y + j;
-                       hasNextMove = true;
+                       // hasNextMove = true;
                        cout << "hi" << endl;
                        //cout << "minx = " << minx << endl;
 //                       cout << "miny = " << miny << endl;
@@ -327,20 +327,22 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                        if(curr_to_goal < prev_to_goal){
                             minx = x + i;
                             miny = y + j;
-                            hasNextMove = true;
+                            // hasNextMove = true;
                            // cout << "minx = " << minx << endl;
 //                            cout << "miny = " << miny << endl;
                            continue;
                        }
                    }
                 }
+
                 else {
                     // not tie condition
                     minx = x + i;
                     miny = y + j;
-                    hasNextMove = true;
+                    // hasNextMove = true;
                 }
 
+                hasNextMove = true;
 
             }
             
@@ -354,7 +356,8 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
 
     int newX = minx;
     int newY = miny;
-    if (!hasNextMove) return 'Z';
+    if (!hasNextMove) 
+      { cout << "fuck" << endl; return 'Z'; }
     Maze::setVisited(Maze::getMousey(), Maze::getMousex());
     // Update the mouse position
     Maze::setMousex(newX);
@@ -768,25 +771,25 @@ int decodeYIndex(int encodedIndex) {
     // cout << "decoded y value = " << toReturn << endl;
     return toReturn; // Will return y index of encoded index via mask 1111100000
 }
-int main() {
+// int main() {
 
-   int state = 1 ;
-   Maze();
-   // cycleLEDs(0.1);
-   // wait(5);
-   // cycleLEDs(0.1);
+//    int state = 1 ;
+//    Maze();
+//    // cycleLEDs(0.1);
+//    // wait(5);
+//    // cycleLEDs(0.1);
 
-   // while (state = 0) { // Runnable State
+//    // while (state = 0) { // Runnable State
 
-   //     if (frontLeftIR.adjWall() && frontRightWall.adjWall()){
-   //         cycleLEDs(0.1);
-   //         cycleMFs(0.02);
-   //         testBuzzer();
+//    //     if (frontLeftIR.adjWall() && frontRightWall.adjWall()){
+//    //         cycleLEDs(0.1);
+//    //         cycleMFs(0.02);
+//    //         testBuzzer();
 
-   //         state++;
-   //         wait(5);
-   //     }       
-   // }
+//    //         state++;
+//    //         wait(5);
+//    //     }       
+//    // }
 
 //    while (state == 1) {
        
@@ -796,20 +799,20 @@ int main() {
 //            state++;
 //            continue;
 //        }
-//        getchar();
+//        //getchar();
 //        //cycleMFs(0.02);
 //        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
 //        update_distances(Maze::getMousey(), Maze::getMousex());
 //        next_move(Maze::getMousey(), Maze::getMousex());
 //        // char next = next_move(Maze::getMousey(), Maze::getMousex()); 
 //        //moveFalcon(next, 0.2);
-//        print_maze();
+//        //print_maze();
 //    }
 
 //    while (state == 2) { // Go Home State
 
 //        if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-//            print_maze();
+//            //print_maze();
 //            getchar();
 //            // Do prep for Speed Run
 //            speedRunPrep();
