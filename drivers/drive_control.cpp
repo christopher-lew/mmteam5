@@ -7,20 +7,6 @@
 #define MVMT_WAIT_MS 250
 
 
-/* Returns the average number of pulses across both encoders since last reset. Unit is encoder pulses; intended for straight driving only. */
-int getEncoderDistance()
-{
-	return (leftEncoder.read() + rightEncoder.read()) >> 1;
-}
-
-
-void resetEncoders()
-{
-	leftEncoder.reset();
-	rightEncoder.reset();
-}
-
-
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 /*
  * Takes in a float speed and a character that dictates the direction of the next move.
@@ -51,8 +37,8 @@ void forward(float speed)
 	// TODO: float constSpeed = 0.3;
 	//float speed = 0.2;
 	//int CELL_DISTANCE = 28000; // TODO: implement as #define
-	float fwd_speed = 0.13;
-	int CELL_DISTANCE = 36000;
+	float fwd_speed = 0.14;
+	int CELL_DISTANCE = 38000;
 	bool alignToFront = false;
 
 	resetEncoders();
@@ -60,16 +46,16 @@ void forward(float speed)
 	rightMotor.accel(fwd_speed);
 
 	while(getEncoderDistance() < CELL_DISTANCE) {
-		wait_ms(1);
 		alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
 		if (alignToFront) {
-			//break;
+			PID_alignToFrontWall();
+			break;
 		}
 	}
 
-	if (alignToFront) {
-		//PID_alignToFrontWall();
-	}
+	//if (alignToFront) {
+	//	PID_alignToFrontWall();	
+	//}
 
 	leftMotor.stop();
 	rightMotor.stop();

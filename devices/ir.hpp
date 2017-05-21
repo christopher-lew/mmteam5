@@ -11,7 +11,7 @@
 
 #define IR_SAMPLES 3
 
-#define FRONT_WALL_LIMIT 9
+#define FRONT_WALL_LIMIT 11
 #define SIDE_WALL_LIMIT 13 // If a wall is closer than this, then it is touching the currently occupied cell
 #define CELL_LENGTH 18.0 // each cell is 18 cm long
 
@@ -21,7 +21,7 @@ class IRPair
 {	
 public:
 	bool isFrontIR;
-	float  	wall_limit;
+	float wall_limit;
 	float readLog[IR_SAMPLES]; // used for logging IR read values
 	
 	IRPair(PinName rxPin, PinName txPin, bool frontStatus);

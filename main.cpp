@@ -147,7 +147,7 @@
 		cycleLEDs(0.05);
 		
 		int i = 0;
-		int moves = 8;
+		int moves = 12;
 		while (i < moves) {
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);
@@ -227,8 +227,8 @@
 		*/
 
 		//Gyro_calibration(150, 100);
-		wait(1);
-		turnAround(0.0);
+		wait(2);
+		PID_alignToFrontWall();
 		//testBuzzer();
 	}
 

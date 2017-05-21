@@ -45,20 +45,6 @@ bool PID_keepStraight()
 }
 
 
-/* Use frontLeft & frontRight IRs to keep the motors straight */
-void PID_alignToFrontWall()
-{
-	// TODO
-	float right = frontRightIR.distToWall();
-	while (right > PID_RIGHT_ALIGN) {
-		right = frontRightIR.distToWall();
-	}
-
-	leftMotor.stop();
-	rightMotor.stop();
-}
-
-
 /* Uses left and/or right walls to align the mouse */
 void PID_alignUsingSides(bool leftWall, bool rightWall)
 {	
@@ -100,6 +86,33 @@ void PID_alignUsingSides(bool leftWall, bool rightWall)
 }
 
 
+/* Use frontLeft & frontRight IRs to keep the motors straight */
+void PID_alignToFrontWall()
+{
+	leftMotor.instantAccel(0);
+	rightMotor.instantAccel(0);
+	cycleMFs(0.025);
+	
+	leftMotor.instantAccel(COAST_SPEED);
+	rightMotor.instantAccel(COAST_SPEED);
+	
+	int fRightDist = frontRightIR.distToWall();
+	int fLeftDist = frontLeftIR.distToWall();
+
+	while ( (fRightDist > PID_FRONT_ALIGN) && (fLeftDist > PID_FRONT_ALIGN) ) {
+		//PID_alignUsingSides(leftIR.adjWall(), rightIR.adjWall());
+		fRightDist = frontRightIR.distToWall();
+		fLeftDist = frontLeftIR.distToWall();
+	}
+
+	leftMotor.instantAccel(-0.05);
+	rightMotor.instantAccel(-0.05);
+	wait_ms(100);
+	leftMotor.instantAccel(0);
+	rightMotor.instantAccel(0);
+}
+
+
 /* Try and get a read 2 walls away or just match the encoder counts on L&R */
 void PID_HailMary()
 {
@@ -111,4 +124,20 @@ void PID_HailMary()
 void PID_turn(char direction)
 {
 	// TODO
+}
+
+
+
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
+/* Returns the average number of pulses across both encoders since last reset. Unit is encoder pulses; intended for straight driving only. */
+int getEncoderDistance()
+{
+	return (leftEncoder.read() + rightEncoder.read()) >> 1;
+}
+
+
+void resetEncoders()
+{
+	leftEncoder.reset();
+	rightEncoder.reset();
 }
