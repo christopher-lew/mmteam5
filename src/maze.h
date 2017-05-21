@@ -257,14 +257,14 @@ public:
 
         if (orientation == NORTH) {
             leftWall = leftIR.adjWall();
-            rightWall = !rightIR.adjWall();
+            rightWall = rightIR.adjWall();
             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
                 topWall = true;
             }
         }
 
         else if (orientation == EAST) {
-            bottomWall = !rightIR.adjWall();
+            bottomWall = rightIR.adjWall();
             topWall = leftIR.adjWall();
             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
                 rightWall = true;
@@ -273,7 +273,7 @@ public:
 
         else if (orientation == WEST) {
             bottomWall = leftIR.adjWall();
-            topWall = !rightIR.adjWall();
+            topWall = rightIR.adjWall();
             if (frontRightIR.adjWall() && frontLeftIR.adjWall()) {
                 leftWall = true;
             }
@@ -281,7 +281,7 @@ public:
 
         else { //if (orientation == SOUTH) {
             rightWall = leftIR.adjWall();
-            leftWall = !rightIR.adjWall();
+            leftWall = rightIR.adjWall();
             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
                 bottomWall = true;
             }

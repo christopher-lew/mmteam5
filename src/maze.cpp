@@ -479,9 +479,9 @@ void update_distances() {
 
         current = stack.back();
         stack.pop_back();
-        printf("current is: %d\n", current);
+        bluetooth.printf("current is: %d\r\n", current);
 
-        printf("current x, y = %d, %d\n", x, y );
+        bluetooth.printf("current x, y = %d, %d\r\n", x, y );
         x = decodeXIndex(current);
         y = decodeYIndex(current);
 
@@ -489,12 +489,12 @@ void update_distances() {
         
         // Find the minimum distance value of all the open neighbors of current cell
         int min = getMinOfNeighbors(y, x);
-        printf("min = %d\n", min);
-        printf("currentDist = %d\n", currentDist);
+        bluetooth.printf("min = %d\r\n", min);
+        bluetooth.printf("currentDist = %d\r\n", currentDist);
 
         // This means that the current cell is unreachable, so continue WHO CARES ABOUT IT LOLOLOL
         if (min == 256) {
-            cout << "JSDA:LKDJ:LKWJE BAD" << endl;
+            //cout << "JSDA:LKDJ:LKWJE BAD" << endl;
             continue;
         }
 
@@ -503,7 +503,7 @@ void update_distances() {
 
         else {
 
-            printf("Making maze[%d][%d] = %d\n", y, x, min + 1);
+            bluetooth.printf("Making maze[%d][%d] = %d\r\n", y, x, min + 1);
             Maze::encodeDist(y, x, min + 1); // Since it is less than min, make it 1 greater than min
 
             // Pushback all the neighbors again to the stack if they exist
@@ -521,9 +521,9 @@ void print_maze() {
     
     // print top wall
     for (int i = 0; i < MAZE_SIZE; i++) {
-        printf("+---");
+        bluetooth.printf("+---");
     }
-    printf("+\n");
+    bluetooth.printf("+\r\n");
     
     int rows = MAZE_SIZE + (MAZE_SIZE - 1);
     int y;
@@ -540,65 +540,65 @@ void print_maze() {
             
             if (i % 2 != 0) {
                 if (Maze::has_top_wall(y, j)) {
-                    printf("+---");
+                    bluetooth.printf("+---");
                 }
                 else {
-                    printf("+   ");
+                    bluetooth.printf("+   ");
                 }
                 if (j == MAZE_SIZE - 1) {
-                    printf("+");
+                    bluetooth.printf("+");
                 }
             }
             
             else {
                 if (j == 0) {
-                    printf("|");
+                    bluetooth.printf("|");
                 }
                 
                 int dist = (int) Maze::decodeDist(y, j);
                 if (y == Maze::getMousey() && j == Maze::getMousex()) {
-                    printf(" M ");
+                    bluetooth.printf(" M ");
 
                 }
                 else if (Maze::getVisited(y, j)) {
-                    printf(" * ");
+                    bluetooth.printf(" * ");
                 }
                 else if (dist > 99) {
-                    printf("%d", dist);
+                    bluetooth.printf("%d", dist);
                 }
                 else if (dist > 9) {
-                    printf(" %d", dist);
+                    bluetooth.printf(" %d", dist);
                 }
                 else {
-                    printf(" %d ", dist);
+                    bluetooth.printf(" %d ", dist);
                 }
                 
                 if ((Maze::has_right_wall(y, j) || j == MAZE_SIZE - 1)) {
-                    printf("|"); 
+                    bluetooth.printf("|"); 
                 }
                 else {
-                    printf(" ");
+                    bluetooth.printf(" ");
                 }
             }
         }
-        printf("\n");
+        bluetooth.printf("\r\n");
     }
     
     // print bottom wall
     for (int i = 0; i < MAZE_SIZE; i++) {
-        printf("+---");
+        bluetooth.printf("+---");
     }
-    printf("+\n\n");
+    bluetooth.printf("+\r\n");
 
-    cout << "End Print Function" << endl;
-    printf("\n");
+    //cout << "End Print Function" << endl;
+    bluetooth.printf("\r\n");
 
 }
 
 
 // Return an int value representing an index in maze as 1 int
 int encodeCellIndex(int y, int x) {
-    printf("%d, %d, is being encoded : ", x, y);
+    bluetooth.printf("%d, %d, is being encoded : ", x, y);
     y = y << 5;
     int encodedVal = y | x;
     // cout << "encoded value = " << encodedVal << endl;
