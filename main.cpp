@@ -17,33 +17,85 @@
 	using namespace std;
 
 	int main() {
-		int x = 0 ;
+
+		int state = 0 ;
 		Maze();
 		cycleLEDs(0.1);
-		wait(3);
+		wait(5);
 		cycleLEDs(0.1);
 
-		bool stop = false;
-		
-		while (1) {
-			if(!stop && is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-               Maze::setStartAsGoal();
-               stop = true;
+		while (state == 0) { // Runnable State
+			
+			if (frontLeftIR.adjWall() && frontRightIR.adjWall()){
+				cycleLEDs(0.1);
+				cycleMFs(0.02);
+				testBuzzer();
 
-       }
-       // 		if (!goaway && stop && is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-       //      Maze::speedRunPrep();
-       //      goaway = true;
-       // }
-	        cycleMFs(0.02);
-	        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
-	        update_distances();
-	        char next = next_move(Maze::getMousey(), Maze::getMousex());
-	        moveFalcon(next, 0.2);
-	        
+				state++;
+				wait(5);
+			}		
+		}
+
+	    while (state == 1) {
+        wait(3);
+        if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            testBuzzer();
+            Maze::setStartAsGoal();
+            state++;
+            continue;
         }
-        testBuzzer();
-	}
+        getchar();
+        cycleMFs(0.02);
+        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+        update_distances(Maze::getMousey(), Maze::getMousex());
+        //next_move(Maze::getMousey(), Maze::getMousex());
+        char next = next_move(Maze::getMousey(), Maze::getMousex()); 
+        moveFalcon(next, 0.2);
+        //print_maze();
+    }
+
+    while (state == 2) { // Go Home State
+		wait(3);
+        if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            //print_maze();
+            //getchar();
+            // Do prep for Speed Run
+            speedRunPrep();
+            floodfill();
+            //print_maze();
+            state++;
+            continue;
+        }
+        //getchar();
+        cycleMFs(0.02);
+        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+        update_distances(Maze::getMousey(), Maze::getMousex());
+        //next_move(Maze::getMousey(), Maze::getMousex());
+        char next = next_move(Maze::getMousey(), Maze::getMousex());
+        moveFalcon(next, 0.2);
+        //print_maze();
+
+    }
+
+    while (state == 3) { // Speed Run State
+		wait(3);
+        getchar();
+        if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            printf("suck it\n");
+            break;
+        }
+        cycleMFs(0.02);
+        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+        //update_distances(Maze::getMousey(), Maze::getMousex());
+        // next_move(Maze::getMousey(), Maze::getMousex());
+        char next = next_move(Maze::getMousey(), Maze::getMousex()); 
+        moveFalcon(next, 0.2);
+        print_maze();
+
+    }
+    testBuzzer();
+}
+
 // END
 
 
