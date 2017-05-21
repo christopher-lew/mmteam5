@@ -20,10 +20,11 @@
 class IRPair
 {	
 public:
-	bool 	front_IR;
+	bool isFrontIR;
+	float  	wall_limit;
 	float readLog[IR_SAMPLES]; // used for logging IR read values
 	
-	IRPair(PinName rxPin, PinName txPin, bool isFrontIR);
+	IRPair(PinName rxPin, PinName txPin, bool frontStatus);
 	
 	bool adjWall(); 
 	float distToWall(); // Returns dist in cm
@@ -32,7 +33,7 @@ public:
 	
 private:
 	
-	float  	wall_limit;
+	
 
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;

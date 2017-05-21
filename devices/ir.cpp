@@ -6,11 +6,11 @@
 
 
 /* Constructor */
-IRPair::IRPair(PinName rxPin, PinName txPin, bool isFrontIR))
-	: IR_Receiver(rxPin), IR_Emitter(txPin), front_IR(isFrontIR)
+IRPair::IRPair(PinName rxPin, PinName txPin, bool frontStatus)
+	: IR_Receiver(rxPin), IR_Emitter(txPin), isFrontIR(frontStatus)
 {
 	this->IR_Emitter.write(0);
-	if (this->front_IR) {
+	if (this->isFrontIR) {
 		this->wall_limit = FRONT_WALL_LIMIT;
 	}
 	else {

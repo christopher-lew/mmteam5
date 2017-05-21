@@ -93,12 +93,6 @@
 		cycleLEDs(0.05);
 		wait(3);
 		cycleLEDs(0.05);
-
-		/*while (MOUSE_STATE == _EXPLORING)
-		{
-			nextMove = rightWallFollower();
-			moveFalcon(nextMove, EXPLORING_SPEED);
-		}*/
 		
 		int i = 0;
 		int moves = 8;
@@ -107,7 +101,6 @@
 			moveFalcon(nextMove, EXPLORING_SPEED);
 			i++;
 		}
-		
 
 	}
 

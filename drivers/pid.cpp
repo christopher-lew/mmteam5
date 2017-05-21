@@ -5,8 +5,17 @@
 #include "pid.hpp"
 
 // Init all important PID variables & Constants
-#define Kp 0.004
-#define Kd 0.008
+//#define Kp 0.002
+//#define Kd 0.008
+
+//#define Kp 0.000203
+//#define Kd 0.000315
+
+//#define Kp 0.000075
+//#define Kd 0.00055
+
+#define Kp 0.000075
+#define Kd 0.00055
 
 volatile float errorP = 0;
 volatile float oldErrorP = 0;
@@ -41,7 +50,7 @@ void PID_alignToFrontWall()
 {
 	// TODO
 	float right = frontRightIR.distToWall();
-	while (right > PID_ALIGN_FRONT_DIST) {
+	while (right > PID_RIGHT_ALIGN) {
 		right = frontRightIR.distToWall();
 	}
 
@@ -53,10 +62,14 @@ void PID_alignToFrontWall()
 /* Uses left and/or right walls to align the mouse */
 void PID_alignUsingSides(bool leftWall, bool rightWall)
 {	
-	//#define PID_ALIGN_FRONT_DIST 3 // centimeters
+	float leftError = 0;
+	float rightError = 0;
 	// Use both walls to align
 	if (leftWall && rightWall) {
-		errorP = leftIR.distToWall() - rightIR.distToWall();
+		leftError = leftIR.distToWall() - PID_LEFT_ALIGN;
+		rightError = rightIR.distToWall() - PID_RIGHT_ALIGN;
+		
+		errorP = leftError - rightError;
 		errorD = errorP - oldErrorP;
 	}
 
@@ -82,8 +95,8 @@ void PID_alignUsingSides(bool leftWall, bool rightWall)
 	totalError = Kp*errorP + Kd*errorD;
 	oldErrorP = errorP;
 
-	leftMotor.accel(leftMotor.curSpeed - totalError);
-	rightMotor.accel(rightMotor.curSpeed + totalError);
+	leftMotor.instantAccel(leftMotor.curSpeed - totalError);
+	rightMotor.instantAccel(rightMotor.curSpeed + totalError);
 }
 
 
