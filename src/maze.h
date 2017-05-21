@@ -238,42 +238,88 @@ public:
 
     // Code to updateWalls
     static void updateWalls(int y, int x) {
-        // bool leftWall =         leftIR.adjWall(); 
-        // if (leftWall) {
-        //     Maze::encodeWalls(y, x, 1);
-        //     if (x > 0) Maze::encodeWalls(y, x - 1, 4);
-        // }
 
-        // bool rightWall =        rightIR.adjWall();
-        // if (rightWall) {
-        //     Maze::encodeWalls(y, x, 4);
-        //     if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
-        // }
+        bool topWall = false;
+        bool bottomWall = false; 
+        bool leftWall = false; 
+        bool rightWall = false;
 
-        // bool frontLeftWall =    frontLeftIR.adjWall();
-        // bool frontRightWall =   frontRightIR.adjWall();
-        // if (frontLeftWall && frontRightWall) {
-        //     Maze::encodeWalls(y, x, 8);
-        //     if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
-        // }
+        Direction orientation = Maze::getCurrentDirection();
 
-
-        if (Maze::actual_has_bottom_wall(y, x)) {
-            Maze::encodeWalls(y, x, 2);
-            if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+        if (orientation == NORTH) {
+            leftWall = leftIR.adjWall();
+            rightWall = rightIR.adjWall();
+            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+                topWall = true;
+            }
         }
-        if (Maze::actual_has_top_wall(y, x)) {
-            Maze::encodeWalls(y, x, 8);
-            if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+
+        else if (orientation == EAST) {
+            bottomWall = rightIR.adjWall();
+            topWall = leftIR.adjWall();
+            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+                rightWall = true;
+            }
         }
-        if (Maze::actual_has_left_wall(y, x)) {
+
+        else if (orientation == WEST) {
+            bottomWall = leftIR.adjWall();
+            topWall = rightIR.adjWall();
+            if (frontRightIR.adjWall() && frontLeftIR.adjWall()) {
+                leftWall = true;
+            }
+        }
+
+        else if (orientation == SOUTH) {
+            rightWall = leftIR.adjWall();
+            leftWall = rightIR.adjWall();
+            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+                bottomWall = true;
+            }
+        }
+
+        // Should not be invalid, but if it is, RIP
+        else {
+
+        }
+
+        if (leftWall) {
             Maze::encodeWalls(y, x, 1);
             if (x > 0) Maze::encodeWalls(y, x - 1, 4);
         }
-        if (Maze::actual_has_right_wall(y, x)) {
+
+        if (rightWall) {
             Maze::encodeWalls(y, x, 4);
             if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
         }
+
+        if (topWall) {
+            Maze::encodeWalls(y, x, 8);
+            if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        }
+
+        if (bottomWall) {
+            Maze::encodeWalls(y, x, 2);
+            if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+        }
+
+
+        // if (Maze::actual_has_bottom_wall(y, x)) {
+        //     Maze::encodeWalls(y, x, 2);
+        //     if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+        // }
+        // if (Maze::actual_has_top_wall(y, x)) {
+        //     Maze::encodeWalls(y, x, 8);
+        //     if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        // }
+        // if (Maze::actual_has_left_wall(y, x)) {
+        //     Maze::encodeWalls(y, x, 1);
+        //     if (x > 0) Maze::encodeWalls(y, x - 1, 4);
+        // }
+        // if (Maze::actual_has_right_wall(y, x)) {
+        //     Maze::encodeWalls(y, x, 4);
+        //     if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
+        // }
 
     }
 

@@ -7,15 +7,35 @@
 	#include <stdio.h>
 	#include <iostream>
 	#include <vector>
+	#include "mbed.h"
+	#include "config/initDevices.hpp"
+	#include "drivers/debug_io.hpp"
+	#include "drivers/drive_control.hpp"
+	#include "drivers/pid.hpp"
+	#include "drivers/testFunctions.hpp"
 
 	using namespace std;
 
 	int main() {
-        unsigned char encodedIndex = encodeCellIndex(10, 10);
-        int x = decodeXIndex(encodedIndex);
-        int y = decodeYIndex(encodedIndex);
-        printf("%d", x);
-        printf("%d", y);
+		int x = 0 ;
+		Maze();
+		cycleLEDs(0.1);
+		wait(3);
+		cycleLEDs(0.1);
+		
+		while (1) {
+			if(is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+				break;
+
+        }
+	        cycleMFs(0.02);
+	        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+	        update_distances();
+	        char next = next_move(Maze::getMousey(), Maze::getMousex());
+	        moveFalcon(next, 0.2);
+	        
+        }
+        testBuzzer();
 	}
 // END
 
@@ -73,7 +93,7 @@
 			moveFalcon(nextMove, EXPLORING_SPEED);
 		}*/
 		int i = 0;
-		int moves = 4;
+		int moves = 5;
 		while (i < moves) {
 			nextMove = rightWallFollower();
 			moveFalcon(nextMove, EXPLORING_SPEED);

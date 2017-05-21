@@ -248,8 +248,8 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                       (currDir == WEST && next_x < x) || (currDir == EAST && next_x > x)){
                        minx = x + i;
                        miny = y + j;
-                       cout << "minx = " << minx << endl;
-                       cout << "miny = " << miny << endl;
+                       //cout << "minx = " << minx << endl;
+//                       cout << "miny = " << miny << endl;
                        continue;
                    }
                     //check for whichever is closer to the center of the maze
@@ -259,8 +259,8 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                        if(curr_to_goal < prev_to_goal){
                             minx = x + i;
                             miny = y + j;
-                            cout << "minx = " << minx << endl;
-                            cout << "miny = " << miny << endl;
+                           // cout << "minx = " << minx << endl;
+//                            cout << "miny = " << miny << endl;
                            continue;
                        }
                    }
@@ -279,8 +279,8 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     }
 
 
-    cout << "minx = " << minx << endl;
-    cout << "miny = " << miny << endl;
+    //cout << "minx = " << minx << endl;
+//    cout << "miny = " << miny << endl;
 
     int newX = minx;
     int newY = miny;
