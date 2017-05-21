@@ -48,66 +48,87 @@ Direction Maze::current_direction = NORTH;
 
 // };
 
-// int Maze::maze_actual[MAZE_SIZE][MAZE_SIZE] = {
-//     { 4, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0},
-//     { 0, 4, 11, 10, 2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 6, 1},
-//     { 4, 1, 10, 2, 4 , 15, 5, 3, 10, 10, 10, 2, 10, 6, 5, 1 },
-//     { 4, 9, 10, 12, 1 , 10, 8, 0, 10, 10, 6, 5, 15, 5, 5, 1 },
-//     { 8, 10, 2, 10, 8 , 10, 6, 9, 6, 15, 5, 9, 10, 4, 5, 1 },
-//     { 10, 10, 8, 2, 10 , 10, 8, 6, 9, 6, 9, 10, 6, 5, 5, 1 },
-//     { 10, 10, 10, 8, 2 , 2, 10, 8, 14, 9, 6, 15, 5, 5, 5, 1 },
-//     { 2, 10, 10, 6, 5 , 5, 3, 2, 6, 7, 9, 6, 5, 5, 5, 1 },
-//     { 0, 6, 15, 5, 9 , 12, 5, 9, 12, 5, 7, 9, 0, 12, 5, 1 },
-//     { 4, 9, 6, 9, 10 , 6, 1, 14, 3, 8, 0, 6, 5, 3, 12, 1 },
-//     { 0, 6, 9, 6, 15 , 5, 5, 11, 0, 10, 4, 13, 5, 9, 10, 0 },
-//     { 4, 9, 6, 9, 6 , 9, 4, 11, 0, 14, 1, 10, 8, 10, 2, 0 },
-//     { 0, 6, 9, 6, 9 , 10, 8, 11, 0, 14, 9, 2, 10, 2, 12, 1 },
-//     { 4, 9, 6, 9, 6 , 11, 2, 10, 0, 14, 3, 8, 2, 8, 10, 0 },
-//     { 4, 15, 9, 6, 9 , 6, 5, 11, 0, 14, 3, 2, 8, 10, 2, 8 },
-//     { 0, 2, 2, 0, 2 , 0, 0, 2, 0, 2, 2, 0, 2, 2, 4, 3 },
-// };
+int Maze::maze_actual[MAZE_SIZE][MAZE_SIZE] = {
+    { 4, 1, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0},
+    { 0, 4, 11, 10, 2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 6, 1},
+    { 4, 1, 10, 2, 4 , 15, 5, 3, 10, 10, 10, 2, 10, 6, 5, 1 },
+    { 4, 9, 10, 12, 1 , 10, 8, 0, 10, 10, 6, 5, 15, 5, 5, 1 },
+    { 8, 10, 2, 10, 8 , 10, 6, 9, 6, 15, 5, 9, 10, 4, 5, 1 },
+    { 10, 10, 8, 2, 10 , 10, 8, 6, 9, 6, 9, 10, 6, 5, 5, 1 },
+    { 10, 10, 10, 8, 2 , 2, 10, 8, 14, 9, 6, 15, 5, 5, 5, 1 },
+    { 2, 10, 10, 6, 5 , 5, 3, 2, 6, 7, 9, 6, 5, 5, 5, 1 },
+    { 0, 6, 15, 5, 9 , 12, 5, 9, 12, 5, 7, 9, 0, 12, 5, 1 },
+    { 4, 9, 6, 9, 10 , 6, 1, 14, 3, 8, 0, 6, 5, 3, 12, 1 },
+    { 0, 6, 9, 6, 15 , 5, 5, 11, 0, 10, 4, 13, 5, 9, 10, 0 },
+    { 4, 9, 6, 9, 6 , 9, 4, 11, 0, 14, 1, 10, 8, 10, 2, 0 },
+    { 0, 6, 9, 6, 9 , 10, 8, 11, 0, 14, 9, 2, 10, 2, 12, 1 },
+    { 4, 9, 6, 9, 6 , 11, 2, 10, 0, 14, 3, 8, 2, 8, 10, 0 },
+    { 4, 15, 9, 6, 9 , 6, 5, 11, 0, 14, 3, 2, 8, 10, 2, 8 },
+    { 0, 2, 2, 0, 2 , 0, 0, 2, 0, 2, 2, 0, 2, 2, 4, 3 },
+};
 
-// int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
 
-//     { 14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14},
-//     { 13, 12, 11, 10,  9, 8, 7, 6, 6, 7, 8,  9, 10, 11, 12, 13},
-//     { 12, 11, 10,  9,  8, 7, 6, 5, 5, 6, 7,  8,  9, 10, 11, 12},
-//     { 11, 10,  9,  8,  7, 6, 5, 4, 4, 5, 6,  7,  8,  9, 10, 11},
-//     { 10,  9,  8,  7,  6, 5, 4, 3, 3, 4, 5,  6,  7,  8,  9, 10},
-//     {  9,  8,  7,  6,  5, 4, 3, 2, 2, 3, 4,  5,  6,  7,  8,  9},
-//     {  8,  7,  6,  5,  4, 3, 2, 1, 1, 2, 3,  4,  5,  6,  7,  8},
-//     {  7,  6,  5,  4,  3, 2, 1, 0, 0, 1, 2,  3,  4,  5,  6,  7},
-//     {  7,  6,  5,  4,  3, 2, 1, 0, 0, 1, 2,  3,  4,  5,  6,  7},
-//     {  8,  7,  6,  5,  4, 3, 2, 1, 1, 2, 3,  4,  5,  6,  7,  8},
-//     {  9,  8,  7,  6,  5, 4, 3, 2, 2, 3, 4,  5,  6,  7,  8,  9},
-//     { 10,  9,  8,  7,  6, 5, 4, 3, 3, 4, 5,  6,  7,  8,  9, 10},
-//     { 11, 10,  9,  8,  7, 6, 5, 4, 4, 5, 6,  7,  8,  9, 10, 11},
-//     { 12, 11, 10,  9,  8, 7, 6, 5, 5, 6, 7,  8,  9, 10, 11, 12},
-//     { 13, 12, 11, 10,  9, 8, 7, 6, 6, 7, 8,  9, 10, 11, 12, 13},
-//     { 14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14},
+    { 14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14},
+    { 13, 12, 11, 10,  9, 8, 7, 6, 6, 7, 8,  9, 10, 11, 12, 13},
+    { 12, 11, 10,  9,  8, 7, 6, 5, 5, 6, 7,  8,  9, 10, 11, 12},
+    { 11, 10,  9,  8,  7, 6, 5, 4, 4, 5, 6,  7,  8,  9, 10, 11},
+    { 10,  9,  8,  7,  6, 5, 4, 3, 3, 4, 5,  6,  7,  8,  9, 10},
+    {  9,  8,  7,  6,  5, 4, 3, 2, 2, 3, 4,  5,  6,  7,  8,  9},
+    {  8,  7,  6,  5,  4, 3, 2, 1, 1, 2, 3,  4,  5,  6,  7,  8},
+    {  7,  6,  5,  4,  3, 2, 1, 0, 0, 1, 2,  3,  4,  5,  6,  7},
+    {  7,  6,  5,  4,  3, 2, 1, 0, 0, 1, 2,  3,  4,  5,  6,  7},
+    {  8,  7,  6,  5,  4, 3, 2, 1, 1, 2, 3,  4,  5,  6,  7,  8},
+    {  9,  8,  7,  6,  5, 4, 3, 2, 2, 3, 4,  5,  6,  7,  8,  9},
+    { 10,  9,  8,  7,  6, 5, 4, 3, 3, 4, 5,  6,  7,  8,  9, 10},
+    { 11, 10,  9,  8,  7, 6, 5, 4, 4, 5, 6,  7,  8,  9, 10, 11},
+    { 12, 11, 10,  9,  8, 7, 6, 5, 5, 6, 7,  8,  9, 10, 11, 12},
+    { 13, 12, 11, 10,  9, 8, 7, 6, 6, 7, 8,  9, 10, 11, 12, 13},
+    { 14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14},
 
-// };
+};
 
-// int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
+int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
 
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//     { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 
-// };
+};
+
+int Maze::the_maze_visited[MAZE_SIZE][MAZE_SIZE] = {
+
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+};
 
 // int Maze::maze_actual[MAZE_SIZE][MAZE_SIZE] = {
 //     {4, 1, 0},
@@ -116,17 +137,17 @@ Direction Maze::current_direction = NORTH;
 
 // };
 
- int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
-     {2, 1, 2},
-     {1, 0, 1},
-     {2, 1, 2},
- };
+ // int Maze::the_maze_dist[MAZE_SIZE][MAZE_SIZE] = {
+ //     {2, 1, 2},
+ //     {1, 0, 1},
+ //     {2, 1, 2},
+ // };
 
- int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
-     {0, 0, 0},
-     {0, 0, 0},
-     {0, 0, 0},
- };
+ // int Maze::the_maze_walls[MAZE_SIZE][MAZE_SIZE] = {
+ //     {0, 0, 0},
+ //     {0, 0, 0},
+ //     {0, 0, 0},
+ // };
 
 // 5x5
 //int Maze::maze_actual[MAZE_SIZE][MAZE_SIZE] = {
@@ -447,7 +468,7 @@ int getMinOfNeighbors(int y, int x) {
 
 }
 // FUNCTION to update the distances.
-void update_distances() {
+void update_distances(int y, int x) {
 
     /** Function Info
      * Function pushes current position onto the stack.
@@ -459,11 +480,11 @@ void update_distances() {
      * If currVal is not exactly 1 more than min value, make curr value 1 greater than min.
      */
 
-    // Initial x, y values
-    int x, y;  
+    // // Initial x, y values
+    // int x, y;  
 
-    x = Maze::getMousex();
-    y = Maze::getMousey();
+    // x = Maze::getMousex();
+    // y = Maze::getMousey();
 
     int current = encodeCellIndex(y, x);   
 
@@ -479,9 +500,9 @@ void update_distances() {
 
         current = stack.back();
         stack.pop_back();
-        bluetooth.printf("current is: %d\r\n", current);
+        //printf("current is: %d\r\n", current);
 
-        bluetooth.printf("current x, y = %d, %d\r\n", x, y );
+        //printf("current x, y = %d, %d\r\n", x, y );
         x = decodeXIndex(current);
         y = decodeYIndex(current);
 
@@ -489,8 +510,8 @@ void update_distances() {
         
         // Find the minimum distance value of all the open neighbors of current cell
         int min = getMinOfNeighbors(y, x);
-        bluetooth.printf("min = %d\r\n", min);
-        bluetooth.printf("currentDist = %d\r\n", currentDist);
+        printf("min = %d\r\n", min);
+        printf("currentDist = %d\r\n", currentDist);
 
         // This means that the current cell is unreachable, so continue WHO CARES ABOUT IT LOLOLOL
         if (min == 256) {
@@ -503,7 +524,7 @@ void update_distances() {
 
         else {
 
-            bluetooth.printf("Making maze[%d][%d] = %d\r\n", y, x, min + 1);
+            printf("Making maze[%d][%d] = %d\r\n", y, x, min + 1);
             Maze::encodeDist(y, x, min + 1); // Since it is less than min, make it 1 greater than min
 
             // Pushback all the neighbors again to the stack if they exist
@@ -521,9 +542,9 @@ void print_maze() {
     
     // print top wall
     for (int i = 0; i < MAZE_SIZE; i++) {
-        bluetooth.printf("+---");
+        printf("+---");
     }
-    bluetooth.printf("+\r\n");
+    printf("+\r\n");
     
     int rows = MAZE_SIZE + (MAZE_SIZE - 1);
     int y;
@@ -540,65 +561,172 @@ void print_maze() {
             
             if (i % 2 != 0) {
                 if (Maze::has_top_wall(y, j)) {
-                    bluetooth.printf("+---");
+                    printf("+---");
                 }
                 else {
-                    bluetooth.printf("+   ");
+                    printf("+   ");
                 }
                 if (j == MAZE_SIZE - 1) {
-                    bluetooth.printf("+");
+                    printf("+");
                 }
             }
             
             else {
                 if (j == 0) {
-                    bluetooth.printf("|");
+                    printf("|");
                 }
                 
                 int dist = (int) Maze::decodeDist(y, j);
                 if (y == Maze::getMousey() && j == Maze::getMousex()) {
-                    bluetooth.printf(" M ");
+                    printf(" M ");
 
                 }
-                else if (Maze::getVisited(y, j)) {
-                    bluetooth.printf(" * ");
-                }
+                // else if (Maze::getVisited(y, j)) {
+                //     printf(" * ");
+                // }
                 else if (dist > 99) {
-                    bluetooth.printf("%d", dist);
+                    printf("%d", dist);
                 }
                 else if (dist > 9) {
-                    bluetooth.printf(" %d", dist);
+                    printf(" %d", dist);
                 }
                 else {
-                    bluetooth.printf(" %d ", dist);
+                    printf(" %d ", dist);
                 }
                 
                 if ((Maze::has_right_wall(y, j) || j == MAZE_SIZE - 1)) {
-                    bluetooth.printf("|"); 
+                    printf("|"); 
                 }
                 else {
-                    bluetooth.printf(" ");
+                    printf(" ");
                 }
             }
         }
-        bluetooth.printf("\r\n");
+        printf("\r\n");
     }
     
     // print bottom wall
     for (int i = 0; i < MAZE_SIZE; i++) {
-        bluetooth.printf("+---");
+        printf("+---");
     }
-    bluetooth.printf("+\r\n");
+    printf("+\r\n");
 
     //cout << "End Print Function" << endl;
-    bluetooth.printf("\r\n");
+    printf("\r\n");
 
 }
 
+void speedRunPrep() {
+    // Maze::encodeDist(0, 0, 2);
+
+    for (int x = 0; x < MAZE_SIZE; x++) {
+        for (int y = 0; y < MAZE_SIZE; y++) {
+
+            //printf("%d\n", getVisited(y, x));
+            if (!Maze::getVisited(y, x) && !is_center(encodeCellIndex(y,x))) {
+                if (y < MAZE_SIZE - 1 && !Maze::has_top_wall(y, x)) Maze::encodeWalls(y + 1, x, 2); // Top neighbor
+                if (y > 0 && !Maze::has_bottom_wall(y, x)) Maze::encodeWalls(y - 1, x, 8); // Bottom Neighbor
+                if (x < MAZE_SIZE - 1 && !Maze::has_right_wall(y, x)) Maze::encodeWalls(y, x + 1, 1); // Right Neighbor
+                if (x > 0 && !Maze::has_left_wall(y, x)) Maze::encodeWalls(y, x - 1, 4); // Left Neighbor
+                Maze::encodeWalls(y, x, 15);
+                Maze::encodeDist(y, x, 256);
+            }
+
+        }
+    }
+
+    print_maze();
+    getchar();
+
+    for (int x = 0; x < MAZE_SIZE; x++) {
+        for (int y = 0; y < MAZE_SIZE; y++) {
+            int wallCount = 0;
+            if (Maze::has_bottom_wall(y, x)) wallCount++;
+            if (Maze::has_left_wall(y, x)) wallCount++;
+            if (Maze::has_top_wall(y, x)) wallCount++;
+            if (Maze::has_right_wall(y, x)) wallCount++;
+
+            if (wallCount >= 3) {
+                // If has three or more walls, encode 15
+                cout << x << " ," << y << " has wall count > 3" << endl;
+                // Find open and encode that wall 
+                if (!Maze::has_top_wall(y, x)) Maze::encodeWalls(y + 1, x, 2); // Top neighbor
+                if (!Maze::has_bottom_wall(y, x)) Maze::encodeWalls(y - 1, x, 8); // Bottom Neighbor
+                if (!Maze::has_right_wall(y, x)) Maze::encodeWalls(y, x + 1, 1); // Right Neighbor
+                if (!Maze::has_left_wall(y, x)) Maze::encodeWalls(y, x - 1, 4); // Left Neighbor
+                
+                Maze::encodeWalls(y, x, 15);
+
+                Maze::encodeDist(y, x, 256);
+            }
+        }
+    }
+
+    // int goal1 = MAZE_SIZE / 2;
+    // int goal2 = (MAZE_SIZE - 1) / 2;
+
+    // Maze::encodeDist(goal1, goal1, 0);
+    // Maze::encodeDist(goal1, goal2, 0);
+    // Maze::encodeDist(goal2, goal1, 0);
+    // Maze::encodeDist(goal2, goal2, 0);
+
+    for (int x = 0; x < MAZE_SIZE; x++) {
+        for (int y = 0; y < MAZE_SIZE; y++) {
+            if (Maze::decodeDist(y, x) != 256) {
+                update_distances(y, x);
+    //             int min = min4(manhattan_dist(y, goal1, x, goal1),
+    //                 manhattan_dist(y, goal1, x, goal2),
+    //                 manhattan_dist(y, goal2, x, goal1),
+    //                 manhattan_dist(y, goal2, x, goal2));
+    //             Maze::encodeDist(y, x, min);
+
+            }
+        }
+    }
+    // print_maze();
+    // getchar();
+}
+
+void floodfill() {
+    int goal1 = MAZE_SIZE / 2;
+    int goal2 = (MAZE_SIZE - 1) / 2;
+
+    Maze::encodeDist(goal1, goal1, 0);
+    Maze::encodeDist(goal1, goal2, 0);
+    Maze::encodeDist(goal2, goal1, 0);
+    Maze::encodeDist(goal2, goal2, 0);
+
+    // checks the next cell with the smallest distance
+
+    std::queue<int> queue;
+    queue.push(encodeCellIndex(goal1, goal1));
+    queue.push(encodeCellIndex(goal1, goal2));
+    queue.push(encodeCellIndex(goal2, goal1));
+    queue.push(encodeCellIndex(goal2, goal2));
+
+    while (!queue.empty()) {
+
+        int current = queue.front();
+        queue.pop();
+        int x = decodeXIndex(current);
+        int y = decodeYIndex(current);
+        if (!Maze::getVisited(y, x)) continue; // Means flooded
+        int min = getMinOfNeighbors(y, x);
+        Maze::setFlooded(y, x);
+        Maze::encodeDist(y, x, min + 1);
+
+        // Pushback all the neighbors again to the stack if they exist
+        if (y  < MAZE_SIZE - 1 && !Maze::has_top_wall(y, x)) queue.push(encodeCellIndex(y + 1, x)); // Top neighbor
+        if (y  > 0 && !Maze::has_bottom_wall(y, x)) queue.push(encodeCellIndex(y - 1, x)); // Bottom Neighbor
+        if (x  < MAZE_SIZE - 1 && !Maze::has_right_wall(y, x)) queue.push(encodeCellIndex(y, x + 1)); // Right Neighbor
+        if (x  > 0 && !Maze::has_left_wall(y, x)) queue.push(encodeCellIndex(y, x - 1)); // Left Neighbor
+    }
+
+}   
 
 // Return an int value representing an index in maze as 1 int
 int encodeCellIndex(int y, int x) {
-    bluetooth.printf("%d, %d, is being encoded : ", x, y);
+    //printf("%d, %d, is being encoded : ", x, y);
     y = y << 5;
     int encodedVal = y | x;
     // cout << "encoded value = " << encodedVal << endl;
@@ -619,37 +747,84 @@ int decodeYIndex(int encodedIndex) {
     // cout << "decoded y value = " << toReturn << endl;
     return toReturn; // Will return y index of encoded index via mask 1111100000
 }
+int main() {
 
-// int main() {
-//    Maze();
-//    print_maze();
+    int state = 1 ;
+    Maze();
+    // cycleLEDs(0.1);
+    // wait(5);
+    // cycleLEDs(0.1);
 
-//    bool stop = false;
-//    bool goaway = false;
+    // while (state = 0) { // Runnable State
 
-//    while (1) {
+    //     if (frontLeftIR.adjWall() && frontRightWall.adjWall()){
+    //         cycleLEDs(0.1);
+    //         cycleMFs(0.02);
+    //         testBuzzer();
 
-//        if(!stop && is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-//                Maze::setStartAsGoal();
-//                stop = true;
+    //         state++;
+    //         wait(5);
+    //     }       
+    // }
 
-//        }
-//        if (!goaway && stop && is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-//             Maze::speedRunPrep();
-//             goaway = true;
-//        }
+    while (state == 1) {
+        
+        if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            // testBuzzer();
+            Maze::setStartAsGoal();
+            state++;
+            continue;
+        }
+        //getchar();
+        //cycleMFs(0.02);
+        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+        update_distances(Maze::getMousey(), Maze::getMousex());
+        next_move(Maze::getMousey(), Maze::getMousex());
+        // char next = next_move(Maze::getMousey(), Maze::getMousex()); 
+        //moveFalcon(next, 0.2);
+        //print_maze();
+    }
 
+    while (state == 2) { // Go Home State
 
-//        getchar();
-//        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
-//        update_distances();
-//        printf("%c\n", next_move(Maze::getMousey(), Maze::getMousex()));
-//        printf("%d,", Maze::getMousex()); printf("%d\n", Maze::getMousey());
-//        print_maze();
-//    }
-    
+        if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            print_maze();
+            getchar();
+            // Do prep for Speed Run
+            speedRunPrep();
+            print_maze();
+            state++;
+            continue;
+        }
+        //getchar();
+        //cycleMFs(0.02);
+        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+        update_distances(Maze::getMousey(), Maze::getMousex());
+        next_move(Maze::getMousey(), Maze::getMousex());
+        //char next = next_move(Maze::getMousey(), Maze::getMousex());
+        //moveFalcon(next, 0.2);
+        //print_maze();
 
+    }
 
-// }
+    while (state == 3) { // Speed Run State
+        floodfill();
+        getchar();
+        if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            printf("suck it\n");
+            break;
+        }
+        //cycleMFs(0.02);
+        // Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
+        //update_distances(Maze::getMousey(), Maze::getMousex());
+        next_move(Maze::getMousey(), Maze::getMousex());
+        // char next = next_move(Maze::getMousey(), Maze::getMousex()); 
+        //moveFalcon(next, 0.2);
+        print_maze();
+
+    }
+    //testBuzzer();
+}
+
 
 

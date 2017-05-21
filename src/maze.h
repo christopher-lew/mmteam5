@@ -16,14 +16,15 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <queue>
 #include <iostream>
-#include "../config/initDevices.hpp"
+//#include "../config/initDevices.hpp"
 
 using namespace std;
 
 //#define const int MAZE_SIZE = 4;
 
-const int MAZE_SIZE = 3;
+const int MAZE_SIZE = 16;
 
 enum Direction {
 
@@ -59,6 +60,7 @@ public:
     static int the_maze_walls[MAZE_SIZE][MAZE_SIZE];
     static int the_maze_dist[MAZE_SIZE][MAZE_SIZE];
     static int maze_actual[MAZE_SIZE][MAZE_SIZE];
+    static int the_maze_visited[MAZE_SIZE][MAZE_SIZE];
     // static unsigned char the_maze[MAZE_SIZE][MAZE_SIZE];
     static int mousey;
     static int mousex;
@@ -110,15 +112,19 @@ public:
 
     // Return visited bit of the maze position
     static int getVisited(int y, int x) {
-        int walls = decodeWalls(y, x);
-        return (walls & 0b10000) >> 4;
+        return the_maze_visited[y][x];
     }
 
     // Set visited bit of the maze walls
     static void setVisited(int y, int x) {
-        cout << "Setting " << x << "," << y << " as visited" << endl;
-        encodeWalls(y, x, 0b10000); // Sets the 5th LSB to one, marking it as visited
-        cout << getVisited(y, x) << endl;
+        //cout << "Setting " << x << "," << y << " as visited" << endl;
+        the_maze_visited[y][x] = 1; // Sets the 5th LSB to one, marking it as visited
+        //cout << getVisited(y, x) << endl;
+    }
+
+    static void setFlooded(int y, int x) {
+    // Set visited bit to 0, but now means it has been previously flooded
+        the_maze_visited[y][x] = 0;
     }
 
     // Return the x coordinate of the mouse position
@@ -176,7 +182,7 @@ public:
         // Push all bits off. If LSB == 1: right wall exists
     static bool actual_has_right_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
-        cout << "has_right_wall == " << walls << endl;
+        //cout << "has_right_wall == " << walls << endl;
         walls = walls & 4;
         return walls >> 2; 
     }
@@ -185,7 +191,7 @@ public:
     static bool actual_has_top_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
         walls = walls & 8;
-        cout << "has_top_wall == " << walls << endl;
+        //cout << "has_top_wall == " << walls << endl;
         return walls >> 3; 
     }
 
@@ -193,14 +199,14 @@ public:
     static bool actual_has_left_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
         walls = walls & 1;
-        cout << "has_left_wall == " << walls << endl;
+        //cout << "has_left_wall == " << walls << endl;
         return walls;
     }
 
     // Mask bits for south wall. if LSB ==1 : south wall exists
     static bool actual_has_bottom_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
-        cout << "has_bottom_wall == " << walls << endl;
+        //cout << "has_bottom_wall == " << walls << endl;
         walls = walls & 2;
         return walls >> 1;
     }
@@ -233,118 +239,118 @@ public:
 
         // Set the new wall to the maze index with dist using OR operator
         the_maze_walls[y][x] = the_maze_walls[y][x] | newWall;
-        cout << the_maze_walls[y][x] << endl;
+        //cout << the_maze_walls[y][x] << endl;
     }
 
     // Code to updateWalls
     static void updateWalls(int y, int x) {
         
-                ledRed = 0;
-        ledYellow = 0;
-        ledGreen = 0;
+//                 ledRed = 0;
+//         ledYellow = 0;
+//         ledGreen = 0;
 
-        bool topWall = false;
-        bool bottomWall = false; 
-        bool leftWall = false; 
-        bool rightWall = false;
+//         bool topWall = false;
+//         bool bottomWall = false; 
+//         bool leftWall = false; 
+//         bool rightWall = false;
 
-        Direction orientation = Maze::getCurrentDirection();
+//         Direction orientation = Maze::getCurrentDirection();
      
-//            leftIR = leftIR.adjWall();
-//            rightIR = rightIR.adjWall();
-//            frontIRs = frontLeftIR.adjWall() && frontRightIR.adjWall())
+// //            leftIR = leftIR.adjWall();
+// //            rightIR = rightIR.adjWall();
+// //            frontIRs = frontLeftIR.adjWall() && frontRightIR.adjWall())
 
 
-        if (orientation == NORTH) {
-            leftWall = leftIR.adjWall();
-            rightWall = rightIR.adjWall();
-            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
-                topWall = true;
-            }
-        }
+//         if (orientation == NORTH) {
+//             leftWall = leftIR.adjWall();
+//             rightWall = rightIR.adjWall();
+//             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+//                 topWall = true;
+//             }
+//         }
 
-        else if (orientation == EAST) {
-            bottomWall = rightIR.adjWall();
-            topWall = leftIR.adjWall();
-            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
-                rightWall = true;
-            }
-        }
+//         else if (orientation == EAST) {
+//             bottomWall = rightIR.adjWall();
+//             topWall = leftIR.adjWall();
+//             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+//                 rightWall = true;
+//             }
+//         }
 
-        else if (orientation == WEST) {
-            bottomWall = leftIR.adjWall();
-            topWall = rightIR.adjWall();
-            if (frontRightIR.adjWall() && frontLeftIR.adjWall()) {
-                leftWall = true;
-            }
-        }
+//         else if (orientation == WEST) {
+//             bottomWall = leftIR.adjWall();
+//             topWall = rightIR.adjWall();
+//             if (frontRightIR.adjWall() && frontLeftIR.adjWall()) {
+//                 leftWall = true;
+//             }
+//         }
 
-        else { //if (orientation == SOUTH) {
-            rightWall = leftIR.adjWall();
-            leftWall = rightIR.adjWall();
-            if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
-                bottomWall = true;
-            }
-        }
+//         else { //if (orientation == SOUTH) {
+//             rightWall = leftIR.adjWall();
+//             leftWall = rightIR.adjWall();
+//             if (frontLeftIR.adjWall() && frontRightIR.adjWall()) {
+//                 bottomWall = true;
+//             }
+//         }
         
-    if ( rightWall)  {
-        ledGreen = 1;
-    }
+//     if ( rightWall)  {
+//         ledGreen = 1;
+//     }
 
-    if ( leftWall)  {
-        ledYellow = 1;
-    }
+//     if ( leftWall)  {
+//         ledYellow = 1;
+//     }
 
-    if ( topWall)  {
-        ledRed = 1;
-    }
+//     if ( topWall)  {
+//         ledRed = 1;
+//     }
 
-    if (bottomWall) {
+//     if (bottomWall) {
         
-    }
+//     }
 
         // // Should not be invalid, but if it is, RIP
         // else {
 
         // }
 
-            if (leftWall) {
-            Maze::encodeWalls(y, x, 1);
-            if (x > 0) Maze::encodeWalls(y, x - 1, 4);
-        }
-
-        if (rightWall) {
-            Maze::encodeWalls(y, x, 4);
-            if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
-        }
-
-        if (topWall) {
-            Maze::encodeWalls(y, x, 8);
-            if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
-        }
-
-        if (bottomWall) {
-            Maze::encodeWalls(y, x, 2);
-            if (y > 0) Maze::encodeWalls(y - 1, x, 8);
-         }
-
-
-        // if (Maze::actual_has_bottom_wall(y, x)) {
-        //     Maze::encodeWalls(y, x, 2);
-        //     if (y > 0) Maze::encodeWalls(y - 1, x, 8);
-        // }
-        // if (Maze::actual_has_top_wall(y, x)) {
-        //     Maze::encodeWalls(y, x, 8);
-        //     if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
-        // }
-        // if (Maze::actual_has_left_wall(y, x)) {
+        //     if (leftWall) {
         //     Maze::encodeWalls(y, x, 1);
         //     if (x > 0) Maze::encodeWalls(y, x - 1, 4);
         // }
-        // if (Maze::actual_has_right_wall(y, x)) {
+
+        // if (rightWall) {
         //     Maze::encodeWalls(y, x, 4);
         //     if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
         // }
+
+        // if (topWall) {
+        //     Maze::encodeWalls(y, x, 8);
+        //     if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        // }
+
+        // if (bottomWall) {
+        //     Maze::encodeWalls(y, x, 2);
+        //     if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+        //  }
+
+
+        if (Maze::actual_has_bottom_wall(y, x)) {
+            Maze::encodeWalls(y, x, 2);
+            if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+        }
+        if (Maze::actual_has_top_wall(y, x)) {
+            Maze::encodeWalls(y, x, 8);
+            if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        }
+        if (Maze::actual_has_left_wall(y, x)) {
+            Maze::encodeWalls(y, x, 1);
+            if (x > 0) Maze::encodeWalls(y, x - 1, 4);
+        }
+        if (Maze::actual_has_right_wall(y, x)) {
+            Maze::encodeWalls(y, x, 4);
+            if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
+        }
 
     }
 
@@ -384,18 +390,13 @@ public:
         }
     }
 
-    static void speedRunPrep() {
-        for (int x = 0; x < MAZE_SIZE; x++) {
-            for (int y = 0; y < MAZE_SIZE; y++) {
-                printf("%d\n", getVisited(y, x));
-                if (!getVisited(y, x)) {
-                    encodeWalls(y, x, 15);
-                }
-            }
-        }
-    }
+
 
 };
+
+void speedRunPrep();
+
+void floodfill();
 
 int getMinOfNeighbors(int y, int x);
 
