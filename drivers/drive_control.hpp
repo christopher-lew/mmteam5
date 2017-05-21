@@ -27,5 +27,7 @@ void turnAround(float speed);
 
 char rightWallFollower();
 
+char leftWallFollower();
+
 
 #endif 

@@ -7,6 +7,7 @@
 	#include <stdio.h>
 	#include <iostream>
 	#include <vector>
+	#include <cstdlib>
 	#include "mbed.h"
 	#include "config/initDevices.hpp"
 	#include "drivers/debug_io.hpp"
@@ -31,6 +32,12 @@
 
 				state++;
 				wait(1);
+			}
+			else if (userButton) {
+				//buzzer.levelComplete();
+				cycleMFs(0.02);
+				state = 4;
+				wait(3);
 			}		
 		}
 
@@ -88,6 +95,22 @@
         //print_maze();
 
     }
+
+    while (state == 4) {
+    	char nextMove;
+    	//srand((unsigned) time(NULL));
+    	int randomNum = (rand()) % 10;
+    	cycleLEDs(0.05);
+    	if (randomNum < 2) {
+    		nextMove = leftWallFollower();
+    	}
+    	else {
+			nextMove = rightWallFollower();
+		}
+		wait(0.25);
+		moveFalcon(nextMove, 0.2);
+    }
+
     testBuzzer();
 }
 

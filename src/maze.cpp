@@ -768,13 +768,13 @@ int decodeYIndex(int encodedIndex) {
     // cout << "decoded y value = " << toReturn << endl;
     return toReturn; // Will return y index of encoded index via mask 1111100000
 }
-int main() {
+// int main() {
 
-   int state = 1 ;
-   Maze();
-   // cycleLEDs(0.1);
-   // wait(5);
-   // cycleLEDs(0.1);
+//    int state = 1 ;
+//    Maze();
+//    cycleLEDs(0.1);
+//    wait(5);
+//    cycleLEDs(0.1);
 
    // while (state = 0) { // Runnable State
 
