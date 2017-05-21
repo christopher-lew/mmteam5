@@ -24,7 +24,7 @@ using namespace std;
 
 //#define const int MAZE_SIZE = 4;
 
-const int MAZE_SIZE = 3;
+const int MAZE_SIZE = 16;
 
 enum Direction {
 

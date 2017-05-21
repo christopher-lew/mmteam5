@@ -8,7 +8,7 @@
 	IRPair frontLeftIR(PC_5, PA_4, true);
 	IRPair frontRightIR(PC_4, PC_1, true);
 	IRPair rightIR(PA_6, PC_14, false);
-	IRPair testIR(PA_7, PH_0, false);
+	//IRPair testIR(PA_7, PH_0, false);
 	
 	Motor leftMotor(PB_5, PC_6);
 	Motor rightMotor(PB_9, PB_8);
@@ -30,6 +30,8 @@
 	AnalogIn battery(PC_0);
 
 	Serial bluetooth(PC_10, PC_11);
+
+	DigitalIn userButton(PH_0);
 
 
 

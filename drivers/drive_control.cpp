@@ -4,7 +4,7 @@
 
 #include "drive_control.hpp"
 
-#define MVMT_WAIT_MS 250
+#define MVMT_WAIT_MS 100
 
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
@@ -226,30 +226,67 @@ char rightWallFollower()
 	bool rightWall = rightIR.adjWall();
 		
 	if ( !(rightWall) ) {
-		//ledRed = 0;
-		//ledYellow = 0;
-		//ledGreen = 1;
+		ledRed = 0;
+		ledYellow = 0;
+		ledGreen = 1;
 		return 'R';
 	}
 
 	else if ( !(frontLeftWall) && !(frontRightWall) ) {
-		//ledRed = 0;
-		//ledYellow = 1;
-		//ledGreen = 0;
+		ledRed = 0;
+		ledYellow = 1;
+		ledGreen = 0;
 		return 'F';
 	}
 
 	else if ( !(leftWall) ) {
-		//ledRed = 1;
-		//ledYellow = 0;
-		//ledGreen = 0;
+		ledRed = 1;
+		ledYellow = 0;
+		ledGreen = 0;
 		return 'L';
 	}
 
 	else {
-		//ledRed = 1;
-		//ledYellow = 1;
-		//ledGreen = 1;
+		ledRed = 1;
+		ledYellow = 1;
+		ledGreen = 1;
+		return 'A';
+	}
+}
+
+
+char leftWallFollower()
+{
+	bool leftWall = leftIR.adjWall();
+	bool frontLeftWall = frontLeftIR.adjWall();
+	bool frontRightWall = frontRightIR.adjWall();
+	bool rightWall = rightIR.adjWall();
+		
+	if ( !(leftWall) ) {
+		ledRed = 1;
+		ledYellow = 0;
+		ledGreen = 0;
+		return 'L';
+	}	
+
+	else if ( !(frontLeftWall) && !(frontRightWall) ) {
+		ledRed = 0;
+		ledYellow = 1;
+		ledGreen = 0;
+		return 'F';
+	}
+
+	else if ( !(rightWall) ) {
+		ledRed = 0;
+		ledYellow = 0;
+		ledGreen = 1;
+		return 'R';
+	}
+
+	else {
+		ledRed = 1;
+		ledYellow = 1;
+		ledGreen = 1;
 		return 'A';
 	}
 }
