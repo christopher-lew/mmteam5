@@ -1,5 +1,5 @@
 /**
- *
+ * PID Controller for the Falcon.
  */
 
 #include "pid.hpp"
@@ -16,6 +16,8 @@
 
 #define Kp 0.000075
 #define Kd 0.00055
+
+
 
 volatile float errorP = 0;
 volatile float oldErrorP = 0;
@@ -127,8 +129,11 @@ void PID_turn(char direction)
 
 
 
-// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
-/* Returns the average number of pulses across both encoders since last reset. Unit is encoder pulses; intended for straight driving only. */
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
+/** 
+ * Returns the average number of pulses across both encoders since last reset. 
+ * Unit is encoder pulses; intended for straight driving only.
+ */
 int getEncoderDistance()
 {
 	return (leftEncoder.read() + rightEncoder.read()) >> 1;

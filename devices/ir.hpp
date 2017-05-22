@@ -20,8 +20,6 @@
 class IRPair
 {	
 public:
-	bool isFrontIR;
-	float wall_limit;
 	float readLog[IR_SAMPLES]; // used for logging IR read values
 	
 	IRPair(PinName rxPin, PinName txPin, bool frontStatus);
@@ -32,8 +30,8 @@ public:
 	float calibration(int signal_delay_us, int signal_rest_us);
 	
 private:
-	
-	
+	bool isFrontIR;
+	float wall_limit;	
 
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;

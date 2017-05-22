@@ -2,10 +2,14 @@
 *.exe
 *.gch
 *.zip
+
+desktop.ini
+
 .DS_Store
 .cproject
 .project
 .settings/
 a.out.dSYM/
+
 micromouse
 micromouse.dSYM/

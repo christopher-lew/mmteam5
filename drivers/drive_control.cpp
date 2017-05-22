@@ -1,13 +1,9 @@
 /**
- *
+ * Collection of functions that physically move the mouse from cell to cell.
  */
 
 #include "drive_control.hpp"
 
-#define MVMT_WAIT_MS 100
-
-
-// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 /*
  * Takes in a float speed and a character that dictates the direction of the next move.
  * Designed to be implemented in main, where nextMove comes from maze.
@@ -62,7 +58,7 @@ void forward(float speed)
 }
 
 
-void turnRight(float speed) // TODO: USING "speed"
+void turnRight(float speed)
 {
 	float turnRight_speed = 0.16;
 	int encLimit = 15700;
@@ -83,6 +79,7 @@ void turnRight(float speed) // TODO: USING "speed"
 	rightMotor.stop();
 	wait_ms(MVMT_WAIT_MS);
 }
+
 
 void turnLeft(float speed)
 {
@@ -106,6 +103,7 @@ void turnLeft(float speed)
 	wait_ms(MVMT_WAIT_MS);
 }
 
+
 void turnAround(float speed)
 {
 	float turnRight_speed = 0.16;
@@ -127,6 +125,7 @@ void turnAround(float speed)
 	rightMotor.stop();
 	wait_ms(MVMT_WAIT_MS);
 }
+
 
 /*
 void turnLeft(float speed)  // TODO: USING "speed"
@@ -215,9 +214,9 @@ void turnAround(float speed) // TODO: USING "speed"
 	wait_ms(100);
 }
 */
-// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 
-// ['F', 'R', 'L', 'A']
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
+
 char rightWallFollower()
 {
 	bool leftWall = leftIR.adjWall();

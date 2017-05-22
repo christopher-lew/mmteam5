@@ -20,16 +20,17 @@
 #define _BATTERIES 2
 
 /*
- *
+ * Selects the IR Coefficients & Timings to be used
  */
 #define _IR_COEFF 2
 
 /*
- * M: Falcon runs using the Maze class
  * D: Falcon operates in general Demo mode
- * W: Falcon operates in Wall Following mode
+ * G: Used for Gyro calibration/testing
  * I: Used for IR Sensor calibration/testing
+ * M: Falcon runs using the Maze class
  * T: Falcon operates in Testing mode
+ * W: Falcon operates in Wall Following mode
  */
 #define _OPERATING_MODE 'M'
 

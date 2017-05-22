@@ -1,5 +1,5 @@
 /**
- * 
+ * Collection of functions that physically move the mouse from cell to cell.
  */
 
 #ifndef DRIVER_H
@@ -12,6 +12,8 @@
 #include "debug_io.hpp"
 #include "pid.hpp"
 #include "testFunctions.hpp"
+
+#define MVMT_WAIT_MS 100
 
 
 void moveFalcon(char nextMove, float speed);

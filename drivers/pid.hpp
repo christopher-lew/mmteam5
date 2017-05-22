@@ -1,5 +1,5 @@
 /**
- *
+ * PID Controller for the Falcon.
  */
 
 #ifndef PID_H
@@ -30,6 +30,7 @@ void PID_turn(char direction);
 
 
 int getEncoderDistance();
+
 void resetEncoders();
 
 

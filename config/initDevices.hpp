@@ -46,7 +46,7 @@ extern AnalogIn battery;
 
 extern Serial bluetooth;
 
-extern DigitalIn userButton; // Falcon v2.0
+extern DigitalIn userButton;
 
 
 #endif
