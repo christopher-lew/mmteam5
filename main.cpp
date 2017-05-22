@@ -34,11 +34,10 @@
 				wait(1);
 			}
 			else if (userButton) {
-				//buzzer.levelComplete();
-				cycleMFs(0.02);
-				state = 4;
+				cycleMFs(0.05);
+				state = -1;
 				wait(3);
-			}		
+			}
 		}
 
 	    while (state == 1) {
@@ -96,7 +95,7 @@
 
     }
 
-    while (state == 4) {
+	while (state == -1) {
     	char nextMove;
     	//srand((unsigned) time(NULL));
     	int randomNum = (rand()) % 10;
@@ -107,10 +106,9 @@
     	else {
 			nextMove = rightWallFollower();
 		}
-		wait(0.25);
 		moveFalcon(nextMove, 0.2);
     }
-
+	
     testBuzzer();
 }
 
