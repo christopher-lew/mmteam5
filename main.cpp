@@ -313,7 +313,7 @@
 		
 		while (i < moves) {
 			nextMove = rightWallFollower();
-			moveFalcon(nextMove, EXPLORING_SPEED);
+			moveFalcon(nextMove, _EXPLORE_SPEED);
 			i++;
 		}
 
