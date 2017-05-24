@@ -15,6 +15,8 @@
 
 #define MVMT_WAIT_MS 100
 
+extern PID_Controller pid;
+
 
 void moveFalcon(char nextMove, float speed);
 

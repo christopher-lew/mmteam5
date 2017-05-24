@@ -15,23 +15,31 @@
 #define PID_RIGHT_ALIGN 6.1
 #define PID_FRONT_ALIGN 4.5
 
-#define COAST_SPEED 0.06
+#define PID_SAMPLE_PERIOD 0.005 // seconds
+
+#define PID_DECCEL_SPEED 0.06
 
 
-bool PID_keepStraight();
+class PID_Controller
+{
+public:
+	PID_Controller(void);
 
-void PID_alignUsingSides(bool leftWall, bool rightWall);
+	bool keepStraight();
+	void alignUsingSides(bool leftWall, bool rightWall);
+	void alignToFrontWall();
+	void HailMary();
+	void turn(char direction);
+	void calibration(float _KP, float _KD, int samples, float sample_period);
 
-void PID_alignToFrontWall();
+	int getEncoderDistance();
+	void resetEncoders();
 
-void PID_HailMary();
-
-void PID_turn(char direction);
-
-
-int getEncoderDistance();
-
-void resetEncoders();
-
+private:
+	volatile float errorP;
+	volatile float oldErrorP;
+	volatile float errorD;
+	volatile float totalError;
+};
 
 #endif

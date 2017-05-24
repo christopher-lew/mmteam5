@@ -37,24 +37,20 @@ void forward(float speed)
 	int CELL_DISTANCE = 41000;
 	bool alignToFront = false;
 
-	resetEncoders();
-	leftMotor.accel(fwd_speed);
-	rightMotor.accel(fwd_speed);
+	pid.resetEncoders();
+	leftMotor.instantAccel(fwd_speed);
+	rightMotor.instantAccel(fwd_speed);
 
-	while(getEncoderDistance() < CELL_DISTANCE) {
-		alignToFront = PID_keepStraight(); // use timer to execute every 1 ms
+	while(pid.getEncoderDistance() < CELL_DISTANCE) {
+		alignToFront = pid.keepStraight(); // use timer to execute every 1 ms
 		if (alignToFront) {
-			PID_alignToFrontWall();
+			pid.alignToFrontWall();
 			break;
 		}
 	}
 
-	//if (alignToFront) {
-	//	PID_alignToFrontWall();	
-	//}
-
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 }
 
 
@@ -63,20 +59,20 @@ void turnRight(float speed)
 	float turnRight_speed = 0.16;
 	int encLimit = 15700;
 
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 	wait_ms(MVMT_WAIT_MS);
 	
-	resetEncoders();
-	leftMotor.accel(turnRight_speed);
-	rightMotor.accel(-turnRight_speed);
+	pid.resetEncoders();
+	leftMotor.instantAccel(turnRight_speed);
+	rightMotor.instantAccel(-turnRight_speed);
 
 	while((leftEncoder.read() < encLimit) && (rightEncoder.read() > -encLimit)) {
-		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+		// TODO: pid.turn('R'); // use timer to ensure constant execution at every 1 ms
 	}
 
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 	wait_ms(MVMT_WAIT_MS);
 }
 
@@ -86,20 +82,20 @@ void turnLeft(float speed)
 	float turnRight_speed = 0.16;
 	int encLimit = 51000;
 
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 	wait_ms(MVMT_WAIT_MS);
 	
-	resetEncoders();
-	leftMotor.accel(turnRight_speed);
-	rightMotor.accel(-turnRight_speed);
+	pid.resetEncoders();
+	leftMotor.instantAccel(turnRight_speed);
+	rightMotor.instantAccel(-turnRight_speed);
 
 	while((leftEncoder.read() < encLimit) && (rightEncoder.read() > -encLimit)) {
-		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+		// TODO: pid.turn('L'); // use timer to ensure constant execution at every 1 ms
 	}
 
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 	wait_ms(MVMT_WAIT_MS);
 }
 
@@ -109,20 +105,20 @@ void turnAround(float speed)
 	float turnRight_speed = 0.16;
 	int encLimit = 34500;
 
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 	wait_ms(MVMT_WAIT_MS);
 	
-	resetEncoders();
-	leftMotor.accel(turnRight_speed);
-	rightMotor.accel(-turnRight_speed);
+	pid.resetEncoders();
+	leftMotor.instantAccel(turnRight_speed);
+	rightMotor.instantAccel(-turnRight_speed);
 
 	while((leftEncoder.read() < encLimit) && (rightEncoder.read() > -encLimit)) {
-		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+		// TODO: pid.turn('R'); // use timer to ensure constant execution at every 1 ms
 	}
 
-	leftMotor.stop();
-	rightMotor.stop();
+	leftMotor.instantStop();
+	rightMotor.instantStop();
 	wait_ms(MVMT_WAIT_MS);
 }
 
@@ -140,14 +136,14 @@ void turnLeft(float speed)  // TODO: USING "speed"
 	rightMotor.stop();
 	wait_ms(100);
 
-	resetEncoders();
+	pid.resetEncoders();
 	gyro.start_sampling();
 	leftMotor.accel(-turnLeft_speed);
 	rightMotor.accel(turnLeft_speed);
 
 
 	while(gyro.getAngle() > turnLeft_angle) {
-		// TODO: PID_turn('L'); // use timer to execute every 1 ms
+		// TODO: pid.turn('L'); // use timer to execute every 1 ms
 	}
 
 	gyro.stop_sampling();
@@ -169,14 +165,14 @@ void turnRight(float speed) // TODO: USING "speed"
 	rightMotor.stop();
 	wait_ms(100);
 	
-	resetEncoders();
+	pid.resetEncoders();
 	gyro.start_sampling();
 	leftMotor.accel(turnRight_speed);
 	rightMotor.accel(-turnRight_speed);
 
 
 	while(gyro.getAngle() < turnRight_angle) {
-		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+		// TODO: pid.turn('R'); // use timer to ensure constant execution at every 1 ms
 	}
 
 	gyro.stop_sampling();
@@ -198,14 +194,14 @@ void turnAround(float speed) // TODO: USING "speed"
 	rightMotor.stop();
 	wait_ms(100);
 	
-	resetEncoders();
+	pid.resetEncoders();
 	gyro.start_sampling();
 	leftMotor.accel(turnRight_speed);
 	rightMotor.accel(-turnRight_speed);
 
 
 	while(gyro.getAngle() < turnRight_angle) {
-		// TODO: PID_turn('R'); // use timer to ensure constant execution at every 1 ms
+		// TODO: pid.turn('R'); // use timer to ensure constant execution at every 1 ms
 	}
 
 	gyro.stop_sampling();

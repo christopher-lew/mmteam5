@@ -1,14 +1,14 @@
-// Load most important config variables/settings first
-#include "config/initModes.hpp"
-
 // Include all the config & driver files needed to run anything on the mouse
 #include "mbed.h"
+#include "config/initModes.hpp"
 #include "config/initConstants.hpp"
 #include "config/initDevices.hpp"
 #include "drivers/debug_io.hpp"
 #include "drivers/drive_control.hpp"
 #include "drivers/pid.hpp"
 #include "drivers/testFunctions.hpp"
+
+PID_Controller pid;
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 
@@ -172,7 +172,7 @@
 
 	int main() {
 
-		int state = 0 ;
+		int state = _OPERATOR_INPUT;
 		Maze();
 		cycleLEDs(0.1);
 
@@ -267,6 +267,32 @@
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 
+#elif _OPERATING_MODE == 'P'
+
+	int main()
+	{
+		float _KP = 0.000075;
+		float _KD = 0.00055;
+		int samples = 200;
+		float sample_period = 0.002;
+		int state = _OPERATOR_INPUT;
+
+		cycleMFs(0.05);
+
+		while (state == _OPERATOR_INPUT) {
+			if (userButton) {
+				cycleLEDs(0.05);
+				wait(1.5);
+				break;
+			}
+		}
+
+		pid.calibration(_KP, _KD, samples, sample_period);
+		testBuzzer();
+	}
+
+// ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
+
 #elif _OPERATING_MODE == 'T'
 
 	#include "devices/QEI_HW.hpp"
@@ -274,6 +300,7 @@
 	int main()
 	{	
 		cycleLEDs(0.05);
+		/*
 		QEI_HW rightEncoder(5);
 		cycleMFs(0.05);
 		int encRead = 0;
@@ -284,6 +311,12 @@
 			bluetooth.printf("Right Encoder = %d\r\n", encRead);
 			rightEncoder.reset();
 			wait(0.2);
+		}
+		*/
+
+		for (int i = 0; i < 10; i++) {
+			pid.keepStraight();
+			wait(0.5);
 		}
 	}
 

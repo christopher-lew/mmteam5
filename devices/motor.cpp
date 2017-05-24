@@ -52,6 +52,17 @@ void Motor::instantAccel(float newSpeed)
 }
 
 
+/* Instantly stop the motors */
+void Motor::instantStop() 
+{
+	this->pwm_ChA.period_us(MOTOR_PERIOD_US);
+	this->pwm_ChB.period_us(MOTOR_PERIOD_US);
+	this->curSpeed = 0;
+	this->pwm_ChA.write(0);
+	this->pwm_ChB.write(0);
+}
+
+
 /* Accelerates the motor to the given speed in ACC_STEPS */
 void Motor::accel(float newSpeed) 
 {

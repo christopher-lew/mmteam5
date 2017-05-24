@@ -67,7 +67,7 @@
 	#define _SPEED_RUN 3
 	#define _WALL_FOLLOWER -1
 
- 	#define _EXPLORE_SPEED 0.15
+ 	#define _EXPLORE_SPEED 0.10
  	#define _RUN_SPEED 0.3
 
 #endif

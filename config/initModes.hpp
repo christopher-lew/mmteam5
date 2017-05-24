@@ -29,9 +29,10 @@
  * G: Used for Gyro calibration/testing
  * I: Used for IR Sensor calibration/testing
  * M: Falcon runs using the Maze class
+ * P: Used for PID tuning
  * T: Falcon operates in Testing mode
  * W: Falcon operates in Wall Following mode
  */
-#define _OPERATING_MODE 'M'
+#define _OPERATING_MODE 'P'
 
 #endif
