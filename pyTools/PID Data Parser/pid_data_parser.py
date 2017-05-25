@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     plt.figure(1)
     plt.suptitle("PID Error Graphs", fontsize=20)
-    plt.subplots_adjust(hspace=0.4)     # Adjust space between subplots
+    plt.subplots_adjust(hspace=0.7)     # Adjust space between subplots
     plt.subplots_adjust(wspace=0.3)
     
     for trial in allData:
