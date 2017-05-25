@@ -69,15 +69,14 @@ PID_Controller pid;
 
 	int main()
 	{
-		int function_num = 1;
+		int function_num = 2;
+		bool isFront = false;
 
 		cycleLEDs(0.1);
 
 
 		// Calibrate IRs
 		if (function_num == 1) {
-			bool isFront = true;
-
 			if (isFront) {
 				bluetooth.printf("Front Left:\r\n");
 				IR_calibration(frontLeftIR, IR_SIGDELAY, IR_SIGREST);
@@ -96,8 +95,6 @@ PID_Controller pid;
 
 		// Get IR distances
 		else if (function_num == 2) {
-			bool isFront = true;
-
 			if (isFront) {
 				bluetooth.printf("Front Left Dist: %1.4f\r\n", leftIR.distToWall());
 				bluetooth.printf("Front Right Dist: %1.4f\r\n", rightIR.distToWall());
@@ -271,24 +268,65 @@ PID_Controller pid;
 
 	int main()
 	{
-		float _KP = 0.000075;
-		float _KD = 0.00055;
-		int samples = 200;
-		float sample_period = 0.002;
-		int state = _OPERATOR_INPUT;
+		int samples = 500;
+		float sample_period = 0.002;	
+		int trials = 0;
+		
+		float _KP = 0.00003;
+		float _KD = 0.00000;
+		
+		float _KP_step = 0.000015;
+		float _KD_step = 0.000;
 
-		cycleMFs(0.05);
+		cycleMFs(0.10);
 
-		while (state == _OPERATOR_INPUT) {
+		while (trials == 0) {
 			if (userButton) {
-				cycleLEDs(0.05);
+				cycleMFs(0.05);
 				wait(1.5);
-				break;
+				
+				pid.calibration(_KP, _KD, samples, sample_period);
+				
+				cycleLEDs(0.05);
+				testBuzzer();
+				trials++;
+				_KP += _KP_step;
+				_KD += _KD_step;
+			}
+		}
+		
+		while (trials == 1) {
+			if (userButton) {
+				cycleMFs(0.05);
+				wait(1.5);
+				
+				pid.calibration(_KP, _KD, samples, sample_period);
+				
+				cycleLEDs(0.05);
+				testBuzzer();
+				trials++;
+				
+				_KP += _KP_step;
+				_KD += _KD_step;
+			}
+		}
+		
+		while (trials == 2) {
+			if (userButton) {
+				cycleMFs(0.05);
+				wait(1.5);
+				
+				pid.calibration(_KP, _KD, samples, sample_period);
+				
+				cycleLEDs(0.05);
+				testBuzzer();
+				trials++;
+				
+				_KP += _KP_step;
+				_KD += _KD_step;
 			}
 		}
 
-		pid.calibration(_KP, _KD, samples, sample_period);
-		testBuzzer();
 	}
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 

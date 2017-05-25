@@ -11,8 +11,8 @@
 #include "../config/initDevices.hpp"
 #include "testFunctions.hpp"
 
-#define PID_LEFT_ALIGN 5.8 // centimeters
-#define PID_RIGHT_ALIGN 6.1
+#define PID_LtoR_OFFSET -0.1 // cm
+#define PID_SIDE_ALIGN 6.0 // cm
 #define PID_FRONT_ALIGN 4.5
 
 #define PID_SAMPLE_PERIOD 0.005 // seconds

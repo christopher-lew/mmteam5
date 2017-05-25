@@ -58,22 +58,19 @@ void PID_Controller::alignUsingSides(bool leftWall, bool rightWall)
 	float rightError = 0;
 	// Use both walls to align
 	if (leftWall && rightWall) {
-		leftError = leftIR.distToWall() - PID_LEFT_ALIGN;
-		rightError = rightIR.distToWall() - PID_RIGHT_ALIGN;
-		
-		errorP = leftError - rightError;
+	errorP = leftIR.distToWall() - rightIR.distToWall() - PID_LtoR_OFFSET;
 		errorD = errorP - oldErrorP;
 	}
 
 	// Use only left wall to align
 	else if (leftWall) {
-		errorP = 2 * (leftIR.distToWall() - PID_LEFT_ALIGN);
+		errorP = 2 * (leftIR.distToWall() - PID_SIDE_ALIGN);
 		errorD = errorP - oldErrorP;
 	}
 
 	// Use only right wall to align
 	else if (rightWall) {
-		errorP = 2 * (rightIR.distToWall() - PID_RIGHT_ALIGN);
+		errorP = 2 * (rightIR.distToWall() - PID_SIDE_ALIGN);
 		errorD = errorP - oldErrorP;
 	}
 
@@ -161,17 +158,15 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 		rightWall= rightIR.adjWall();
 		
 		if (leftWall && rightWall) {
-			leftError = leftIR.distToWall() - PID_LEFT_ALIGN;
-			rightError = rightIR.distToWall() - PID_RIGHT_ALIGN;
-			errorP = leftError - rightError;
+			errorP = leftIR.distToWall() - rightIR.distToWall() - PID_LtoR_OFFSET;
 			errorD = errorP - oldErrorP;
 		}
 		else if (leftWall) {
-			errorP = 2 * (leftIR.distToWall() - PID_LEFT_ALIGN);
+			errorP = 2 * (leftIR.distToWall() - PID_SIDE_ALIGN);
 			errorD = errorP - oldErrorP;
 		}
 		else if (rightWall) {
-			errorP = 2 * (rightIR.distToWall() - PID_RIGHT_ALIGN);
+			errorP = 2 * (rightIR.distToWall() - PID_SIDE_ALIGN);
 			errorD = errorP - oldErrorP;
 		}
 		else {
