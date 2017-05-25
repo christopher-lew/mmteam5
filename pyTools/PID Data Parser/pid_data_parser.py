@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 
 separatorString = "##### ##### #####"
-curTrialFile = "pid_data/PID_ERRORS.txt"
+curTrialFile = "pid_data/currentTrial.txt"
 
 
 def read_trial_header(file):
@@ -54,6 +54,7 @@ if __name__ == '__main__':
     plt.figure(1)
     plt.suptitle("PID Error Graphs", fontsize=20)
     plt.subplots_adjust(hspace=0.4)     # Adjust space between subplots
+    plt.subplots_adjust(wspace=0.3)
     
     for trial in allData:
         header = trial['header']
@@ -68,12 +69,14 @@ if __name__ == '__main__':
         plt.plot(xData, errorP)
         plt.xlabel('Time (ms)')
         plt.ylabel('Error P')
+        plt.title('Kp = {}'.format(header['Kp']))
         plt.grid(True)
         
         plt.subplot(n_trials, n_graphs, i+1)
         plt.plot(xData, errorD)
         plt.xlabel('Time (ms)')
         plt.ylabel('Error D')
+        plt.title('Kd = {}'.format(header['Kd']))
         plt.grid(True)
         
         plt.subplot(n_trials, n_graphs, i+2)
