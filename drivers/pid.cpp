@@ -131,7 +131,7 @@ void PID_Controller::turn(char direction)
 /*
  * Test function turns the motor on to go forward for a set amount of time (not distance/encoder ticks)
  */
-void PID_Controller::calibration(float _KP, float _KD, int samples, float sample_period)
+void PID_Controller::calibration(float _KP, float _KD, int samples, float sample_period, bool print_pidLog)
 {
 	float speed = _EXPLORE_SPEED;
 	float pid_log[samples][2];
@@ -198,8 +198,10 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 	bluetooth.printf("##### ##### #####\r\n");
 	bluetooth.printf("Kp=%1.7f\r\nKd=%1.7f\r\n", _KP, _KD);
 	bluetooth.printf("Samples=%d\r\nPeriod=%1.4f\r\n", samples, sample_period);
-	for(int i = 0; i < samples; i++) {
-		bluetooth.printf("%1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1]);
+	if (print_pidLog) {
+		for(int i = 0; i < samples; i++) {
+			bluetooth.printf("%1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1]);
+		}
 	}
 }
 

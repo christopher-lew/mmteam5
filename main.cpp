@@ -268,65 +268,45 @@ PID_Controller pid;
 
 	int main()
 	{
-		int samples = 500;
+		//_KP = 0.000065;
+		//_KD = 0.000250;
+		
+		int trial = 0;
+		int n_trials = 4;
+		bool waiting = true;
+
+		int samples = 600;
 		float sample_period = 0.002;	
-		int trials = 0;
+			
+		float _KP = 0.000020;
+		float _KD = 0.0000;
 		
-		float _KP = 0.00003;
-		float _KD = 0.00000;
-		
-		float _KP_step = 0.000015;
-		float _KD_step = 0.000;
+		float _KP_step = 0.00001;
+		float _KD_step = 0.00000;
 
 		cycleMFs(0.10);
 
-		while (trials == 0) {
-			if (userButton) {
-				cycleMFs(0.05);
-				wait(1.5);
-				
-				pid.calibration(_KP, _KD, samples, sample_period);
-				
-				cycleLEDs(0.05);
-				testBuzzer();
-				trials++;
-				_KP += _KP_step;
-				_KD += _KD_step;
+		while (trial < n_trials) {
+			while (waiting) {
+				if (userButton) {
+					cycleMFs(0.05);
+					wait(1.5);
+					
+					pid.calibration(_KP, _KD, samples, sample_period, false);
+					
+					cycleLEDs(0.05);
+					testBuzzer();
+					waiting = false;
+				}
 			}
+			
+			waiting = true;
+			trial++;
+			_KP += _KP_step;
+			_KD += _KD_step;
 		}
 		
-		while (trials == 1) {
-			if (userButton) {
-				cycleMFs(0.05);
-				wait(1.5);
-				
-				pid.calibration(_KP, _KD, samples, sample_period);
-				
-				cycleLEDs(0.05);
-				testBuzzer();
-				trials++;
-				
-				_KP += _KP_step;
-				_KD += _KD_step;
-			}
-		}
-		
-		while (trials == 2) {
-			if (userButton) {
-				cycleMFs(0.05);
-				wait(1.5);
-				
-				pid.calibration(_KP, _KD, samples, sample_period);
-				
-				cycleLEDs(0.05);
-				testBuzzer();
-				trials++;
-				
-				_KP += _KP_step;
-				_KD += _KD_step;
-			}
-		}
-
+		buzzer.levelComplete();
 	}
 
 // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
