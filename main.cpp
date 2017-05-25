@@ -268,9 +268,11 @@ PID_Controller pid;
 
 	int main()
 	{
+		bluetooth.baud(BAUD_RATE);
+		
 		//_KP = 0.000065;
 		//_KD = 0.000250;
-		
+
 		int trial = 0;
 		int n_trials = 4;
 		bool waiting = true;

@@ -39,7 +39,7 @@ bool PID_Controller::keepStraight()
 	bool frontLeftWall =	frontLeftIR.adjWall();
 	bool frontRightWall=	frontRightIR.adjWall();
 
-	if (frontLeftWall && frontLeftWall) {
+	if (frontLeftWall && frontRightWall) {
 		alignToFrontWall = true;
 	}
 	
@@ -133,16 +133,17 @@ void PID_Controller::turn(char direction)
  */
 void PID_Controller::calibration(float _KP, float _KD, int samples, float sample_period, bool print_pidLog)
 {
-	float speed = _EXPLORE_SPEED;
 	float pid_log[samples][2];
-	
-	float time_left;
-	Timer pid_timer;
+	float left_log[samples];
+	float right_log[samples];
 
+	int print_args = 4;
+	float speed = _EXPLORE_SPEED;
+	
 	bool leftWall;
 	bool rightWall;
-	float leftError = 0;
-	float rightError= 0;
+	float time_left;
+	Timer pid_timer;
 
 	// ----- Effectively the drive_control/forward() function -----
 	this->resetEncoders();
@@ -156,17 +157,20 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 		// ----- Effectively keepStraight() & alignUsingSides() -----
 		leftWall = leftIR.adjWall();
 		rightWall= rightIR.adjWall();
+
+		left_log[i] = leftIR.distToWall();
+		right_log[i] = rightIR.distToWall();
 		
 		if (leftWall && rightWall) {
-			errorP = leftIR.distToWall() - rightIR.distToWall() - PID_LtoR_OFFSET;
+			errorP = left_log[i] - right_log[i] - PID_LtoR_OFFSET;
 			errorD = errorP - oldErrorP;
 		}
 		else if (leftWall) {
-			errorP = 2 * (leftIR.distToWall() - PID_SIDE_ALIGN);
+			errorP = 2 * (left_log[i] - PID_SIDE_ALIGN);
 			errorD = errorP - oldErrorP;
 		}
 		else if (rightWall) {
-			errorP = 2 * (rightIR.distToWall() - PID_SIDE_ALIGN);
+			errorP = 2 * (right_log[i] - PID_SIDE_ALIGN);
 			errorD = errorP - oldErrorP;
 		}
 		else {
@@ -197,10 +201,15 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 	// Print out CSV Data from pid_log
 	bluetooth.printf("##### ##### #####\r\n");
 	bluetooth.printf("Kp=%1.7f\r\nKd=%1.7f\r\n", _KP, _KD);
-	bluetooth.printf("Samples=%d\r\nPeriod=%1.4f\r\n", samples, sample_period);
+	bluetooth.printf("Samples=%d\r\nPeriod=%1.4f\r\nArgs=%d\r\n", samples, sample_period, print_args);
 	if (print_pidLog) {
 		for(int i = 0; i < samples; i++) {
-			bluetooth.printf("%1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1]);
+			if (print_args == 4) {
+				bluetooth.printf("%1.4f , %1.4f , %1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1], left_log[i], right_log[i]);
+			}
+			else if (print_args == 2) {
+				bluetooth.printf("%1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1]);	
+			}
 		}
 	}
 }

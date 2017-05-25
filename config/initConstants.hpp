@@ -70,4 +70,6 @@
  	#define _EXPLORE_SPEED 0.12
  	#define _RUN_SPEED 0.3
 
+ 	#define BAUD_RATE 55000
+
 #endif
