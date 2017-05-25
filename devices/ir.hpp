@@ -31,7 +31,8 @@ public:
 	
 private:
 	bool isFrontIR;
-	float wall_limit;	
+	float wall_limit;
+	float recharge_time; // usec
 
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;

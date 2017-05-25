@@ -16,6 +16,10 @@ IRPair::IRPair(PinName rxPin, PinName txPin, bool frontStatus)
 	else {
 		this->wall_limit = SIDE_WALL_LIMIT;
 	}
+
+	// Determine the recharge cycle (whichever Tau is greater)
+	this->recharge_time = ((IR_EMIT_TAU > IR_RECV_TAU) ? IR_EMIT_TAU : IR_RECV_TAU)
+	this->recharge_time*= IR_TAU_CYCLES
 }
 
 
@@ -23,11 +27,11 @@ IRPair::IRPair(PinName rxPin, PinName txPin, bool frontStatus)
 float IRPair::fireAndRead()
 {
 	IR_Emitter.write(1);
-	wait_us(IR_SIGDELAY); // Wait for firing capacitor
+	wait_us(IR_PEAK_DELAY); // Wait for firing capacitor
 
 	float read = IR_Receiver.read();
 	IR_Emitter.write(0);
-	wait_us(IR_SIGREST); // Recharge firing capacitor
+	wait_us(recharge_time); // Recharge firing capacitor
 
 	return read;
 }
