@@ -164,14 +164,20 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 		if (leftWall && rightWall) {
 			errorP = left_log[i] - right_log[i] - PID_LtoR_OFFSET;
 			errorD = errorP - oldErrorP;
+		totalError = _KP*errorP + _KD*errorD;
+		oldErrorP = errorP;
 		}
 		else if (leftWall) {
 			errorP = 2 * (left_log[i] - PID_SIDE_ALIGN);
 			errorD = errorP - oldErrorP;
+		totalError = _KP*errorP + _KD*errorD;
+		oldErrorP = errorP;
 		}
 		else if (rightWall) {
 			errorP = 2 * (right_log[i] - PID_SIDE_ALIGN);
 			errorD = errorP - oldErrorP;
+		totalError = -1*(_KP*errorP + _KD*errorD);
+		oldErrorP = errorP;
 		}
 		else {
 			errorP = 0;
@@ -181,8 +187,7 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 		pid_log[i][0] = errorP;
 		pid_log[i][1] = errorD;
 
-		totalError = _KP*errorP + _KD*errorD;
-		oldErrorP = errorP;
+
 
 		leftMotor.instantAccel(leftMotor.curSpeed - totalError);
 		rightMotor.instantAccel(rightMotor.curSpeed + totalError);

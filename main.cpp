@@ -281,13 +281,13 @@ PID_Controller pid;
 		float sample_period = 0.002;	
 			
 		float _KP = 0.000020;
-		float _KD = 0.0000;
+		float _KD = 0.000001;
 		
 		//float _KP = 0.0000125;
 		//float _KD = 0.0000016;
 		
-		float _KP_step = 0.00001;
-		float _KD_step = 0.00000;
+		float _KP_step = 0.000005;
+		float _KD_step = 0.0000005;
 
 		cycleMFs(0.10);
 
