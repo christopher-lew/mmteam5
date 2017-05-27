@@ -100,6 +100,47 @@ MFv21_18ohm_2_2uF = {
 
 
 
+MFv21_7_5ohm_2_2uF = {
+'2.0': 0.8667,
+'2.5': 0.8408,
+'3.0': 0.8122,
+'3.5': 0.7471,
+'4.0': 0.,
+'4.5': 0.,
+'5.0': 0.,
+'5.5': 0.,
+'6.0': 0.,
+'6.5': 0.,
+'7.0': 0.,
+'8.0': 0.,
+'9.0': 0.,
+'10.0': 0.,
+'11.0': 0.,
+'12.0': 0.,
+'13.0': 0.,
+'14.0': 0.,
+
+'15.0': 0.,
+'18.0': 0.,
+'21.0': 0.,
+'24.0': 0.,
+'27.0': 0.,
+'30.0': 0.,
+'33.0': 0.,
+
+# General Info
+'Emitter': 'SFH4545',
+'Emitter Voltage':  '3.3V',
+'Emitter Resistor': '7.5 ohms',
+'Emitter Capacitor':'2.2 uF',
+
+'Receiver':'TEFT4300',
+'Receiver Voltage': '3.3V',
+'Receiver Resistor':'1240 ohms'
+}
+
+
+
 # Choose which dataset to be used
 DATASET_CHOICE = MFv21_18ohm_2_2uF
 

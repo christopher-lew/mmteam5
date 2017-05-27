@@ -69,8 +69,8 @@ PID_Controller pid;
 
 	int main()
 	{
-		int function_num = 2;
-		bool isFront = false;
+		int function_num = 7;
+		bool isFront = true;
 
 		cycleLEDs(0.1);
 
@@ -91,10 +91,52 @@ PID_Controller pid;
 				IR_calibration(rightIR, IR_SIGDELAY, IR_SIGREST);
 			}
 		}
+		
+		// Raw Calibration
+		else if (function_num == 2) {
+			for (int i = 0; i < 3; i++) {
+				bluetooth.printf("----- ----- Trial %d ----- -----\r\n", i);
+				int samples = 5;
+				float left_avg = 0;
+				float right_avg = 0;
+				float left_log[samples];
+				float right_log[samples];
+				
+				for (int i = 0; i < samples; i++) {
+					left_log[i] = frontLeftIR.fireAndRead();
+					right_log[i] = frontRightIR.fireAndRead();
+					left_avg += left_log[i];
+					right_avg += right_log[i];
+				}
+				
+				left_avg /= samples;
+				right_avg/= samples;
+				
+				bluetooth.printf("Front Left Avg = %1.4f\r\n", left_avg);
+				for (int i = 0; i < samples; i++) {
+					bluetooth.printf("%1.6f\r\n", left_log[i]);
+				}
+				
+				bluetooth.printf("Front Right Avg = %1.4f\r\n", right_avg);
+				for (int i = 0; i < samples; i++) {
+					bluetooth.printf("%1.6f\r\n", right_log[i]);
+				}
+				bluetooth.printf("\r\n");
+			}
+		}
+
+		
+		// Calibrate IRs
+		else if (function_num == 3) {
+			for (int i = 1; i < 10; i++) {
+				bluetooth.printf("Front Right:\r\n");
+				IR_calibration(frontRightIR, i, IR_SIGREST);
+			}
+		}
 
 
 		// Get IR distances
-		else if (function_num == 2) {
+		else if (function_num == 4) {
 			if (isFront) {
 				bluetooth.printf("Front Left Dist: %1.4f\r\n", leftIR.distToWall());
 				bluetooth.printf("Front Right Dist: %1.4f\r\n", rightIR.distToWall());
@@ -108,7 +150,7 @@ PID_Controller pid;
 		
 
 		// Check adjWall states && print distances to all walls
-		else if (function_num == 3) {
+		else if (function_num == 5) {
 			bool frontLeftWall;
 			bool frontRightWall;
 			bool rightWall;
@@ -140,6 +182,79 @@ PID_Controller pid;
 				bluetooth.printf("right Dist: %1.4f\r\n", rightIR.distToWall());
 			
 				wait_ms(100);
+			}
+		}
+
+
+		// Read Noise
+		else if (function_num == 6) {
+			int samples = 1000;
+			int wait_ms_time = 2;
+			float noise_log[samples];
+			
+			wait(3);
+			testBuzzer();
+			
+			for (int i = 0; i < samples; i++) {
+				noise_log[i] = frontRightIR.readNoise();
+				wait_ms(wait_ms_time);
+			}
+
+			bluetooth.printf("----- ----- NOISE READINGS ----- -----\r\n");
+			for (int i = 0; i < samples; i++) {
+				bluetooth.printf("%1.6f\r\n", noise_log[i]);
+			}
+			bluetooth.printf("\r\n");	
+		}
+
+
+		// HAIL MARY
+		else if (function_num == 7) {
+			for (int i = 0; i < 3; i++) {
+				bluetooth.printf("----- ----- Trial %d ----- -----\r\n", i);
+				int samples = 5;
+				float left_avg = 0;
+				float right_avg = 0;
+
+				float left_log[samples];
+				float right_log[samples];
+
+				float left_recv[samples][RECV_SAMPLES];
+				float right_recv[samples][RECV_SAMPLES];
+				
+				for (int i = 0; i < samples; i++) {
+					left_log[i] = frontLeftIR.fireAndRead();
+					right_log[i] = frontRightIR.fireAndRead();
+
+					left_avg += left_log[i];
+					right_avg += right_log[i];
+
+					left_recv[i][0] = frontLeftIR.recvLog[0];
+					left_recv[i][1] = frontLeftIR.recvLog[1];
+					left_recv[i][2] = frontLeftIR.recvLog[2];
+					left_recv[i][3] = frontLeftIR.recvLog[3];
+					left_recv[i][4] = frontLeftIR.recvLog[4];
+
+					right_recv[i][0] = frontRightIR.recvLog[0];
+					right_recv[i][1] = frontRightIR.recvLog[1];
+					right_recv[i][2] = frontRightIR.recvLog[2];
+					right_recv[i][3] = frontRightIR.recvLog[3];
+					right_recv[i][4] = frontRightIR.recvLog[4];
+				}
+				
+				left_avg /= samples;
+				right_avg/= samples;
+				
+				bluetooth.printf("Front Left Avg = %1.4f\r\n", left_avg);
+				for (int i = 0; i < samples; i++) {
+					bluetooth.printf("%1.6f\t(%1.6f, %1.6f, %1.6f, %1.6f, %1.6f)\r\n", left_log[i], left_recv[i][0], left_recv[i][1], left_recv[i][2], left_recv[i][3], left_recv[i][4]);
+				}
+				
+				bluetooth.printf("Front Right Avg = %1.4f\r\n", right_avg);
+				for (int i = 0; i < samples; i++) {
+					bluetooth.printf("%1.6f\t(%1.6f, %1.6f, %1.6f, %1.6f, %1.6f)\r\n", right_log[i], right_recv[i][0], right_recv[i][1], right_recv[i][2], right_recv[i][3], right_recv[i][4]);
+				}
+				bluetooth.printf("\r\n");
 			}
 		}
 
@@ -282,9 +397,6 @@ PID_Controller pid;
 			
 		float _KP = 0.000020;
 		float _KD = 0.0000;
-		
-		//float _KP = 0.0000125;
-		//float _KD = 0.0000016;
 		
 		float _KP_step = 0.00001;
 		float _KD_step = 0.00000;

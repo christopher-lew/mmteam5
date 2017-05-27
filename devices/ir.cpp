@@ -19,17 +19,29 @@ IRPair::IRPair(PinName rxPin, PinName txPin, bool frontStatus)
 }
 
 
+float IRPair::readNoise()
+{
+	return IR_Receiver.read();
+}
+
 /* Fires a single cycle of the IR Pair and returns the ADC read value. */
 float IRPair::fireAndRead()
 {
 	IR_Emitter.write(1);
 	wait_us(IR_SIGDELAY); // Wait for firing capacitor
 
-	float read = IR_Receiver.read();
+	recvLog[0] = IR_Receiver.read();
+	recvLog[1] = IR_Receiver.read();
+	recvLog[2] = IR_Receiver.read();
+	recvLog[3] = IR_Receiver.read();
+	recvLog[4] = IR_Receiver.read();
+
+	float recv_avg = recvLog[0] +recvLog[1] +recvLog[2] +recvLog[3] +recvLog[4];
+
 	IR_Emitter.write(0);
 	wait_us(IR_SIGREST); // Recharge firing capacitor
 
-	return read;
+	return recv_avg;
 }
 
 

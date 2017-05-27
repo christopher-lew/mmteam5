@@ -10,6 +10,7 @@
 #include "../config/initConstants.hpp"
 
 #define IR_SAMPLES 3
+#define RECV_SAMPLES 5
 
 #define FRONT_WALL_LIMIT 11
 #define SIDE_WALL_LIMIT 13 // If a wall is closer than this, then it is touching the currently occupied cell
@@ -20,10 +21,13 @@
 class IRPair
 {	
 public:
-	float readLog[IR_SAMPLES]; // used for logging IR read values
+	float recvLog[RECV_SAMPLES]; // used inside of fireAndRead()
+	float readLog[IR_SAMPLES]; // used inside of distToWall()
 	
 	IRPair(PinName rxPin, PinName txPin, bool frontStatus);
-	
+
+	float fireAndRead();
+	float readNoise();	
 	bool adjWall(); 
 	float distToWall(); // Returns dist in cm
 	int cellsToWall(); // Returns how many cells away a wall is
@@ -36,7 +40,6 @@ private:
 	AnalogIn 	IR_Receiver;
 	DigitalOut	IR_Emitter;
 
-	float fireAndRead();
 	float calib_fireAndRead(int signal_delay_us, int signal_rest_us);
 	float getDistance(float ADC_read);
 };
