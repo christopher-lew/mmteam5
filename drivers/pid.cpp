@@ -24,6 +24,7 @@ PID_Controller::PID_Controller(void)
 {
 	this->errorP = 0;
 	this->oldErrorP = 0;
+	this->errorI = 0;
 	this->errorD = 0;
 	this->totalError = 0;
 }
@@ -131,13 +132,15 @@ void PID_Controller::turn(char direction)
 /*
  * Test function turns the motor on to go forward for a set amount of time (not distance/encoder ticks)
  */
-void PID_Controller::calibration(float _KP, float _KD, int samples, float sample_period, bool print_pidLog)
+void PID_Controller::calibration(float _KP, float _KI, float _KD, int samples, float sample_period, bool print_pidLog, bool print_motors)
 {
-	float pid_log[samples][2];
-	float left_log[samples];
-	float right_log[samples];
+	float pid_log[samples][3];
+	float left_dist[samples]; 	// if(print_motors): left_log = leftMotor.curSpeed, else: left_log = leftIR.distToWall()
+	float right_dist[samples];
+	float left_motor[samples];
+	float right_motor[samples];
 
-	int print_args = 4;
+	int print_args = 5;
 	float speed = _EXPLORE_SPEED;
 	
 	bool leftWall;
@@ -158,34 +161,42 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 		leftWall = leftIR.adjWall();
 		rightWall= rightIR.adjWall();
 
-		left_log[i] = leftIR.distToWall();
-		right_log[i] = rightIR.distToWall();
+		left_dist[i] = leftIR.distToWall();
+		right_dist[i] = rightIR.distToWall();
 		
 		if (leftWall && rightWall) {
-			errorP = left_log[i] - right_log[i] - PID_LtoR_OFFSET;
+			errorP = left_dist[i] - right_dist[i] - PID_LtoR_OFFSET;
+			errorI += 0;//errorP;
 			errorD = errorP - oldErrorP;
 		}
 		else if (leftWall) {
-			errorP = 2 * (left_log[i] - PID_SIDE_ALIGN);
+			errorP = 2 * (left_dist[i] - PID_SIDE_ALIGN);
+			errorI += 0;//errorP;
 			errorD = errorP - oldErrorP;
 		}
 		else if (rightWall) {
-			errorP = 2 * (right_log[i] - PID_SIDE_ALIGN);
+			errorP = 2 * (right_dist[i] - PID_SIDE_ALIGN);
+			errorI += 0;//errorP;
 			errorD = errorP - oldErrorP;
 		}
 		else {
 			errorP = 0;
+			errorI = 0;
 			errorD = 0;
 		}
 
 		pid_log[i][0] = errorP;
-		pid_log[i][1] = errorD;
+		pid_log[i][1] = errorI;
+		pid_log[i][2] = errorD;
 
-		totalError = _KP*errorP + _KD*errorD;
+		totalError = _KP*errorP + _KI*errorI + _KD*errorD;
 		oldErrorP = errorP;
 
 		leftMotor.instantAccel(leftMotor.curSpeed - totalError);
 		rightMotor.instantAccel(rightMotor.curSpeed + totalError);
+
+		left_motor[i] = leftMotor.curSpeed;
+		right_motor[i] = rightMotor.curSpeed;
 		// ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 
 		time_left = sample_period - pid_timer.read();
@@ -200,15 +211,20 @@ void PID_Controller::calibration(float _KP, float _KD, int samples, float sample
 
 	// Print out CSV Data from pid_log
 	bluetooth.printf("##### ##### #####\r\n");
-	bluetooth.printf("Kp=%1.7f\r\nKd=%1.7f\r\n", _KP, _KD);
+	bluetooth.printf("Kp=%.2f u\r\nKi=%.2f u\r\nKd=%.2f u\r\n", _KP*1000000, _KI*1000000, _KD*1000000);
 	bluetooth.printf("Samples=%d\r\nPeriod=%1.4f\r\nArgs=%d\r\n", samples, sample_period, print_args);
 	if (print_pidLog) {
 		for(int i = 0; i < samples; i++) {
-			if (print_args == 4) {
-				bluetooth.printf("%1.4f , %1.4f , %1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1], left_log[i], right_log[i]);
+			if (print_args == 5) {
+				if (print_motors) {
+				bluetooth.printf("%1.4f , %1.4f , %1.4f , %1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1], pid_log[i][2], left_motor[i], right_motor[i]);
+				}
+				else {
+				bluetooth.printf("%1.4f , %1.4f , %1.4f , %1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1], pid_log[i][2], left_log[i], right_log[i]);
+				}
 			}
 			else if (print_args == 2) {
-				bluetooth.printf("%1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1]);	
+				bluetooth.printf("%1.4f , %1.4f , %1.4f\r\n", pid_log[i][0], pid_log[i][1], pid_log[i][2]);	
 			}
 		}
 	}

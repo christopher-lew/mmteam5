@@ -69,8 +69,8 @@ PID_Controller pid;
 
 	int main()
 	{
-		int function_num = 7;
-		bool isFront = true;
+		int function_num = 4;
+		bool isFront = false;
 
 		cycleLEDs(0.1);
 
@@ -143,14 +143,29 @@ PID_Controller pid;
 	
 			// Get IR distances
 			else if (function_num == 4) {
-				if (isFront) {
-					bluetooth.printf("Front Left Dist: %1.4f\r\n", leftIR.distToWall());
-					bluetooth.printf("Front Right Dist: %1.4f\r\n", rightIR.distToWall());
-				}
-	
-				else {
-					bluetooth.printf("Left Dist: %1.4f\r\n", leftIR.distToWall());
-					bluetooth.printf("Right Dist: %1.4f\r\n", rightIR.distToWall());
+				for (int i = 0; i < 5; i++) {
+					float irDist1;
+					float irDist2;
+					float irDiff;
+					
+					if (isFront) {
+						irDist1 = frontLeftIR.distToWall();
+						irDist2 = frontRightIR.distToWall();
+						irDiff = irDist1 - irDist2;
+						bluetooth.printf("Front Left Dist: %1.4f\r\n", frontLeftIR.distToWall());
+						bluetooth.printf("Front Right Dist: %1.4f\r\n", frontRightIR.distToWall());
+						
+					}
+		
+					else {
+						irDist1 = leftIR.distToWall();
+						irDist2 = rightIR.distToWall();
+						irDiff = irDist1 - irDist2;
+						bluetooth.printf("Left Dist: %1.4f\r\n", leftIR.distToWall());
+						bluetooth.printf("Right Dist: %1.4f\r\n", rightIR.distToWall());
+					}
+					
+					bluetooth.printf("Difference = %1.4f\r\n\n", irDiff);
 				}
 			}
 			
@@ -384,24 +399,27 @@ PID_Controller pid;
 #elif _OPERATING_MODE == 'P'
 
 	int main()
-	{
-		bluetooth.baud(BAUD_RATE);
-		
+	{		
 		//_KP = 0.000065;
 		//_KD = 0.000250;
+		
+		//_KP = 0.000040;
+		//_KD = 0.000110;
 
 		int trial = 0;
-		int n_trials = 4;
+		int n_trials = 5;
 		bool waiting = true;
 
-		int samples = 600;
-		float sample_period = 0.002;	
+		int samples = 500;
+		float sample_period = 0.004;	
 			
-		float _KP = 0.000020;
-		float _KD = 0.0000;
+		float _KP = 0.0000168;
+		float _KI = 0.000014;
+		float _KD = -0.0000035;
 		
-		float _KP_step = 0.00001;
-		float _KD_step = 0.00000;
+		float _KP_step = 0.000000;
+		float _KI_step = 0.000000;
+		float _KD_step = 0.000000;
 
 		cycleMFs(0.10);
 
@@ -411,7 +429,7 @@ PID_Controller pid;
 					cycleMFs(0.05);
 					wait(1.5);
 					
-					pid.calibration(_KP, _KD, samples, sample_period, false);
+					pid.calibration(_KP, _KI, _KD, samples, sample_period, false);
 					
 					cycleLEDs(0.05);
 					testBuzzer();
@@ -422,6 +440,7 @@ PID_Controller pid;
 			waiting = true;
 			trial++;
 			_KP += _KP_step;
+			_KI += _KI_step;
 			_KD += _KD_step;
 		}
 		

@@ -29,34 +29,39 @@ def read_trial_data(file):
     print_args = int(header['Args'])
     
     errorP_log = []
+    errorI_log = []
     errorD_log = []
     leftDist_log = []
     rightDist_log = []
     data = {}
 
-    if (print_args == 2):
+    if (print_args == 3):
         for i in range(n_samples):
             line = file.readline().split(",")
             errorP_log.append(float(line[0].strip()))
-            errorD_log.append(float(line[1].strip()))
+            errorI_log.append(float(line[1].strip()))
+            errorD_log.append(float(line[2].strip()))
             
         errorP = np.array(errorP_log)
+        errorI = np.array(errorI_log)
         errorD = np.array(errorD_log)
         data = {'header':header, 'errorP':errorP, 'errorD':errorD}
     
-    elif (print_args == 4):
+    elif (print_args == 5):
         for i in range(n_samples):
             line = file.readline().split(",")
             errorP_log.append(float(line[0].strip()))
-            errorD_log.append(float(line[1].strip()))
-            leftDist_log.append(float(line[2].strip()))
-            rightDist_log.append(float(line[3].strip()))
+            errorI_log.append(float(line[1].strip()))
+            errorD_log.append(float(line[2].strip()))
+            leftDist_log.append(float(line[3].strip()))
+            rightDist_log.append(float(line[4].strip()))
             
         errorP = np.array(errorP_log)
+        errorI = np.array(errorI_log)
         errorD = np.array(errorD_log)
         leftDist = np.array(leftDist_log)
         rightDist = np.array(rightDist_log)
-        data = {'header':header, 'errorP':errorP, 'errorD':errorD, 'leftDist':leftDist, 'rightDist':rightDist}
+        data = {'header':header, 'errorP':errorP, 'errorI':errorI, 'errorD':errorD, 'leftDist':leftDist, 'rightDist':rightDist}
     
     return data
 
@@ -72,8 +77,8 @@ if __name__ == '__main__':
     n_trials = len(allData)   
     print_args = int(allData[0]['header']['Args'])
     
-    if (print_args == 2):
-        n_graphs = 3
+    if (print_args == 3):
+        n_graphs = 4
         plt.figure(1)
         plt.suptitle("PID Error Graphs", fontsize=20)
         plt.subplots_adjust(hspace=0.7)     # Adjust space between subplots
@@ -82,8 +87,9 @@ if __name__ == '__main__':
         for trial in allData:
             header = trial['header']
             errorP = trial['errorP'] * header['Kp']
+            errorI = trial['errorI'] * header['Ki']
             errorD = trial['errorD'] * header['Kd']
-            totalError = errorP + errorD
+            totalError = errorP + errorI + errorD
             
             xData = np.arange(int(header['Samples']))
             xData = xData * header['Period'] * 1000
@@ -93,6 +99,13 @@ if __name__ == '__main__':
             plt.xlabel('Time (ms)')
             plt.ylabel('Error P')
             plt.title('Kp = {}'.format(header['Kp']))
+            plt.grid(True)
+            
+            plt.subplot(n_trials, n_graphs, i+1)
+            plt.plot(xData, errorI)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Error I')
+            plt.title('Ki = {}'.format(header['Ki']))
             plt.grid(True)
             
             plt.subplot(n_trials, n_graphs, i+1)
@@ -110,8 +123,8 @@ if __name__ == '__main__':
             
             i += n_graphs
         
-    elif (print_args == 4):
-        n_graphs = 4
+    elif (print_args == 5):
+        n_graphs = 5
         plt.figure(1)
         plt.suptitle("PID Error Graphs", fontsize=20)
         plt.subplots_adjust(hspace=0.7)     # Adjust space between subplots
@@ -143,6 +156,13 @@ if __name__ == '__main__':
             plt.xlabel('Time (ms)')
             plt.ylabel('Error P')
             plt.title('Kp = {}'.format(header['Kp']))
+            plt.grid(True)
+            
+            plt.subplot(n_trials, n_graphs, i+1)
+            plt.plot(xData, errorI)
+            plt.xlabel('Time (ms)')
+            plt.ylabel('Error I')
+            plt.title('Ki = {}'.format(header['Ki']))
             plt.grid(True)
             
             plt.subplot(n_trials, n_graphs, i+2)

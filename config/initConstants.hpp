@@ -58,7 +58,7 @@
  	#elif _IR_COEFF == 3
 	 	// 7.5 ohms, 2.2uF (UCSD Walls)
 		#define IR_C13   -0.005
-		#define IR_C12   -0.279
+		#define IR_C12    0.279
 		#define IR_C11   -3.311
 		#define IR_C00   31.831
 		#define IR_C01  -91.366
@@ -79,7 +79,7 @@
 	#define _SPEED_RUN 3
 	#define _WALL_FOLLOWER -1
 
- 	#define _EXPLORE_SPEED 0.12
+ 	#define _EXPLORE_SPEED 0.10
  	#define _RUN_SPEED 0.3
 
  	#define BAUD_RATE 55000

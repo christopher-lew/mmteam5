@@ -30,7 +30,7 @@ public:
 	void alignToFrontWall();
 	void HailMary();
 	void turn(char direction);
-	void calibration(float _KP, float _KD, int samples, float sample_period, bool print_pidLog);
+	void calibration(float _KP, float _KI, float _KD, int samples, float sample_period, bool print_pidLog);
 
 	int getEncoderDistance();
 	void resetEncoders();
@@ -38,6 +38,7 @@ public:
 private:
 	volatile float errorP;
 	volatile float oldErrorP;
+	volatile float errorI;
 	volatile float errorD;
 	volatile float totalError;
 };

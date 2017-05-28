@@ -33,6 +33,6 @@
  * T: Falcon operates in Testing mode
  * W: Falcon operates in Wall Following mode
  */
-#define _OPERATING_MODE 'I'
+#define _OPERATING_MODE 'P'
 
 #endif
