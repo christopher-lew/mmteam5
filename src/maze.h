@@ -42,7 +42,7 @@
 #endif
 
 #ifndef MAZESIZE
-#define MAZESIZE 3
+#define MAZESIZE 16
 #endif
 
 #if OFFLINE == 1
@@ -399,6 +399,8 @@ public:
     }
 
     static void initMaze();
+
+    static void resetMazeDist();
 
 };
 

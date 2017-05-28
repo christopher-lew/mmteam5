@@ -171,6 +171,7 @@ PID_Controller pid;
 
 		int state = _OPERATOR_INPUT;
 		Maze();
+        Maze::initMaze();
 		cycleLEDs(0.1);
 
 		while (state == _OPERATOR_INPUT) { // Runnable State
@@ -197,51 +198,47 @@ PID_Controller pid;
 	            state++;
 	            continue;
 	        }
-	        //getchar();
 	        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
 	        update_distances(Maze::getMousey(), Maze::getMousex());
-	        //next_move(Maze::getMousey(), Maze::getMousex());
-	        char next = next_move(Maze::getMousey(), Maze::getMousex()); 
+	        char next = next_move(Maze::getMousey(), Maze::getMousex());
 	        moveFalcon(next, 0.2);
-	        //print_maze();
 		}
 
 	    while (state == _GO_HOME) { // Go Home State
 	        if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-	            //print_maze();
-	            //getchar();
 	            // Do prep for Speed Run
 	            speedRunPrep();
 	            floodfill();
-	            //print_maze();
 	            state++;
 	            continue;
 	        }
-	        //getchar();
 	        cycleMFs(0.02);
 	        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
 	        update_distances(Maze::getMousey(), Maze::getMousex());
-	        //next_move(Maze::getMousey(), Maze::getMousex());
 	        char next = next_move(Maze::getMousey(), Maze::getMousex());
 	        moveFalcon(next, 0.2);
-	        //print_maze();
 
 	    }
 
 	    while (state == _SPEED_RUN) { // Speed Run State
 			wait(3);
-	        //getchar();
 	        if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-	            printf("suck it\n");
+                printf("\nEndOfMaze\n");
 	            break;
 	        }
+
 	        cycleMFs(0.02);
-	        Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
-	        //update_distances(Maze::getMousey(), Maze::getMousex());
-	        // next_move(Maze::getMousey(), Maze::getMousex());
-	        char next = next_move(Maze::getMousey(), Maze::getMousex()); 
-	        moveFalcon(next, 0.2);
-	        //print_maze();
+
+            std::vector<char> path;
+            while (!is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+                path.push_back(next_move(Maze::getMousey(), Maze::getMousex()));
+            }
+
+            print_maze();
+            for (std::vector<char>::const_iterator i = path.begin(); i != path.end(); ++i) {
+                std::cout << *i;
+                moveFalcon(*i, 0.2);
+            }
 
 	    }
 

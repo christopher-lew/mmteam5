@@ -15,6 +15,7 @@
 
 #include "maze.h"
 #include <stdio.h>
+
 #include <stdlib.h>
 
 bool Maze::center = false;
@@ -63,6 +64,7 @@ int Maze::the_maze_visited[MAZE_SIZE][MAZE_SIZE] = {};
              {0, 2, 0},
 
          };
+
     #endif
     #elif MAZESIZE == 5
 
@@ -99,6 +101,26 @@ void Maze::initMaze() {
         }
 
     }
+}
+
+// FUNCTION to reset the distance of the maze
+void Maze::resetMazeDist() {
+
+    int goal1 = MAZE_SIZE / 2;
+    int goal2 = (MAZE_SIZE - 1) / 2;
+    for (int y = 0; y < MAZE_SIZE; y++) {
+        for (int x = 0; x < MAZE_SIZE; x++) {
+
+            //Find the minimum distance to the center, and encode dist to maze_dist
+            int i1 = manhattan_dist(y, goal1, x, goal1);
+            int i2 = manhattan_dist(y, goal1, x, goal2);
+            int i3 = manhattan_dist(y, goal2, x, goal1);
+            int i4 = manhattan_dist(y, goal2, x, goal2);
+
+            Maze::encodeDist(y, x, min4(i1, i2, i3, i4));
+        }
+    }
+
 }
 
 //FUNCTION to take the minimum of 4 distances
@@ -183,6 +205,7 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
 
             // if the next cell has a smaller distance then check
             if (Maze::decodeDist(next_y,next_x) < Maze::decodeDist(y, x)){
+                hasNextMove = true;
                 // breaking ties
                 if((next_x == minx) && (next_y == miny)){
                     // check if the mouse is facing straight 0->1->2->3 counter-clockwise
@@ -190,6 +213,7 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                       (currDir == WEST && next_x < x) || (currDir == EAST && next_x > x)){
                        minx = x + i;
                        miny = y + j;
+                       //hasNextMove = true;
                        continue;
                    }
                     //check for whichever is closer to the center of the maze
@@ -199,7 +223,7 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                        if(curr_to_goal < prev_to_goal){
                             minx = x + i;
                             miny = y + j;
-                            // hasNextMove = true;
+                            //hasNextMove = true;
                            // cout << "minx = " << minx << endl;
 //                          cout << "miny = " << miny << endl;
                            continue;
@@ -211,10 +235,8 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
                     // not tie condition
                     minx = x + i;
                     miny = y + j;
-                    // hasNextMove = true;
+                    //hasNextMove = true;
                 }
-
-                hasNextMove = true;
 
             }
             
@@ -222,40 +244,39 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     }
 
 
-    cout << hasNextMove << endl;
-    cout << "minx = " << minx << endl;
-    cout << "miny = " << miny << endl;
+//    cout << hasNextMove << endl;
+//    cout << "minx = " << minx << endl;
+//    cout << "miny = " << miny << endl;
 
     int newX = minx;
     int newY = miny;
     if (!hasNextMove) 
-      { cout << "fuck" << endl; return 'Z'; }
+
+    { cout << "fuck" << endl; return 'Z'; }
     Maze::setVisited(Maze::getMousey(), Maze::getMousex());
     // Update the mouse position
     Maze::setMousex(newX);
     Maze::setMousey(newY);
 
 
-    Direction turning = NVALID;
-
     // signals next cell's direction
     // We want to go left in the maze! 
     if((minx < x) && (miny == y)){
 
         if (currDir == NORTH) {
-            Maze::setCurrentDirection(turning=WEST);
+            Maze::setCurrentDirection(WEST);
             return 'L';
         }
         if (currDir == SOUTH) {
-            Maze::setCurrentDirection(turning=WEST);
+            Maze::setCurrentDirection(WEST);
             return 'R';
         }
         if (currDir == EAST) {
-            Maze::setCurrentDirection(turning=WEST);
+            Maze::setCurrentDirection(WEST);
             return 'S';
         }
         if (currDir == WEST) {
-            Maze::setCurrentDirection(turning=WEST);
+            Maze::setCurrentDirection(WEST);
             return 'F';
         }
     }
@@ -263,19 +284,19 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     // We want to go forward in the maze!
     else if((minx == x) && (miny > y)){
        if (currDir == NORTH) {
-            Maze::setCurrentDirection(turning=NORTH);
+            Maze::setCurrentDirection(NORTH);
             return 'F';
         }
         if (currDir == SOUTH) {
-            Maze::setCurrentDirection(turning=NORTH);
+            Maze::setCurrentDirection(NORTH);
             return 'S';
         }
         if (currDir == EAST) {
-            Maze::setCurrentDirection(turning=NORTH);
+            Maze::setCurrentDirection(NORTH);
             return 'L';
         }
         if (currDir == WEST) {
-            Maze::setCurrentDirection(turning=NORTH);
+            Maze::setCurrentDirection(NORTH);
             return 'R';
         }
     }
@@ -283,19 +304,19 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     // We want to go right in the maze!
     else if((minx > x) && (miny == y)){
        if (currDir == NORTH) {
-            Maze::setCurrentDirection(turning=EAST);
+            Maze::setCurrentDirection(EAST);
             return 'R';
         }
         if (currDir == SOUTH) {
-            Maze::setCurrentDirection(turning=EAST);
+            Maze::setCurrentDirection(EAST);
             return 'L';
         }
         if (currDir == EAST) {
-            Maze::setCurrentDirection(turning=EAST);
+            Maze::setCurrentDirection(EAST);
             return 'F';
         }
         if (currDir == WEST) {
-            Maze::setCurrentDirection(turning=EAST);
+            Maze::setCurrentDirection(EAST);
             return 'S';
         }
     }
@@ -303,19 +324,19 @@ char next_move(int currX, int currY) { // (Maze::Cell *current)
     // We want to go south in the maze!
     else {// if((minx == x) && (miny < y)){
        if (currDir == NORTH) {
-            Maze::setCurrentDirection(turning=SOUTH);
+            Maze::setCurrentDirection(SOUTH);
             return 'S';
         }
         if (currDir == SOUTH) {
-            Maze::setCurrentDirection(turning=SOUTH);
+            Maze::setCurrentDirection(SOUTH);
             return 'F';
         }
         if (currDir == EAST) {
-            Maze::setCurrentDirection(turning=SOUTH);
+            Maze::setCurrentDirection(SOUTH);
             return 'R';
         }
         if (currDir == WEST) {
-            Maze::setCurrentDirection(turning=SOUTH);
+            Maze::setCurrentDirection(SOUTH);
             return 'L';
         }
     }
@@ -401,8 +422,8 @@ void update_distances(int y, int x) {
         
         // Find the minimum distance value of all the open neighbors of current cell
         int min = getMinOfNeighbors(y, x);
-        printf("min = %d\r\n", min);
-        printf("currentDist = %d\r\n", currentDist);
+//        printf("min = %d\r\n", min);
+//        printf("currentDist = %d\r\n", currentDist);
 
         // This means that the current cell is unreachable, so continue WHO CARES ABOUT IT LOLOLOL
         if (min == 256) {
@@ -415,7 +436,7 @@ void update_distances(int y, int x) {
 
         else {
 
-            printf("Making maze[%d][%d] = %d\r\n", y, x, min + 1);
+            //printf("Making maze[%d][%d] = %d\r\n", y, x, min + 1);
             Maze::encodeDist(y, x, min + 1); // Since it is less than min, make it 1 greater than min
 
             // Pushback all the neighbors again to the stack if they exist
@@ -467,7 +488,7 @@ void print_maze() {
                     printf("|");
                 }
                 
-                int dist = (int) Maze::decodeDist(y, j);
+                int dist = Maze::decodeDist(y, j);
                 if (y == Maze::getMousey() && j == Maze::getMousex()) {
                     printf(" M ");
 
@@ -511,6 +532,10 @@ void print_maze() {
 void speedRunPrep() {
     // Maze::encodeDist(0, 0, 2);
 
+    Maze::resetMazeDist();
+    print_maze();
+    getchar();
+    // If not visited, set to visited, they become DONT CARES
     for (int x = 0; x < MAZE_SIZE; x++) {
         for (int y = 0; y < MAZE_SIZE; y++) {
 
@@ -527,9 +552,7 @@ void speedRunPrep() {
         }
     }
 
-    //print_maze();
-    //getchar();
-
+    // If has three or more walls, except if center, it is a dead end, we do not care about dead ends
     for (int x = 0; x < MAZE_SIZE; x++) {
         for (int y = 0; y < MAZE_SIZE; y++) {
             int wallCount = 0;
@@ -541,12 +564,12 @@ void speedRunPrep() {
             if (wallCount >= 3 && !is_center(encodeCellIndex(y,x))) {
                 // If has three or more walls, encode 15
                 cout << x << " ," << y << " has wall count > 3" << endl;
-                // Find open and encode that wall 
+                // Find open and encode that wall
                 if (!Maze::has_top_wall(y, x)) Maze::encodeWalls(y + 1, x, 2); // Top neighbor
                 if (!Maze::has_bottom_wall(y, x)) Maze::encodeWalls(y - 1, x, 8); // Bottom Neighbor
                 if (!Maze::has_right_wall(y, x)) Maze::encodeWalls(y, x + 1, 1); // Right Neighbor
                 if (!Maze::has_left_wall(y, x)) Maze::encodeWalls(y, x - 1, 4); // Left Neighbor
-                
+
                 Maze::encodeWalls(y, x, 15);
 
                 Maze::encodeDist(y, x, 256);
@@ -554,29 +577,14 @@ void speedRunPrep() {
         }
     }
 
-    // int goal1 = MAZE_SIZE / 2;
-    // int goal2 = (MAZE_SIZE - 1) / 2;
-
-    // Maze::encodeDist(goal1, goal1, 0);
-    // Maze::encodeDist(goal1, goal2, 0);
-    // Maze::encodeDist(goal2, goal1, 0);
-    // Maze::encodeDist(goal2, goal2, 0);
-
     for (int x = 0; x < MAZE_SIZE; x++) {
         for (int y = 0; y < MAZE_SIZE; y++) {
             if (Maze::decodeDist(y, x) != 256) {
                 update_distances(y, x);
-    //             int min = min4(manhattan_dist(y, goal1, x, goal1),
-    //                 manhattan_dist(y, goal1, x, goal2),
-    //                 manhattan_dist(y, goal2, x, goal1),
-    //                 manhattan_dist(y, goal2, x, goal2));
-    //             Maze::encodeDist(y, x, min);
 
             }
         }
     }
-    // print_maze();
-    // getchar();
 }
 
 // FUNCTION to floodfill values after speedrun gets
@@ -652,9 +660,8 @@ int decodeYIndex(int encodedIndex) {
     Maze();
     Maze::initMaze();
     print_maze();
-    getchar();
 
-    while (state == 1) {
+    while (state == 1) { // Exploring State
 
         if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
             Maze::setStartAsGoal();
@@ -670,31 +677,36 @@ int decodeYIndex(int encodedIndex) {
     while (state == 2) { // Go Home State
 
         if (is_start(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-            getchar();
             // Do prep for Speed Run
             speedRunPrep();
             floodfill();
-            print_maze();
             state++;
             continue;
         }
-        getchar();
         Maze::updateWalls(Maze::getMousey(), Maze::getMousex());
         update_distances(Maze::getMousey(), Maze::getMousex());
         next_move(Maze::getMousey(), Maze::getMousex());
-        print_maze();
 
     }
 
     while (state == 3) { // Speed Run State
-        getchar();
         if (is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
-            printf("suck it\n");
+            printf("\nEndOfMaze\n");
+            state++;
             break;
         }
-        next_move(Maze::getMousey(), Maze::getMousex());
+
+        std::vector<char> path;
+        while (!is_center(encodeCellIndex(Maze::getMousey(), Maze::getMousex()))) {
+            path.push_back(next_move(Maze::getMousey(), Maze::getMousex()));
+        }
+
         print_maze();
+        for (std::vector<char>::const_iterator i = path.begin(); i != path.end(); ++i)
+            std::cout << *i << ' ';
+            printf("+\r\n");
     }
+
  }
 
 #endif
