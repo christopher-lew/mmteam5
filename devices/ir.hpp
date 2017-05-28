@@ -27,10 +27,12 @@ public:
 	IRPair(PinName rxPin, PinName txPin, bool frontStatus);
 
 	float fireAndRead();
-	float readNoise();	
 	bool adjWall(); 
 	float distToWall(); // Returns dist in cm
 	int cellsToWall(); // Returns how many cells away a wall is
+
+	// Testing & Calibration functions
+	float readNoise();	
 	float calibration(int signal_delay_us, int signal_rest_us);
 	
 private:

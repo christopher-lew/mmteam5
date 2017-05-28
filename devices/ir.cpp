@@ -36,7 +36,7 @@ float IRPair::fireAndRead()
 	recvLog[3] = IR_Receiver.read();
 	recvLog[4] = IR_Receiver.read();
 
-	float recv_avg = recvLog[0] +recvLog[1] +recvLog[2] +recvLog[3] +recvLog[4];
+	float recv_avg = (recvLog[0] +recvLog[1] +recvLog[2] +recvLog[3] +recvLog[4])/RECV_SAMPLES;
 
 	IR_Emitter.write(0);
 	wait_us(IR_SIGREST); // Recharge firing capacitor
@@ -147,11 +147,18 @@ float IRPair::calib_fireAndRead(int signal_delay_us, int signal_rest_us)
 	IR_Emitter.write(1);
 	wait_us(signal_delay_us); // Wait for firing capacitor
 
-	float read = IR_Receiver.read();
+	recvLog[0] = IR_Receiver.read();
+	recvLog[1] = IR_Receiver.read();
+	recvLog[2] = IR_Receiver.read();
+	recvLog[3] = IR_Receiver.read();
+	recvLog[4] = IR_Receiver.read();
+
+	float recv_avg = (recvLog[0] +recvLog[1] +recvLog[2] +recvLog[3] +recvLog[4])/RECV_SAMPLES;
+	
 	IR_Emitter.write(0);
 	wait_us(signal_rest_us); // Recharge firing capacitor
 
-	return read;
+	return recv_avg;
 }
 
 float IRPair::calibration(int signal_delay_us, int signal_rest_us)

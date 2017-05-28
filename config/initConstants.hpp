@@ -41,7 +41,6 @@
 		
 		#define IR_SIGDELAY 6 // Wait for firing capacitor signal (usec)
 		#define IR_SIGREST 75 // Allows firing cap to recharge
-
 		
 	#elif _IR_COEFF == 2
 	 	// 18 ohms, 2.2uF
@@ -55,6 +54,19 @@
 		
 		#define IR_SIGDELAY 5 // Wait for firing capacitor signal (usec)
 		#define IR_SIGREST 160 // Allows firing cap to recharge
+
+ 	#elif _IR_COEFF == 3
+	 	// 7.5 ohms, 2.2uF (UCSD Walls)
+		#define IR_C13   -0.005
+		#define IR_C12   -0.279
+		#define IR_C11   -3.311
+		#define IR_C00   31.831
+		#define IR_C01  -91.366
+		#define IR_C02  129.720
+		#define IR_C03  -67.773
+		
+		#define IR_SIGDELAY 5 // Wait for firing capacitor signal (usec)
+		#define IR_SIGREST 66 // Allows firing cap to recharge
 		
 	#endif
 

@@ -22,7 +22,7 @@
 /*
  * Selects the IR Coefficients & Timings to be used
  */
-#define _IR_COEFF 2
+#define _IR_COEFF 3
 
 /*
  * D: Falcon operates in general Demo mode
@@ -33,6 +33,6 @@
  * T: Falcon operates in Testing mode
  * W: Falcon operates in Wall Following mode
  */
-#define _OPERATING_MODE 'P'
+#define _OPERATING_MODE 'I'
 
 #endif
