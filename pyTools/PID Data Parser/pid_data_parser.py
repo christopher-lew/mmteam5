@@ -17,8 +17,10 @@ curTrialFile = "pid_data/currentTrial.txt"
 
 def read_trial_header(file):
     headerData = {}
-    for i in range(5):
+    for i in range(6):
         line = file.readline().split("=")
+        line[1] = line[1].strip()
+        if (line[1][-1] == "u"): line[1] = line[1][:-2]
         headerData[line[0].strip()] = float(line[1].strip())
     return headerData
 
@@ -108,14 +110,14 @@ if __name__ == '__main__':
             plt.title('Ki = {}'.format(header['Ki']))
             plt.grid(True)
             
-            plt.subplot(n_trials, n_graphs, i+1)
+            plt.subplot(n_trials, n_graphs, i+2)
             plt.plot(xData, errorD)
             plt.xlabel('Time (ms)')
             plt.ylabel('Error D')
             plt.title('Kd = {}'.format(header['Kd']))
             plt.grid(True)
             
-            plt.subplot(n_trials, n_graphs, i+2)
+            plt.subplot(n_trials, n_graphs, i+3)
             plt.plot(xData, totalError)
             plt.xlabel('Time (ms)')
             plt.ylabel('Total Error')
@@ -133,6 +135,7 @@ if __name__ == '__main__':
         for trial in allData:
             header = trial['header']
             errorP = trial['errorP'] * header['Kp']
+            errorI = trial['errorI'] * header['Ki']
             errorD = trial['errorD'] * header['Kd']
             leftDist = trial['leftDist']
             rightDist = trial['rightDist']
@@ -158,21 +161,21 @@ if __name__ == '__main__':
             plt.title('Kp = {}'.format(header['Kp']))
             plt.grid(True)
             
-            plt.subplot(n_trials, n_graphs, i+1)
+            plt.subplot(n_trials, n_graphs, i+2)
             plt.plot(xData, errorI)
             plt.xlabel('Time (ms)')
             plt.ylabel('Error I')
             plt.title('Ki = {}'.format(header['Ki']))
             plt.grid(True)
             
-            plt.subplot(n_trials, n_graphs, i+2)
+            plt.subplot(n_trials, n_graphs, i+3)
             plt.plot(xData, errorD)
             plt.xlabel('Time (ms)')
             plt.ylabel('Error D')
             plt.title('Kd = {}'.format(header['Kd']))
             plt.grid(True)
             
-            plt.subplot(n_trials, n_graphs, i+3)
+            plt.subplot(n_trials, n_graphs, i+4)
             plt.plot(xData, totalError)
             plt.xlabel('Time (ms)')
             plt.ylabel('Total Error')
