@@ -1,14 +1,19 @@
-/**
- * Maze class header file
+/** Maze.h
+ *  Authors::Micromouse Team 1 - Javier Uruquiz, Eddie Calva, Nahoon Hwang, Christopher Lew
+ *  Version 1.2
+ *
+ *  Functions include:
+ *      Initmaze, min4, manhattenDist, isStart, isCenter, nextMove,
+ *      getMinofNeighbors, updateDistances, print_maze, speedRunPrep,
+ *      floodfill, encodeCellIndex, decodeXIndex, decodeYIndex
+ *
+ *
  */
+
+// ------------------------------------------------------------------------- //
 
 #ifndef __MAZE_H__
 #define __MAZE_H__
-
-/**
- * @author MMTeam1
- * @version 0.1
- */
 
 #include <cmath>
 #include <ctime>
@@ -18,14 +23,39 @@
 #include <vector>
 #include <queue>
 #include <iostream>
+
+/**
+ *
+ * Macro For Different Working Methods:
+ * OFFLINE == 1: Testing MicroMouse
+ * OFFLINE == 0: Testing Computer
+ *
+ * MAZESIZE == x: The size of the maze
+ *
+ * NOTE: If OFFLINE == 0; MAZESIZE = {3, 5, 16}
+ * Make more mazes of variable sizes to test on more sizes if testing on computer
+ *
+ */
+
+#ifndef OFFLINE
+#define OFFLINE 0
+#endif
+
+#ifndef MAZESIZE
+#define MAZESIZE 3
+#endif
+
+#if OFFLINE == 1
 #include "../config/initDevices.hpp"
+#endif
 
-using namespace std;
+// ------------------------------------------------------------------------- //
 
-//#define const int MAZE_SIZE = 4;
-
-const int MAZE_SIZE = 16;
-
+/**
+ *  Enumeration :: Direction - direction for turning and next move decisions. Includes 4 cardinal direction
+ *  and 1 invalid "default" direction
+ *
+ */
 enum Direction {
 
     NORTH,
@@ -36,67 +66,59 @@ enum Direction {
 
 };
 
+// ------------------------------------------------------------------------- //
+
+
+using namespace std;
+
+/**
+ * Maze Class:
+ *
+ * Defines the structure of the maze and the mouse within the maze.
+ * Static functions to manipulate the maze and mouse data.
+ *
+ * Functions include:
+ *      setCenter, getCenter, setBackAtStart, getVisited, setVisited,
+ *      setFlooded, getMousex, getMousey, setMousex, setMousey,
+ *      hasRightWall, hasTopWall, hasLeftWall, hasBottomWall,
+ *      decodeDist, decodeWalls, encodeWalls, encodeDist,
+ *      getCurrentDirection, setCurrentDirection, setFound,
+ *      setStartAsGoal, initMaze
+ *
+ *      IF OFFLINE == 0:
+ *             actualHasRightWall, actualHasLeftWall, actualHasTopWall,
+ *             actualHasBottomWall, decodeWallsActual
+ *
+ */
+
+const int MAZE_SIZE = MAZESIZE;
+
 class Maze {
 public:
-
-    class Cell {
-    public:
-        int y;
-        int x;
-        Cell(int y, int x) : y(y), x(x) {}
-
-        int getCellY() {
-            return this->y;
-        }
-
-        int getCellX() {
-            return this->x;
-        }
-
-    };
 
     // Encoding for the maze in column major order. Walls represent 4 LSB, where
     // 0001 = W, 0010 = S, 0100 = E, 1000 = N, where 1 represents bit that direction
     static int the_maze_walls[MAZE_SIZE][MAZE_SIZE];
     static int the_maze_dist[MAZE_SIZE][MAZE_SIZE];
-    static int maze_actual[MAZE_SIZE][MAZE_SIZE];
     static int the_maze_visited[MAZE_SIZE][MAZE_SIZE];
-    // static unsigned char the_maze[MAZE_SIZE][MAZE_SIZE];
+
+// If testing on computer
+#if OFFLINE == 0
+    static int maze_actual[MAZE_SIZE][MAZE_SIZE];
+#endif
+
     static int mousey;
     static int mousex;
     static bool center;
     static bool backAtStart;
     
-    // // Directions to Move
+    // Directions to Move
     static Direction current_direction;
 
 
     // Constructor Definition (it has none LOL)
     Maze() {
     }
-
-    // static void mazeDistInit() {
-
-    //     int goal1 = MAZE_SIZE / 2;
-    //     int goal2 = (MAZE_SIZE - 1) / 2;
-    //     for (int i = 0; i < MAZE_SIZE; i++) {
-    //         for (int j = 0; j < MAZE_SIZE; j++) {
-    //             // Distance of the cell will be the minimum distance to the closest
-    //             // one out of four middle destination cells.
-    //             the_maze_dist[i][j] = min4(manhattan_dist(i, goal1, j, goal1),
-    //                                              manhattan_dist(i, goal1, j, goal2),
-    //                                              manhattan_dist(i, goal2, j, goal1),
-    //                                              manhattan_dist(i, goal2, j, goal2));
-    //             /**          cout <<"store: " << min4(manhattan_dist(i, goal1, j, goal1),
-    //                                                        manhattan_dist(i, goal1, j, goal2),
-    //                                                        manhattan_dist(i, goal2, j, goal1),
-    //                                                        manhattan_dist(i, goal2, j, goal2)) <<
-    //                                                        " in ( " << i <<" , "<< j << " )......."<<endl;
-    //                       cout<< " ( " << i << " , " << j << " ):  " << maze[i][j]->dist << endl;
-    //           **/
-    //         }
-    //     }
-    // }
 
     static void setCenter() {
         center = true;
@@ -150,7 +172,6 @@ public:
     // Push all bits off. If LSB == 1: right wall exists
     static bool has_right_wall(int y, int x) {
         int walls = Maze::decodeWalls(y, x);
-        // cout << "has_right_wall == " << walls << endl;
         walls = walls & 4;
         return walls >> 2; 
     }
@@ -159,8 +180,7 @@ public:
     static bool has_top_wall(int y, int x) {
         int walls = Maze::decodeWalls(y, x);
         walls = walls & 8;
-        // cout << "has_top_wall == " << walls << endl;
-        return walls >> 3; 
+        return walls >> 3;
     }
 
     // Mask everything except first bit. If LSB == 1: left wall exists
@@ -179,10 +199,12 @@ public:
         return walls >> 1;
     }
 
-        // Push all bits off. If LSB == 1: right wall exists
+// If working on computer
+#if OFFLINE == 0
+
+    // Push all bits off. If LSB == 1: right wall exists
     static bool actual_has_right_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
-        //cout << "has_right_wall == " << walls << endl;
         walls = walls & 4;
         return walls >> 2; 
     }
@@ -191,29 +213,21 @@ public:
     static bool actual_has_top_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
         walls = walls & 8;
-        //cout << "has_top_wall == " << walls << endl;
-        return walls >> 3; 
+        return walls >> 3;
     }
 
     // Mask everything except first bit. If LSB == 1: left wall exists
     static bool actual_has_left_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
         walls = walls & 1;
-        //cout << "has_left_wall == " << walls << endl;
         return walls;
     }
 
     // Mask bits for south wall. if LSB ==1 : south wall exists
     static bool actual_has_bottom_wall(int y, int x) {
         int walls = Maze::decodeWallsActual(y, x);
-        //cout << "has_bottom_wall == " << walls << endl;
         walls = walls & 2;
         return walls >> 1;
-    }
-
-    // Return the 12 MSB by pushing the bits that represent walls off
-    static int decodeDist (int y, int x) {
-        return the_maze_dist[y][x];
     }
 
     // 0001 = W, 0010 = S, 0100 = E, 1000 = N, where 1 represents bit that direction
@@ -224,6 +238,13 @@ public:
         return cell & 15;
     }
 
+#endif
+
+    // Return the 12 MSB by pushing the bits that represent walls off
+    static int decodeDist (int y, int x) {
+        return the_maze_dist[y][x];
+    }
+
     // Function to return the wall values 1111 & walls 
     static int decodeWalls (int y, int x){
     int cell = the_maze_walls[y][x];
@@ -232,20 +253,15 @@ public:
 
     // Update the walls using AND operator
     static void encodeWalls (int y, int x, int newWall) {
-        // Save the dist in a temporary mask
-        // int dist = decodeDist(y,x);
-
-        // dist = dist << 4;
-
-        // Set the new wall to the maze index with dist using OR operator
         the_maze_walls[y][x] = the_maze_walls[y][x] | newWall;
-        //cout << the_maze_walls[y][x] << endl;
     }
 
     // Code to updateWalls
     static void updateWalls(int y, int x) {
-        
-                ledRed = 0;
+
+#if OFFLINE == 1
+
+        ledRed = 0;
         ledYellow = 0;
         ledGreen = 0;
 
@@ -255,10 +271,6 @@ public:
         bool rightWall = false;
 
         Direction orientation = Maze::getCurrentDirection();
-     
-//            leftIR = leftIR.adjWall();
-//            rightIR = rightIR.adjWall();
-//            frontIRs = frontLeftIR.adjWall() && frontRightIR.adjWall())
 
 
         if (orientation == NORTH) {
@@ -309,43 +321,44 @@ public:
         
     }
 
+    if (leftWall) {
+        Maze::encodeWalls(y, x, 1);
+        if (x > 0) Maze::encodeWalls(y, x - 1, 4);
+    }
 
-        //     if (leftWall) {
-        //     Maze::encodeWalls(y, x, 1);
-        //     if (x > 0) Maze::encodeWalls(y, x - 1, 4);
-        // }
+    if (rightWall) {
+        Maze::encodeWalls(y, x, 4);
+        if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
+    }
 
-       //  if (rightWall) {
-       //      Maze::encodeWalls(y, x, 4);
-       //      if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
-       //  }
+    if (topWall) {
+        Maze::encodeWalls(y, x, 8);
+        if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+    }
 
-       //  if (topWall) {
-       //      Maze::encodeWalls(y, x, 8);
-       //      if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
-       //  }
+    if (bottomWall) {
+        Maze::encodeWalls(y, x, 2);
+        if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+    }
+#else // Working on online maze
 
-       //  if (bottomWall) {
-       //      Maze::encodeWalls(y, x, 2);
-       //      if (y > 0) Maze::encodeWalls(y - 1, x, 8);
-       //   }
-
-       // if (Maze::actual_has_bottom_wall(y, x)) {
-       //     Maze::encodeWalls(y, x, 2);
-       //     if (y > 0) Maze::encodeWalls(y - 1, x, 8);
-       // }
-       // if (Maze::actual_has_top_wall(y, x)) {
-       //     Maze::encodeWalls(y, x, 8);
-       //     if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
-       // }
-       // if (Maze::actual_has_left_wall(y, x)) {
-       //     Maze::encodeWalls(y, x, 1);
-       //     if (x > 0) Maze::encodeWalls(y, x - 1, 4);
-       // }
-       // if (Maze::actual_has_right_wall(y, x)) {
-       //     Maze::encodeWalls(y, x, 4);
-       //     if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
-       // }
+        if (Maze::actual_has_bottom_wall(y, x)) {
+            Maze::encodeWalls(y, x, 2);
+            if (y > 0) Maze::encodeWalls(y - 1, x, 8);
+        }
+        if (Maze::actual_has_top_wall(y, x)) {
+            Maze::encodeWalls(y, x, 8);
+            if (y < MAZE_SIZE - 1) Maze::encodeWalls(y + 1, x, 2);
+        }
+        if (Maze::actual_has_left_wall(y, x)) {
+            Maze::encodeWalls(y, x, 1);
+            if (x > 0) Maze::encodeWalls(y, x - 1, 4);
+        }
+        if (Maze::actual_has_right_wall(y, x)) {
+            Maze::encodeWalls(y, x, 4);
+            if (x < MAZE_SIZE - 1) Maze::encodeWalls(y, x + 1, 1);
+        }
+#endif
 
     }
 
@@ -385,9 +398,12 @@ public:
         }
     }
 
-
+    static void initMaze();
 
 };
+
+// ------------------------------------------------------------------------- //
+
 
 void speedRunPrep();
 
@@ -400,11 +416,6 @@ int manhattan_dist(int x1, int x2, int y1, int y2);
 int min4(int a, int b, int c, int d);
 
 void update_distances(int y, int x);
-
-void explore(vector<int> &stack, int y, int x);
-
-bool is_solved();
-// TODO
 
 bool is_center(int cell);
 
@@ -421,3 +432,7 @@ int decodeXIndex(int encodedIndex);
 int decodeYIndex(int encodedIndex);
 
 #endif
+
+// ------------------------------------------------------------------------- //
+
+// EOF
